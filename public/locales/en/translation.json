@@ -268,7 +268,13 @@
     "policeStation": "Police Station",
     "caseNumber": "Case Number",
     "judgment": "Judgment",
-    "accusation": "Accusation"
+    "accusation": "Accusation",
+    "vehicleModel": "Vehicle Model",
+    "vehicleColor": "Vehicle Color",
+    "chassisNumber": "Chassis Number",
+    "vehicleNumber": "Vehicle Number",
+    "yearmanufacture": "Year of manufacture",
+    "licenseExpiration": "License Expiration"
   },
   "forms": {
     "child": {

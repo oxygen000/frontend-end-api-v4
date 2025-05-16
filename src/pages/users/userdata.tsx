@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams,  useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiUser,
@@ -266,8 +266,6 @@ function Userdata() {
     user.flight_number ||
     user.return_date;
 
-
-
   const getImageUrl = (
     imagePath: string | null | undefined,
     userName: string
@@ -290,13 +288,12 @@ function Userdata() {
     return `https://backend-fast-api-ai.fly.dev/${formattedPath.replace(/^\/?/, '')}`;
   };
 
-
   return (
     <div className="p-3 sm:p-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Back button */}
       <div className="mb-4 sm:mb-6 flex justify-between">
         <button
-            onClick={() => navigate(-1)}
+          onClick={() => navigate(-1)}
           className="px-4 sm:px-6 py-2 bg-blue-600/30 text-white rounded-md hover:bg-blue-700/50 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 backdrop-blur-lg backdrop-opacity-60 transition-all duration-300 text-sm sm:text-base"
         >
           <FiArrowLeft className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
@@ -748,11 +745,21 @@ function Userdata() {
                             user.additional_data.includes('{')
                           ) {
                             const parsed = JSON.parse(user.additional_data);
-                            return (
-                              parsed.additional_data ||
-                              parsed.additional_notes ||
-                              user.additional_data
-                            );
+                            // If parsed has nested fields, handle them properly
+                            if (typeof parsed === 'object') {
+                              // If it contains specific fields we want to display
+                              return (
+                                parsed.additional_data ||
+                                parsed.additional_notes ||
+                                // If it doesn't have those specific fields but is still an object, stringify it nicely
+                                (Object.keys(parsed).length > 0
+                                  ? Object.entries(parsed)
+                                      .map(([key, value]) => `${key}: ${value}`)
+                                      .join(', ')
+                                  : t('users.notAvailable', 'N/A'))
+                              );
+                            }
+                            return parsed || t('users.notAvailable', 'N/A');
                           }
                           return (
                             user.additional_data ||
@@ -779,7 +786,6 @@ function Userdata() {
                       )}
                     </span>
                   </div>
-                  
                 </div>
               </motion.div>
             </>
@@ -1125,7 +1131,7 @@ function Userdata() {
 
                     <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
                       <span className="text-white/70 text-sm">
-                        {t('users.vehicleModel', 'Vehicle Model:')}
+                        {t('registration.vehicleModel', 'Vehicle Model:')}
                       </span>
                       <span className="text-white font-medium text-sm">
                         {maskSensitiveInfo(user.vehicle_model)}
@@ -1134,7 +1140,7 @@ function Userdata() {
 
                     <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
                       <span className="text-white/70 text-sm">
-                        {t('users.vehicleColor', 'Vehicle Color:')}
+                        {t('registration.vehicleColor', 'Vehicle Color:')}
                       </span>
                       <span className="text-white font-medium text-sm">
                         {maskSensitiveInfo(user.vehicle_color)}
@@ -1143,7 +1149,7 @@ function Userdata() {
 
                     <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
                       <span className="text-white/70 text-sm">
-                        {t('users.chassisNumber', 'Chassis Number:')}
+                        {t('registration.chassisNumber', 'Chassis Number:')}
                       </span>
                       <span className="text-white font-medium text-sm">
                         {maskSensitiveInfo(user.chassis_number)}
@@ -1152,7 +1158,7 @@ function Userdata() {
 
                     <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
                       <span className="text-white/70 text-sm">
-                        {t('users.vehicleNumber', 'Vehicle Number:')}
+                        {t('registration.vehicleNumber', 'Vehicle Number:')}
                       </span>
                       <span className="text-white font-medium text-sm">
                         {maskSensitiveInfo(user.vehicle_number)}
@@ -1161,7 +1167,10 @@ function Userdata() {
 
                     <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
                       <span className="text-white/70 text-sm">
-                        {t('users.licenseExpiration', 'License Expiration:')}
+                        {t(
+                          'registration.licenseExpiration',
+                          'License Expiration:'
+                        )}
                       </span>
                       <span className="text-white font-medium text-sm">
                         {formatDate(user.license_expiration)}

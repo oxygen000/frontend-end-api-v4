@@ -892,7 +892,7 @@ const AddNormalMan = () => {
                     'registration.yearmanufacture',
                     'Year of manufacture'
                   )}
-                  name=" manufacture_year"
+                  name="manufacture_year"
                   type="date"
                   value={formData.manufacture_year}
                   onChange={handleInputChange}

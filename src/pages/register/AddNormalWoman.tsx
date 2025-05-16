@@ -47,6 +47,7 @@ interface FormData {
   chassis_number: string;
   vehicle_number: string;
   license_expiration: string;
+  manufacture_year: string;
 
   // Travel info
   travel_date: string;
@@ -86,6 +87,7 @@ const initialFormData: FormData = {
   chassis_number: '',
   vehicle_number: '',
   license_expiration: '',
+  manufacture_year: '',
   travel_date: '',
   travel_destination: '',
   arrival_airport: '',
@@ -891,6 +893,13 @@ const AddNormalWoman = () => {
                 name="license_expiration"
                 type="date"
                 value={formData.license_expiration}
+                onChange={handleInputChange}
+              />
+              <Input
+                label={t('registration.yearmanufacture', 'Year of manufacture')}
+                name="manufacture_year"
+                type="date"
+                value={formData.manufacture_year}
                 onChange={handleInputChange}
               />
               <SectionButtons onPrev={prevSection} onNext={nextSection} />
