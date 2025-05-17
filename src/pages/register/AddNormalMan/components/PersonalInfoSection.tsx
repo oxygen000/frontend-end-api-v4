@@ -40,7 +40,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           onChange={handleInputChange}
           required
           error={errors.name}
-          placeholder={t('placeholders.fullName', 'Enter your full name')}
+          placeholder={t('registration.fullName', 'Enter your full name')}
         />
 
         <Input
@@ -48,7 +48,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           name="nickname"
           value={formData.nickname}
           onChange={handleInputChange}
-          placeholder={t('placeholders.nickname', 'Enter your nickname')}
+          placeholder={t('registration.nickname', 'Enter your nickname')}
           error={errors.nickname}
         />
       </div>
@@ -71,7 +71,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           onChange={handleInputChange}
           required
           error={errors.national_id}
-          placeholder={t('placeholders.nationalId', 'Enter your national ID')}
+          placeholder={t('registration.nationalId', 'Enter your national ID')}
         />
       </div>
 
@@ -81,7 +81,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         value={formData.address}
         onChange={handleInputChange}
         error={errors.address}
-        placeholder={t('placeholders.address', 'Enter your full address')}
+        placeholder={t('registration.address', 'Enter your full address')}
       />
 
       <Input
@@ -90,7 +90,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         value={formData.job}
         onChange={handleInputChange}
         error={errors.job}
-        placeholder={t('placeholders.job', 'Enter your occupation')}
+        placeholder={t('registration.job', 'Enter your occupation')}
       />
 
       <SectionButtons onNext={nextSection} />
