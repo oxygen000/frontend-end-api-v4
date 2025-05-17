@@ -1,14 +1,36 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 function Landing() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = false;
+      video.volume = 1;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log("Playback started with sound");
+          })
+          .catch((error) => {
+            console.warn("Autoplay with sound failed:", error);
+            video.muted = true;
+            video.play(); // fallback muted
+          });
+      }
+    }
+  }, []);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      {/* خلفية الفيديو */}
       <video
+        ref={videoRef}
         autoPlay
         loop
-        muted
         playsInline
         className="absolute inset-0 w-full h-full object-fill object-center"
       >
@@ -16,7 +38,6 @@ function Landing() {
         Your browser does not support the video tag.
       </video>
 
-      {/* المحتوى فوق الفيديو */}
       <div className="relative z-10 w-full h-full">
         <Link to="/login">
           <motion.button
