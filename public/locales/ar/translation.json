@@ -235,14 +235,18 @@
     "gender": "الجنس",
     "male": "ذكر",
     "job":"العمل",
+    
     "vehicleInfo":"معلومات المركبة",
+    "hasVehicle": "لديه معلومات المركبة",
     "licensePlate":"لوحة الترخيص",
     "vehicleModel":"طراز المركبة",
     "vehicleColor":"لون المركبة",
+    
     "chassisNumber":"رقم الشاسيه",
     "vehicleNumber":"رقم المركبة",
     "licenseExpiration":"انتهاء الترخيص",
     "travelInfo":"معلومات السفر",
+    
     "travelDate":"تاريخ السفر",
     "travelDestination":"وجهة السفر",
     "arrivalAirport":"مطار الوصول",

@@ -71,6 +71,13 @@ const AddNormalMan = () => {
     }));
   };
 
+  const handleToggleVehicle = () => {
+    setFormData((prev) => ({
+      ...prev,
+      has_vehicle: !prev.has_vehicle,
+    }));
+  };
+
   const validateAndProceed = () => {
     const errors = validateForm(formData, currentSection, capturedImage, t);
     setFormErrors(errors);
@@ -455,6 +462,7 @@ const AddNormalMan = () => {
                   prevSection={prevSection}
                   nextSection={nextSection}
                   t={t}
+                  handleToggleVehicle={handleToggleVehicle}
                 />
               )}
 

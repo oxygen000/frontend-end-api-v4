@@ -24,6 +24,7 @@ export interface FormData {
 
   // Vehicle info
   has_motorcycle: boolean;
+  has_vehicle: boolean;
   license_plate: string;
   vehicle_model: string;
   vehicle_color: string;
@@ -66,6 +67,7 @@ export const initialFormData: FormData = {
   judgment: '',
   accusation: '',
   has_motorcycle: false,
+  has_vehicle: false,
   license_plate: '',
   vehicle_model: '',
   vehicle_color: '',

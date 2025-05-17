@@ -238,12 +238,14 @@
     "job":"Job",
     "female": "Female",
     "vehicleInfo":"Vehicle Information",
+    "hasVehicle": "Has Vehicle Information",
     "nationalId": "National ID",
     "phoneNumber": "Phone Number",
     "address": "Address",
     "caseReferenceId": "Case Reference ID:",
     "selectGender": "Select Gender",
     "phoneCompany": "Phone Company",
+    "licenseExpiration": "License Expiration",
     "photo": "Person's Photo",
     "photoInstructions": "Please upload a clear photo of the person's face. This will be used for identification purposes.",
     "capturePhoto": "Capture Photo",
@@ -276,8 +278,6 @@
     "chassisNumber": "Chassis Number",
     "vehicleNumber": "Vehicle Number",
     "yearmanufacture": "Year of manufacture"
-    
-    
   },
   "forms": {
     "child": {
@@ -354,6 +354,7 @@
         "vehicle": "Vehicle Information",
         "travel": "Travel Information",
         "case": "Case Information"
+        
       }
     },
     "woman": {
