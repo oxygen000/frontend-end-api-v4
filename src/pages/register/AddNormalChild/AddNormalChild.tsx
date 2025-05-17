@@ -22,7 +22,7 @@ function AddNormalChild() {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, ] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const webcamRef = useRef<Webcam>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
