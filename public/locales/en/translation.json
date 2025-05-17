@@ -169,7 +169,9 @@
       "visitor": "Visitor",
       "male": "Male",
       "female": "Female",
-      "man": "Man"
+      "man": "Man",
+      "woman": "Woman",
+      "adult": "Adult"
     },
     "sortBy": "Sort By",
     "sortFields": {

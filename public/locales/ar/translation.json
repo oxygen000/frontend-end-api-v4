@@ -169,7 +169,8 @@
       "visitor": "زائر",
       "male": "ذكر",
       "female": "أنثى",
-      "man": "رجل"
+      "man": "رجل",
+      "adult": "بالغ"
     },
     "sortBy": "ترتيب حسب",
     "sortFields": {

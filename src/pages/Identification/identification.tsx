@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { FaCamera, FaRedo, FaUpload, FaSync } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import AnimatedFaceIcon from '../../components/AnimatedFaceIcon';
-import { registrationApi } from '../../services/api';
+import { recognitionApi } from '../../services/api';
 import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
 function Identification() {
@@ -160,7 +160,7 @@ function Identification() {
 
       if (uploadedImage) {
         // For uploaded files, use the file-based recognition
-        const data = await registrationApi.recognizeFace(
+        const data = await recognitionApi.recognizeFace(
           uploadedImage,
           preselectedId || undefined
         );
@@ -183,7 +183,7 @@ function Identification() {
         }
       } else if (capturedImage) {
         // For captured images, use the base64 recognition
-        const data = await registrationApi.recognizeFaceBase64(
+        const data = await recognitionApi.recognizeFaceBase64(
           capturedImage,
           preselectedId || undefined
         );

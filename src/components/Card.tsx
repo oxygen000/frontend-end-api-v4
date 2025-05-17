@@ -6,7 +6,7 @@ import { useTranslationWithFallback } from '../hooks/useTranslationWithFallback'
 interface User {
   id: string;
   name: string;
-  nickname: string;
+  nickname?: string;  // Make nickname optional
   department?: string;
   role?: string;
   image_path?: string;
@@ -18,6 +18,17 @@ interface User {
   national_id?: string;
   address?: string;
   dob?: string;
+  // Additional fields that might be in ApiUser
+  vehicle_info?: {
+    vehicle_model?: string;
+    vehicle_color?: string;
+    license_plate?: string;
+    license_expiration?: string;
+    manufacture_year?: string;
+    chassis_number?: string;
+    vehicle_number?: string;
+    traffic_department?: string;
+  };
 }
 
 interface CardProps {
