@@ -276,6 +276,7 @@
     "submitting": "جاري الإرسال...",
     "successMessage": "تم التسجيل بنجاح!",
     "successDescription": "تم تسجيل الشخص في النظام ويمكن التعرف عليه الآن."
+    
   },
   "forms": {
     "child": {
@@ -309,7 +310,13 @@
       "previousDispute": "الخلافات السابقة",
       "closeImage": "إغلاق الصورة",
       "additionalData": "خلافات سابقة",
-      "medicalCondition": "تاريخ مرضي"
+      "medicalCondition": "تاريخ مرضي",
+      "sections": {
+        "personal": "معلومات الطفل",
+        "guardian": "معلومات الوصي",
+        "photo": "صورة الطفل",
+        "disappearance": "تفاصيل الغياب"
+      }
     },
     "disabled": {
       "title": "تسجيل شخص مرافق",
@@ -338,13 +345,33 @@
       "clothes": "أوصاف الملابس",
       "previousDisputes": "خلافات سابقه",
       "medicalHistory": "تاريخ مرضي",
-      "recentPhoto": "صوره حديثه للمتغيب"
+      "recentPhoto": "صوره حديثه للمتغيب",
+      "sections": {
+        "personal": "معلومات الشخص",
+        "disability": "معلومات الإعاقة",
+        "photo": "صورة الشخص",
+        "disappearance": "تفاصيل الغياب"
+      }
     },
     "man": {
-      "title": "تسجيل ذكر"
+      "title": "تسجيل ذكر",
+      "sections": {
+        "personal": "معلومات الشخص",
+        "contact": "معلومات الاتصال",
+        "vehicle": "معلومات المركبة",
+        "travel": "معلومات السفر",
+        "case": "معلومات القضية"
+      }
     },
     "woman": {
-      "title": "تسجيل أنثى"
+      "title": "تسجيل أنثى",
+      "sections": {
+        "personal": "معلومات الشخص",
+        "contact": "معلومات الاتصال",
+        "vehicle": "معلومات المركبة",
+        "travel": "معلومات السفر",
+        "case": "معلومات القضية"
+      }
     }
   },
   "validation": {

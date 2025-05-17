@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { toast } from 'react-hot-toast';
 import SuccessAnimation from '../../../components/SuccessAnimation';
 import { useTranslationWithFallback } from '../../../hooks/useTranslationWithFallback';
-import { errorVariants, transition } from '../../../config/animations';
+import {
+  errorVariants,
+  transition,
+  formVariants,
+} from '../../../config/animations';
 
 // Import extracted components
 import PersonalInfoSection from './components/PersonalInfoSection';
@@ -67,25 +71,32 @@ const AddNormalMan = () => {
     }));
   };
 
-  // Unified next section function
-  const nextSection = () => {
+  const validateAndProceed = () => {
     const errors = validateForm(formData, currentSection, capturedImage, t);
     setFormErrors(errors);
 
-    if (errors.length === 0) {
+    if (errors.length > 0) {
+      setTimeout(() => {
+        const errorElement = document.querySelector('.bg-red-500\\/20');
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return false;
+    }
+
+    return true;
+  };
+
+  // Unified next section function
+  const nextSection = () => {
+    if (validateAndProceed()) {
       setCurrentSection(currentSection + 1);
       // Scroll to top of form when changing sections
       setTimeout(() => {
         document
           .querySelector('form')
           ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    } else {
-      setTimeout(() => {
-        const errorElement = document.querySelector('.bg-red-500\\/20');
-        if (errorElement) {
-          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
       }, 100);
     }
   };
@@ -163,33 +174,63 @@ const AddNormalMan = () => {
     setFacingMode((prevMode) => (prevMode === 'user' ? 'environment' : 'user'));
   };
 
-  // Enhanced form submission
+  // Form submission handler
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const errors = validateForm(formData, currentSection, capturedImage, t);
-    setFormErrors(errors);
-
-    if (errors.length > 0) {
+    if (!validateAndProceed()) {
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await submitForm(formData, capturedImage, t);
+      // Create a copy of formData and properly nest vehicle information
+      const submissionData = { ...formData };
+
+      // Extract vehicle-related fields and nest them under vehicle_info
+      const vehicleInfo: Record<string, string> = {};
+      const vehicleFields = [
+        'manufacture_year',
+        'vehicle_model',
+        'vehicle_color',
+        'chassis_number',
+        'vehicle_number',
+        'license_plate',
+        'license_expiration',
+      ];
+
+      let hasVehicleData = false;
+
+      vehicleFields.forEach((field) => {
+        if (submissionData[field as keyof FormData]) {
+          vehicleInfo[field] = submissionData[
+            field as keyof FormData
+          ] as string;
+          // Remove the field from top level
+          delete submissionData[field as keyof FormData];
+          hasVehicleData = true;
+        }
+      });
+
+      // Only add vehicle_info if we have vehicle data
+      if (hasVehicleData) {
+        submissionData.vehicle_info = vehicleInfo;
+      }
+
+      const result = await submitForm(submissionData, capturedImage, t);
 
       if (result.success) {
-      setSubmitSuccess(true);
+        setSubmitSuccess(true);
         setRegisteredUserId(result.userId || null);
 
-      // Reset form data after animation plays
-      setTimeout(() => {
-        setFormData(initialFormData);
-        setCapturedImage(null);
-        setCurrentSection(1);
-        setSubmitSuccess(false);
-      }, 1000);
+        // Reset form data after animation plays
+        setTimeout(() => {
+          setFormData(initialFormData);
+          setCapturedImage(null);
+          setCurrentSection(1);
+          setSubmitSuccess(false);
+        }, 3000);
       }
     } finally {
       setLoading(false);
@@ -209,11 +250,31 @@ const AddNormalMan = () => {
     setCapturedImage(null);
   };
 
+  // Get the section title based on current section
+  const getSectionTitle = () => {
+    switch (currentSection) {
+      case 1:
+        return t('forms.man.sections.personal', 'Personal Information');
+      case 2:
+        return t('forms.man.sections.contact', 'Contact Information');
+      case 3:
+        return t('forms.man.sections.criminal', 'Criminal Record');
+      case 4:
+        return t('forms.man.sections.travel', 'Travel Information');
+      case 5:
+        return t('forms.man.sections.vehicle', 'Vehicle Information');
+      case 6:
+        return t('forms.man.sections.photo', 'Photo');
+      default:
+        return t('forms.man.title', 'Male Registration');
+    }
+  };
+
   return (
-    <div className="p-4 sm:p-6">
+    <div className="min-h-screen p-4 sm:p-6 ">
       <Link
         to="/home"
-        className="inline-flex items-center text-white hover:text-blue-300 transition-colors"
+        className="inline-flex items-center text-white hover:text-blue-300 transition-colors font-medium"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -232,147 +293,192 @@ const AddNormalMan = () => {
 
       {/* Form Progress Indicator - Hide when showing success */}
       {!submitSuccess && (
-        <div className="flex justify-center mt-4 sm:mt-6 overflow-x-auto py-2">
-          <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-            {[1, 2, 3, 4, 5, 6].map((step, idx) => (
-              <React.Fragment key={step}>
-                {idx > 0 && (
-                  <div className="w-6 sm:w-10 md:w-16 h-1 bg-gray-300">
-                    <div
-                      className={`h-full ${currentSection >= step ? 'bg-blue-600' : 'bg-gray-300'}`}
-                    ></div>
+        <div className="max-w-2xl mx-auto mt-6 mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white text-center mb-2">
+            {t('forms.man.title', 'Male Registration')}
+          </h1>
+          <p className="text-white/70 text-center mb-6">
+            {getSectionTitle()} ({currentSection}/6)
+          </p>
+
+          <div className="flex justify-center py-2 mb-4">
+            <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+              {[1, 2, 3, 4, 5, 6].map((step, idx) => (
+                <React.Fragment key={step}>
+                  {idx > 0 && (
+                    <div className="w-6 sm:w-10 md:w-16 h-1 bg-gray-300/30 rounded-full">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          currentSection >= step
+                            ? 'bg-gradient-to-r from-blue-500 to-indigo-600'
+                            : 'bg-gray-300/30'
+                        }`}
+                        style={{
+                          width:
+                            currentSection > step
+                              ? '100%'
+                              : currentSection === step
+                                ? '50%'
+                                : '0%',
+                        }}
+                      ></div>
+                    </div>
+                  )}
+                  <div
+                    className={`w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm md:text-base ${
+                      currentSection === step
+                        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-indigo-700/30 scale-110'
+                        : currentSection > step
+                          ? 'bg-gradient-to-r from-blue-400 to-indigo-500 text-white'
+                          : 'bg-gray-200/20 text-white/70'
+                    }`}
+                  >
+                    {step}
                   </div>
-                )}
-                <div
-                  className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm md:text-base ${
-                    currentSection === step
-                      ? 'bg-blue-600 text-white scale-110'
-                      : currentSection > step
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                  }`}
-                >
-                  {step}
-                </div>
-              </React.Fragment>
-            ))}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {submitSuccess ? (
-        <SuccessAnimation
-          title={t('registration.success', 'Registration Successful!')}
-          message={t(
-            'registration.successDescription',
-            'User has been registered successfully.'
-          )}
-          id={registeredUserId}
-          idLabel={t('registration.caseReferenceId', 'Registration ID:')}
-        />
-      ) : (
-        <motion.form
-          onSubmit={handleFormSubmit}
-          className="w-full max-w-2xl mx-auto bg-white/20 backdrop-blur-lg p-4 sm:p-6 md:p-10 mt-4 sm:mt-6 rounded-xl sm:rounded-2xl shadow-[0_0_30px_5px_rgba(0,0,255,0.3)] text-white border border-white/30 space-y-4 sm:space-y-8"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">
-            {t('forms.man.title', 'Male Registration')}
-          </h2>
-
-          {/* Display form errors */}
-          {formErrors.length > 0 && (
-            <motion.div
-              variants={errorVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              transition={transition}
-              className="bg-red-500/20 p-3 rounded-lg border border-red-500/30 mb-4"
-            >
-              <ul className="list-disc pl-5">
-                {formErrors.map((error, index) => (
-                  <li key={index} className="text-red-200 text-sm sm:text-base">
-                    {error}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
-
-          {/* Sections */}
-          <>
-            {currentSection === 1 && (
-              <PersonalInfoSection
-                formData={formData}
-                handleInputChange={handleInputChange}
-                nextSection={nextSection}
-              />
+      <AnimatePresence mode="wait">
+        {submitSuccess ? (
+          <SuccessAnimation
+            title={t('registration.success', 'Registration Successful!')}
+            message={t(
+              'registration.successDescription',
+              'User has been registered successfully.'
             )}
+            id={registeredUserId}
+            idLabel={t('registration.caseReferenceId', 'Registration ID:')}
+          />
+        ) : (
+          <motion.form
+            onSubmit={handleFormSubmit}
+            className="w-full max-w-2xl mx-auto 
+                      bg-white/10 backdrop-blur-lg 
+                      p-5 sm:p-8 
+                      mt-4 sm:mt-6 
+                      rounded-2xl 
+                      shadow-[0_10px_40px_-5px_rgba(59,130,246,0.3)] 
+                      text-white 
+                      border border-white/20 
+                      space-y-6 sm:space-y-8"
+            variants={formVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {/* Display form errors */}
+            <AnimatePresence>
+              {formErrors.length > 0 && (
+                <motion.div
+                  variants={errorVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={transition}
+                  className="bg-red-500/20 p-4 rounded-xl border border-red-500/30 mb-4"
+                >
+                  <div className="flex items-start">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-red-400 mr-2 mt-0.5 flex-shrink-0"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <ul className="list-disc pl-5 space-y-1">
+                      {formErrors.map((error, index) => (
+                        <li key={index} className="text-red-100 text-sm">
+                          {error}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            {currentSection === 2 && (
-              <ContactInfoSection
-                formData={formData}
-                handleInputChange={handleInputChange}
-                prevSection={prevSection}
-                nextSection={nextSection}
-                t={t}
-              />
-            )}
+            {/* Sections */}
+            <AnimatePresence mode="wait">
+              {currentSection === 1 && (
+                <PersonalInfoSection
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  nextSection={nextSection}
+                  t={t}
+                />
+              )}
 
-            {currentSection === 3 && (
-              <CriminalRecordSection
-                formData={formData}
-                handleInputChange={handleInputChange}
-                handleToggleCriminalRecord={handleToggleCriminalRecord}
-                prevSection={prevSection}
-                nextSection={nextSection}
-                t={t}
-              />
-            )}
+              {currentSection === 2 && (
+                <ContactInfoSection
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  prevSection={prevSection}
+                  nextSection={nextSection}
+                  t={t}
+                />
+              )}
 
-            {currentSection === 4 && (
-              <TravelInfoSection
-                formData={formData}
-                handleInputChange={handleInputChange}
-                prevSection={prevSection}
-                nextSection={nextSection}
-                t={t}
-              />
-            )}
+              {currentSection === 3 && (
+                <CriminalRecordSection
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  handleToggleCriminalRecord={handleToggleCriminalRecord}
+                  prevSection={prevSection}
+                  nextSection={nextSection}
+                  t={t}
+                />
+              )}
 
-            {currentSection === 5 && (
-              <VehicleInfoSection
-                formData={formData}
-                handleInputChange={handleInputChange}
-                prevSection={prevSection}
-                nextSection={nextSection}
-                t={t}
-              />
-            )}
+              {currentSection === 4 && (
+                <TravelInfoSection
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  prevSection={prevSection}
+                  nextSection={nextSection}
+                  t={t}
+                />
+              )}
 
-            {currentSection === 6 && (
-              <ImageSection
-                formData={formData}
-                capturedImage={capturedImage}
-                webcamRef={webcamRef}
-                facingMode={facingMode}
-                handleToggleCamera={handleToggleCamera}
-                handleFileChange={handleFileChange}
-                captureImage={captureImage}
-                toggleCameraFacingMode={toggleCameraFacingMode}
-                retakePhoto={retakePhoto}
-                handleFormSubmit={handleFormSubmit}
-                loading={loading}
-                prevSection={prevSection}
-                t={t}
-              />
-            )}
-          </>
-        </motion.form>
-      )}
+              {currentSection === 5 && (
+                <VehicleInfoSection
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  prevSection={prevSection}
+                  nextSection={nextSection}
+                  t={t}
+                />
+              )}
+
+              {currentSection === 6 && (
+                <ImageSection
+                  formData={formData}
+                  capturedImage={capturedImage}
+                  webcamRef={webcamRef}
+                  facingMode={facingMode}
+                  handleToggleCamera={handleToggleCamera}
+                  handleFileChange={handleFileChange}
+                  captureImage={captureImage}
+                  toggleCameraFacingMode={toggleCameraFacingMode}
+                  retakePhoto={retakePhoto}
+                  handleFormSubmit={handleFormSubmit}
+                  loading={loading}
+                  prevSection={prevSection}
+                  t={t}
+                />
+              )}
+            </AnimatePresence>
+          </motion.form>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

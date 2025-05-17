@@ -43,6 +43,8 @@ export interface FormData {
   // Image handling
   image: File | null;
   useCamera: boolean;
+  // Vehicle info object for nested data
+  vehicle_info?: Record<string, string>;
 }
 
 export const initialFormData: FormData = {
