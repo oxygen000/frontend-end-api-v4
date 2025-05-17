@@ -85,11 +85,7 @@ const UserProfileHeader = ({
             </h1>
           </div>
           <p className="text-white/70 mt-1 flex flex-wrap items-center justify-center md:justify-start gap-2">
-            {user.form_type && (
-              <span className="capitalize bg-white/20 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
-                {t(`search.formTypes.${user.form_type}`, user.form_type)}
-              </span>
-            )}
+            
             {user.department && (
               <span className="bg-blue-500/30 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                 {user.department}
