@@ -11,8 +11,7 @@ function Home() {
 
   const [isPopupAddOpen, setIsPopupAddOpen] = useState(false);
   const [isPopupSearchOpen, setIsPopupSearchOpen] = useState(false);
-  const [isPopupIdentificationOpen, setIsPopupIdentificationOpen] =
-    useState(false);
+  const [isPopupIdentificationOpen, setIsPopupIdentificationOpen] = useState(false);
 
   const openPopup = () => setIsPopupAddOpen(true);
   const closePopup = () => setIsPopupAddOpen(false);
@@ -32,8 +31,32 @@ function Home() {
     animate: { opacity: 1, y: 0 },
   };
 
+  const buttons = [
+    {
+      id: 1,
+      onClick: openPopupIdentification,
+      label: t('home.identificationButton', 'Identification Of Unidentified'),
+    },
+    {
+      id: 2,
+      onClick: openPopupSearch,
+      label: t('home.searchButton', 'Search For Missing Persons'),
+    },
+    {
+      id: 3,
+      onClick: openPopup,
+      label: t('home.addButton', 'Add New Data'),
+    },
+    {
+      id: 4,
+      label: t('home.bigDataButton', 'Big Data'),
+      isLink: true,
+      linkTo: '/search',
+    },
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       <motion.div
         className="text-center mb-12"
         initial="initial"
@@ -41,87 +64,60 @@ function Home() {
         variants={titleVariants}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
           {t('home.title', 'SMART FACE ID POLICE EDITION')}
         </h1>
       </motion.div>
 
-      <div className="relative flex flex-wrap justify-center gap-8">
-        {[1, 2, 3, 4].map((num, index) => (
-          <motion.div
-            key={num}
-            className="flex flex-col items-center"
-            initial="initial"
-            animate="animate"
-            variants={buttonVariants}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-          >
-            <div className="bg-white w-16 h-16 flex justify-center items-center rounded-full border-2 border-gray-800 z-10 mb-4">
-              <span className="text-2xl text-gray-800">{num}</span>
-            </div>
-            {num === 1 && (
-              <motion.button
-                onClick={openPopupIdentification}
-                className="px-6 py-2 w-40 bg-gray-800 text-white rounded hover:bg-gray-700 transition duration-300"
-                whileHover="hover"
-                variants={buttonVariants}
-              >
-                {t('home.identificationButton', 'Identification Of Unidentified')}
-              </motion.button>
-            )}
-            {num === 2 && (
-              <motion.button
-                onClick={openPopupSearch}
-                className="px-6 py-2 w-40 text-center bg-gray-800 text-white rounded hover:bg-gray-700 transition duration-300"
-                whileHover="hover"
-                variants={buttonVariants}
-              >
-                {t('home.searchButton', 'Search For Missing Persons')}
-              </motion.button>
-            )}
-            {num === 3 && (
-              <motion.button
-                onClick={openPopup}
-                className="px-6 py-2 w-40 text-center bg-gray-800 text-white rounded hover:bg-gray-700 transition duration-300"
-                whileHover="hover"
-                variants={buttonVariants}
-              >
-                {t('home.addButton', 'Add New Data')}
-              </motion.button>
-            )}
-            {num === 4 && (
-              <Link
-                to="/search"
-                className="px-6 py-2 w-40 text-center bg-gray-800 text-white rounded hover:bg-gray-700 transition duration-300"
-              >
-                {t('home.bigDataButton', 'Big Data')}
-              </Link>
-            )}
-          </motion.div>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center">
+      {buttons.map(({ id, onClick, label, isLink, linkTo }, index) => (
+  <motion.div
+    key={id}
+    className="relative flex flex-col items-center"
+    initial="initial"
+    animate="animate"
+    variants={buttonVariants}
+    transition={{ duration: 0.5, delay: (id - 1) * 0.2 }}
+  >
+    {/* الدائرة */}
+    <div className="bg-white w-16 h-16 flex justify-center items-center rounded-full border-2 border-gray-800 z-10 mb-4">
+      <span className="text-2xl font-semibold text-gray-800">{id}</span>
+    </div>
 
-        {/* Lines between buttons */}
-        <motion.div
-          className="hidden sm:block absolute bg-white h-1 top-[20%] left-[28%] w-[24%]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        />
-        <motion.div
-          className="hidden sm:block absolute bg-white h-1 top-[20%] left-[42%] w-[24%]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-        />
-        <motion.div
-          className="hidden sm:block absolute bg-white h-1 top-[20%] left-[54%] w-[20%]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-        />
+    {/* الزر أو الرابط */}
+    {isLink ? (
+      <Link
+        to={linkTo}
+        className="px-8 py-3 bg-gray-800 text-white rounded hover:bg-gray-700 transition duration-300 w-64"
+      >
+        {label}
+      </Link>
+    ) : (
+      <motion.button
+        onClick={onClick}
+        className="px-6 py-3 bg-gray-800 text-white rounded hover:bg-gray-700 transition duration-300 w-48"
+        whileHover="hover"
+        variants={buttonVariants}
+      >
+        {label}
+      </motion.button>
+    )}
+
+    {/* الخط العمودي أسفل العنصر */}
+    {id < 4 && (
+      <div className="w-1 h-10  bg-white mt-4 rounded block sm:hidden" />
+    )}
+
+    {/* الخط الأفقي بين الأعمدة على الشاشات الكبيرة */}
+    {index < buttons.length - 1 && (
+      <div className="hidden md:block absolute top-8 right-[-50%] w-full h-1 bg-white z-0" />
+    )}
+  </motion.div>
+))}
+
       </div>
 
-      {/* Popups */}
+      {/* النوافذ المنبثقة */}
       <PopupChoiceAdd
         isOpen={isPopupAddOpen}
         onClose={closePopup}
@@ -132,10 +128,7 @@ function Home() {
       <PopupChoiceIdentification
         isOpen={isPopupIdentificationOpen}
         onClose={closePopupIdentification}
-        title={t(
-          'popups.identificationTitle',
-          'Select the type you want to check.'
-        )}
+        title={t('popups.identificationTitle', 'Select the type you want to check.')}
         cancelText={t('common.cancel', 'cancel')}
       />
 
