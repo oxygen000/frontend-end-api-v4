@@ -169,8 +169,8 @@
       "visitor": "Visitor",
       "male": "Male",
       "female": "Female",
-      "man": "Man",
-      "woman": "Woman",
+      "man": "Male",
+      "woman": "Female",
       "adult": "Adult"
     },
     "sortBy": "Sort By",

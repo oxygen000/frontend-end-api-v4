@@ -44,14 +44,14 @@ function Home() {
     },
     {
       id: 3,
-      onClick: openPopup,
-      label: t('home.addButton', 'Add New Data'),
-    },
-    {
-      id: 4,
       label: t('home.bigDataButton', 'Big Data'),
       isLink: true,
       linkTo: '/search',
+    },
+    {
+      id: 4,
+      onClick: openPopup,
+      label: t('home.addButton', 'Add New Data'),
     },
   ];
 
