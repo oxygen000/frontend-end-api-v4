@@ -1,93 +1,43 @@
 import { toast } from 'react-hot-toast';
 import { registrationApi } from '../../../../services/api';
-import { BASE_API_URL } from '../../../../config/constants';
-import type { FormData, UserWithFaceId } from '../types/types';
+import type { FormData } from '../types/types';
+
+// Track registration requests to prevent duplicates
+const pendingRegistrations = new Set<string>();
+
+// Helper function to generate a truly unique ID that won't conflict
+const generateUniqueId = () => {
+  // Create a unique string with timestamp and random values
+  const timestamp = new Date().getTime();
+  const random = Math.floor(Math.random() * 1000000);
+  return `${timestamp}-${random}`;
+};
 
 export const submitForm = async (
   formData: FormData,
   capturedImage: string | null,
   t: (key: string, fallback: string) => string
 ): Promise<{ success: boolean; userId?: string; userName?: string }> => {
+  // Generate a unique submission ID for tracking
+  const submissionKey = `${formData.name}-${formData.dob}-${Date.now()}`;
+
+  // Check if this submission is already in progress
+  if (pendingRegistrations.has(submissionKey)) {
+    console.log('Registration already in progress, preventing duplicate');
+    toast.error('Registration already in progress');
+    return { success: false };
+  }
+
+  // Mark this submission as pending
+  pendingRegistrations.add(submissionKey);
+
   try {
-    // Create FormData object for file upload
-    const formDataToSend = new FormData();
+    console.log('Starting child registration process...');
+    toast.loading('Registering child information...', { id: 'registration' });
 
-    // Add required form fields
-    formDataToSend.append('name', formData.name);
-    formDataToSend.append('nickname', formData.name.split(' ')[0] || '');
-    formDataToSend.append('dob', formData.dob);
-    formDataToSend.append('gender', formData.gender || '');
-    formDataToSend.append('national_id', formData.national_id || '');
-    formDataToSend.append('address', formData.address || '');
-    formDataToSend.append('form_type', 'child');
-    formDataToSend.append('category', 'child');
-
-    // Add bypass parameters for face validation
-    formDataToSend.append('bypass_angle_check', 'true');
-    formDataToSend.append('train_multiple', 'true');
-
-    // Phone fields are required by the backend
-    formDataToSend.append('phone_number', formData.guardian_phone || '');
-    formDataToSend.append('phone_company', formData.phone_company || '');
-
-    // Add Child-specific fields
-    formDataToSend.append(
-      'physical_description',
-      formData.physical_description || ''
-    );
-    formDataToSend.append('last_clothes', formData.last_seen_clothes || '');
-    formDataToSend.append(
-      'area_of_disappearance',
-      formData.last_seen_location || ''
-    );
-    formDataToSend.append('last_seen_time', formData.last_seen_time || '');
-    formDataToSend.append('guardian_name', formData.guardian_name || '');
-    formDataToSend.append('guardian_phone', formData.guardian_phone || '');
-    formDataToSend.append('guardian_id', formData.national_id || '');
-    formDataToSend.append('relationship', formData.relationship || '');
-    formDataToSend.append('additional_notes', formData.additional_notes || '');
-    formDataToSend.append(
-      'medical_condition',
-      formData.medical_condition || ''
-    );
-
-    // Additional important fields
-    formDataToSend.append('description', ''); // Empty but required field
-    formDataToSend.append('notes', ''); // Empty but required field
-
-    // Create a complete child data object and append as JSON
-    const childData = {
-      name: formData.name,
-      nickname: formData.name.split(' ')[0] || '',
-      dob: formData.dob,
-      date_of_birth: formData.dob,
-      national_id: formData.national_id || '',
-      address: formData.address || '',
-      category: 'child',
-      form_type: 'child',
-      additional_data: formData.additional_data || '',
-      physical_description: formData.physical_description || '',
-      last_clothes: formData.last_seen_clothes || '',
-      area_of_disappearance: formData.last_seen_location || '',
-      last_seen_time: formData.last_seen_time || '',
-      guardian_name: formData.guardian_name || '',
-      guardian_phone: formData.guardian_phone || '',
-      guardian_id: formData.national_id || '',
-      relationship: formData.relationship || '',
-      gender: formData.gender || '',
-      additional_notes: formData.additional_notes || '',
-      medical_condition: formData.medical_condition || '',
-      // Required fields for the backend database
-      phone_number: formData.guardian_phone || '',
-      phone_company: formData.phone_company || '',
-      employee_id: '',
-      department: '',
-      role: '',
-    };
-
-    // Append the complete user data in JSON format
-    formDataToSend.append('user_data', JSON.stringify(childData));
-    formDataToSend.append('child_data', JSON.stringify(childData));
+    // Generate a unique ID for this submission to prevent conflicts
+    const uniqueSubmissionId = generateUniqueId();
+    console.log(`Generated unique submission ID: ${uniqueSubmissionId}`);
 
     // Handle image from file upload or webcam
     let imageFile: File | null = null;
@@ -121,9 +71,13 @@ export const submitForm = async (
         }
 
         const blob = new Blob([ab], { type: 'image/jpeg' });
-        imageFile = new File([blob], `webcam_capture_${Date.now()}.jpg`, {
-          type: 'image/jpeg',
-        });
+        imageFile = new File(
+          [blob],
+          `webcam_capture_${uniqueSubmissionId}.jpg`,
+          {
+            type: 'image/jpeg',
+          }
+        );
       } catch (error) {
         console.error('Error converting base64 to file:', error);
         throw new Error(
@@ -132,76 +86,148 @@ export const submitForm = async (
       }
     }
 
-    if (imageFile) {
-      // Append the file with name 'file' as expected by the backend
-      formDataToSend.append('file', imageFile);
-    } else {
+    if (!imageFile) {
       // No image was provided
+      toast.dismiss('registration');
+      pendingRegistrations.delete(submissionKey);
       throw new Error(t('validation.photoRequired', 'Please provide an image'));
     }
 
-    // Call API to register user
-    const responseData = await registrationApi.registerUser(formDataToSend);
+    // Create FormData for submission
+    const formDataToSend = new FormData();
 
-    // Handle successful registration
-    const userId = responseData?.user_id || responseData?.user?.id || undefined;
-    const userName = responseData?.user?.name || formData.name;
-
-    toast.success(
-      `${userName} ${t('registration.successMessage', 'registered successfully!')}`
+    // Add all required fields
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('nickname', formData.name.split(' ')[0] || '');
+    formDataToSend.append('dob', formData.dob);
+    formDataToSend.append('gender', formData.gender || '');
+    formDataToSend.append('national_id', formData.national_id || '');
+    formDataToSend.append('address', formData.address || '');
+    formDataToSend.append('form_type', 'child');
+    formDataToSend.append('category', 'child');
+    formDataToSend.append('bypass_angle_check', 'true');
+    formDataToSend.append('train_multiple', 'true');
+    formDataToSend.append('phone_number', formData.guardian_phone || '');
+    formDataToSend.append('phone_company', formData.phone_company || '');
+    formDataToSend.append(
+      'physical_description',
+      formData.physical_description || ''
+    );
+    formDataToSend.append('last_clothes', formData.last_seen_clothes || '');
+    formDataToSend.append(
+      'area_of_disappearance',
+      formData.last_seen_location || ''
+    );
+    formDataToSend.append('last_seen_time', formData.last_seen_time || '');
+    formDataToSend.append('guardian_name', formData.guardian_name || '');
+    formDataToSend.append('guardian_phone', formData.guardian_phone || '');
+    formDataToSend.append('guardian_id', formData.national_id || '');
+    formDataToSend.append('relationship', formData.relationship || '');
+    formDataToSend.append('additional_notes', formData.additional_notes || '');
+    formDataToSend.append(
+      'medical_condition',
+      formData.medical_condition || ''
     );
 
-    // Verify the registration only if we have a userId with a proper format (not temp-)
-    if (userId && !userId.toString().startsWith('temp-')) {
-      // Try to verify the registration without delays
-      try {
-        const verificationData =
-          await registrationApi.verifyRegistration(userId);
-        const user = verificationData.user as UserWithFaceId;
+    // Add the uniquely generated ID to prevent conflicts
+    formDataToSend.append('unique_submission_id', uniqueSubmissionId);
 
-        if (user && user.face_id) {
-          console.log(
-            'User verification successful with face_id:',
-            user.face_id
-          );
-        } else {
-          console.log('User verified but no face_id yet');
-        }
-      } catch (error) {
-        console.error('Error during verification:', error);
-      }
+    // Add the image file
+    formDataToSend.append('file', imageFile);
 
-      // If verification didn't give us a face_id, try to trigger face processing
-      try {
-        if (imageFile) {
-          const verifyFormData = new FormData();
-          verifyFormData.append('file', imageFile);
+    // Create a child data object for JSON payload
+    const childData = {
+      unique_id: uniqueSubmissionId,
+      name: formData.name,
+      nickname: formData.name.split(' ')[0] || '',
+      dob: formData.dob,
+      gender: formData.gender || '',
+      national_id: formData.national_id || '',
+      address: formData.address || '',
+      category: 'child',
+      form_type: 'child',
+      additional_data: formData.additional_data || '',
+      physical_description: formData.physical_description || '',
+      last_clothes: formData.last_seen_clothes || '',
+      area_of_disappearance: formData.last_seen_location || '',
+      last_seen_time: formData.last_seen_time || '',
+      guardian_name: formData.guardian_name || '',
+      guardian_phone: formData.guardian_phone || '',
+      guardian_id: formData.national_id || '',
+      relationship: formData.relationship || '',
+      additional_notes: formData.additional_notes || '',
+      medical_condition: formData.medical_condition || '',
+      // Required fields for the backend database
+      phone_number: formData.guardian_phone || '',
+      phone_company: formData.phone_company || '',
+    };
 
-          fetch(`${BASE_API_URL}/api/verify-face`, {
-            method: 'POST',
-            body: verifyFormData,
-          })
-            .then((response) => {
-              if (response.ok) {
-                console.log(
-                  'Face verification successful, this may help generate face_id'
-                );
-              }
-            })
-            .catch((verifyError) => {
-              console.error('Error during face verification:', verifyError);
-            });
-        }
-      } catch (verifyError) {
-        console.error('Error during face verification:', verifyError);
-      }
+    // Ensure there's no ID field
+    if ('id' in childData) {
+      delete (childData as Record<string, unknown>).id;
     }
 
-    return { success: true, userId, userName };
+    // Add user_data as JSON
+    formDataToSend.append('user_data', JSON.stringify(childData));
+
+    // IMPORTANT: Only use the main registration endpoint to avoid duplicates
+    console.log('Using main registration endpoint only');
+    try {
+      const responseData = await registrationApi.registerUser(formDataToSend);
+      console.log('Registration response:', responseData);
+
+      // If successful, clear pending registration
+      pendingRegistrations.delete(submissionKey);
+
+      // Extract user info from the response
+      const userId =
+        responseData?.user_id ||
+        responseData?.user?.id ||
+        `temp-${uniqueSubmissionId}`;
+      const userName = responseData?.user?.name || formData.name;
+
+      toast.success(
+        `${userName} ${t('registration.successMessage', 'registered successfully!')}`,
+        { id: 'registration' }
+      );
+
+      return { success: true, userId, userName };
+    } catch (error) {
+      console.error('Registration error:', error);
+      pendingRegistrations.delete(submissionKey);
+
+      let errorMessage = t(
+        'registration.generalError',
+        'An error occurred during registration'
+      );
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+
+        // Handle common errors
+        if (errorMessage.includes('UNIQUE constraint failed')) {
+          errorMessage =
+            'Registration could not be completed. Please try again with a different image.';
+        } else if (
+          errorMessage.includes('Face angle') ||
+          errorMessage.includes('face is not')
+        ) {
+          errorMessage = t(
+            'validation.faceAngleError',
+            "The uploaded photo doesn't meet our requirements. Please upload a clear front-facing photo where the person is looking directly at the camera."
+          );
+        }
+      }
+
+      toast.error(errorMessage, { id: 'registration' });
+      return { success: false };
+    }
   } catch (err) {
     console.error('Registration error:', err);
+    pendingRegistrations.delete(submissionKey);
+    toast.dismiss('registration');
 
-    // Check for specific face angle error
+    // Check for specific error types
     let errorMessage = t(
       'registration.generalError',
       'An error occurred during registration'
@@ -210,8 +236,13 @@ export const submitForm = async (
     if (err instanceof Error) {
       errorMessage = err.message;
 
+      // Special case for UNIQUE constraint errors
+      if (errorMessage.includes('UNIQUE constraint failed')) {
+        errorMessage =
+          'Registration could not be completed. Please try again with a different image.';
+      }
       // Provide more user-friendly message for face angle errors
-      if (
+      else if (
         errorMessage.includes('Face angle') ||
         errorMessage.includes('face is not')
       ) {

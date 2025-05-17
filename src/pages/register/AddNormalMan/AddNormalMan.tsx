@@ -180,16 +180,16 @@ const AddNormalMan = () => {
       const result = await submitForm(formData, capturedImage, t);
 
       if (result.success) {
-        setSubmitSuccess(true);
+      setSubmitSuccess(true);
         setRegisteredUserId(result.userId || null);
 
-        // Reset form data after animation plays
-        setTimeout(() => {
-          setFormData(initialFormData);
-          setCapturedImage(null);
-          setCurrentSection(1);
-          setSubmitSuccess(false);
-        }, 1000);
+      // Reset form data after animation plays
+      setTimeout(() => {
+        setFormData(initialFormData);
+        setCapturedImage(null);
+        setCurrentSection(1);
+        setSubmitSuccess(false);
+      }, 1000);
       }
     } finally {
       setLoading(false);

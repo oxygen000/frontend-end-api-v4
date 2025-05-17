@@ -26,6 +26,9 @@ import {
   prepareImageFile,
 } from './utils/formValidation';
 
+// Track submissions to prevent duplicates
+const pendingSubmissions = new Set<string>();
+
 function AddDisabled() {
   const { t } = useTranslationWithFallback();
   const [currentSection, setCurrentSection] = useState<DisabledFormSection>(1);
@@ -126,7 +129,21 @@ function AddDisabled() {
       return;
     }
 
+    // Generate submission key to detect duplicate submissions
+    const submissionKey = `${personDetails.name}-${personDetails.dob}-${Date.now()}`;
+
+    // Prevent duplicate submissions
+    if (pendingSubmissions.has(submissionKey)) {
+      toast.error('A submission is already in progress');
+      return;
+    }
+
+    // Mark as pending
+    pendingSubmissions.add(submissionKey);
     setLoading(true);
+    toast.loading('Registering information...', {
+      id: 'disabled-registration',
+    });
 
     try {
       // Build form data for submission
@@ -140,6 +157,8 @@ function AddDisabled() {
       if (imageFile) {
         formDataToSend.append('file', imageFile);
       } else {
+        pendingSubmissions.delete(submissionKey);
+        toast.dismiss('disabled-registration');
         throw new Error('Please provide a photo');
       }
 
@@ -148,8 +167,15 @@ function AddDisabled() {
         const responseData = await registrationApi.registerUser(formDataToSend);
         console.log('Response data from registerUser:', responseData);
 
+        // Clear pending submission immediately
+        pendingSubmissions.delete(submissionKey);
+
         // Handle successful registration
         setSubmitSuccess(true);
+
+        // Clear form data immediately to prevent duplicate submissions
+        setPersonDetails({ ...initialFormData });
+        setCapturedImage(null);
 
         // If we didn't get proper data back, try to recreate it
         let userId, userName;
@@ -193,20 +219,31 @@ function AddDisabled() {
 
         // Store the ID for reference
         setRegisteredUserId(userId);
-        toast.success(`${userName} registered successfully!`);
+        toast.success(`${userName} registered successfully!`, {
+          id: 'disabled-registration',
+        });
+
+        // Show success animation
+        setSubmitSuccess(true);
 
         // Reset form data after animation plays
         setTimeout(() => {
-          setPersonDetails(initialFormData);
+          // Reset success state to show the form again
+          setSubmitSuccess(false);
+
+          // Make sure form is fully reset
+          setPersonDetails({ ...initialFormData });
           setCapturedImage(null);
           setCurrentSection(1);
-          setSubmitSuccess(false);
           setLoading(false);
-        }, 3000);
+          console.log('Form reset completed after success animation');
+        }, 3500);
       } catch (err) {
+        pendingSubmissions.delete(submissionKey);
         handleRegistrationError(err);
       }
     } catch (err) {
+      pendingSubmissions.delete(submissionKey);
       handleRegistrationError(err);
     }
   };
@@ -229,9 +266,14 @@ function AddDisabled() {
         errorMessage =
           "The uploaded photo doesn't meet our requirements. Please upload a clear front-facing photo where the person is looking directly at the camera.";
       }
+      // Handle unique constraint errors
+      else if (errorMessage.includes('UNIQUE constraint failed')) {
+        errorMessage =
+          'Registration could not be completed. Please try again with a different image.';
+      }
     }
 
-    toast.error(errorMessage);
+    toast.error(errorMessage, { id: 'disabled-registration' });
     setFormErrors([errorMessage]);
     setLoading(false);
   };

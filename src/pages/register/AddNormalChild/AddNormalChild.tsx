@@ -12,7 +12,7 @@ import GuardianInfoSection from './components/GuardianInfoSection';
 import DisappearanceDetailsSection from './components/DisappearanceDetailsSection';
 import ImageSection from './components/ImageSection';
 import { validateForm } from './utils/FormValidation';
-import { submitForm } from './utils/FormSubmission';
+import { submitChildForm } from './utils/DirectSubmission';
 import type { FormData } from './types/types';
 import { initialFormData } from './types/types';
 
@@ -27,6 +27,7 @@ function AddNormalChild() {
   const webcamRef = useRef<Webcam>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Toggle camera/upload mode
   const handleToggleCamera = () => {
@@ -43,29 +44,29 @@ function AddNormalChild() {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       if (imageSrc) {
-        setCapturedImage(imageSrc);
+      setCapturedImage(imageSrc);
 
-        // Convert the captured image to a File object for API submission
-        if (imageSrc) {
-          // Convert base64 to blob
-          const byteString = atob(imageSrc.split(',')[1]);
-          const mimeString = imageSrc.split(',')[0].split(':')[1].split(';')[0];
-          const ab = new ArrayBuffer(byteString.length);
-          const ia = new Uint8Array(ab);
+      // Convert the captured image to a File object for API submission
+      if (imageSrc) {
+        // Convert base64 to blob
+        const byteString = atob(imageSrc.split(',')[1]);
+        const mimeString = imageSrc.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
 
-          for (let i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-          }
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
 
-          const blob = new Blob([ab], { type: mimeString });
-          const file = new File([blob], 'captured-image.jpg', {
-            type: 'image/jpeg',
-          });
+        const blob = new Blob([ab], { type: mimeString });
+        const file = new File([blob], 'captured-image.jpg', {
+          type: 'image/jpeg',
+        });
 
-          setFormData((prev) => ({
-            ...prev,
-            image: file,
-          }));
+        setFormData((prev) => ({
+          ...prev,
+          image: file,
+        }));
         }
       }
     }
@@ -146,40 +147,76 @@ function AddNormalChild() {
     setFacingMode((prevMode) => (prevMode === 'user' ? 'environment' : 'user'));
   };
 
-  // Form submission handler
+  // Form submission
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateAndProceed()) {
+
+    // Debug - check if we're using the updated FormSubmission
+    console.log('Using submitForm function - version check');
+
+    // Validate form before submission
+    const errors = validateForm(formData, currentSection, capturedImage, t);
+    if (errors.length > 0) {
+      setFormErrors(errors);
       return;
     }
 
-    setIsSubmitting(true);
+    // Prevent multiple submissions
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    setFormErrors([]);
 
     try {
-      // Call submitForm from FormSubmission.ts
-      const result = await submitForm(formData, capturedImage, t);
+      const result = await submitChildForm(formData, capturedImage, t);
 
       if (result.success) {
+        // Store the user ID and set success state
+        const userId = result.userId || `temp-${Date.now()}`;
+      setRegisteredUserId(userId);
+        
+        // Clear form data immediately to prevent duplicate submissions
+        setFormData({ ...initialFormData });
+        setCapturedImage(null);
+        
+        // Show success animation
         setSubmitSuccess(true);
-        setRegisteredUserId(result.userId || null);
-
-        // Reset form data after animation plays
+        
+        // After showing success animation, reset everything to initial state
         setTimeout(() => {
-          setFormData(initialFormData);
+          // Reset success state to show the form again
+          setSubmitSuccess(false);
+          
+          // Make sure form is fully reset
+          setFormData({ ...initialFormData });
           setCapturedImage(null);
           setCurrentSection(1);
-          setSubmitSuccess(false);
-        }, 1000);
-      }
-    } catch (err) {
-      console.error('Form submission error:', err);
-      if (err instanceof Error) {
-        setFormErrors([err.message]);
+          setLoading(false);
+          console.log('Form reset completed after success animation');
+        }, 3500);
       } else {
-        setFormErrors(['An unknown error occurred']);
+        // If not successful, show error message
+        setFormErrors([
+          t('registration.failed', 'Registration failed. Please try again.'),
+        ]);
       }
+    } catch (error) {
+      console.error('Form submission error:', error);
+
+      let errorMessage = t(
+        'registration.generalError',
+        'An error occurred during registration'
+      );
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      setFormErrors([errorMessage]);
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 

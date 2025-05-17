@@ -58,23 +58,6 @@ export const submitForm = async (
       formDataToSend.append('accusation', formData.accusation || '');
     }
 
-    // Add vehicle fields if applicable
-    if (formData.has_motorcycle) {
-      formDataToSend.append('license_plate', formData.license_plate || '');
-      formDataToSend.append('vehicle_model', formData.vehicle_model || '');
-      formDataToSend.append('vehicle_color', formData.vehicle_color || '');
-      formDataToSend.append('chassis_number', formData.chassis_number || '');
-      formDataToSend.append('vehicle_number', formData.vehicle_number || '');
-      formDataToSend.append(
-        'license_expiration',
-        formData.license_expiration || ''
-      );
-      // Only send manufacture_year if it's actually set
-      if (formData.manufacture_year) {
-        formDataToSend.append('manufacture_year', formData.manufacture_year);
-      }
-    }
-
     // Add travel fields
     if (formData.travel_date) {
       formDataToSend.append('travel_date', formData.travel_date);
@@ -89,7 +72,7 @@ export const submitForm = async (
     }
 
     // Create a complete user data object and append as JSON
-    const userData = {
+    const userData: Record<string, any> = {
       name: formData.name,
       nickname: formData.nickname || formData.name.split(' ')[0] || '',
       dob: formData.dob,
@@ -113,16 +96,6 @@ export const submitForm = async (
       judgment: formData.judgment || '',
       accusation: formData.accusation || '',
       has_motorcycle: formData.has_motorcycle ? '1' : '0',
-      license_plate: formData.license_plate || '',
-      vehicle_model: formData.vehicle_model || '',
-      vehicle_color: formData.vehicle_color || '',
-      chassis_number: formData.chassis_number || '',
-      vehicle_number: formData.vehicle_number || '',
-      license_expiration: formData.license_expiration || '',
-      // Only include manufacture_year if it has a value to avoid DB errors
-      ...(formData.manufacture_year
-        ? { manufacture_year: formData.manufacture_year }
-        : {}),
       travel_date: formData.travel_date || '',
       travel_destination: formData.travel_destination || '',
       arrival_airport: formData.arrival_airport || '',
@@ -130,6 +103,31 @@ export const submitForm = async (
       flight_number: formData.flight_number || '',
       return_date: formData.return_date || '',
     };
+
+    // Store vehicle info in additional_data field which is a valid field in the database schema
+    const additionalDataObj: Record<string, any> = {};
+    
+    // Collect vehicle info
+    if (formData.vehicle_info) {
+      additionalDataObj.vehicle_info = formData.vehicle_info;
+    } 
+    else if (formData.has_motorcycle) {
+      additionalDataObj.vehicle_info = {
+        license_plate: formData.license_plate || '',
+        vehicle_model: formData.vehicle_model || '',
+        vehicle_color: formData.vehicle_color || '',
+        chassis_number: formData.chassis_number || '',
+        vehicle_number: formData.vehicle_number || '',
+        license_expiration: formData.license_expiration || '',
+        ...(formData.manufacture_year ? { manufacture_year: formData.manufacture_year } : {})
+      };
+    }
+    
+    // Add the additional_data field if we have vehicle info
+    if (Object.keys(additionalDataObj).length > 0) {
+      userData.additional_data = JSON.stringify(additionalDataObj);
+      formDataToSend.append('additional_data', JSON.stringify(additionalDataObj));
+    }
 
     // Append the complete user data as JSON and log for debugging
     formDataToSend.append('user_data', JSON.stringify(userData));

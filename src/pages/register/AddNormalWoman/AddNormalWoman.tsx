@@ -190,7 +190,40 @@ const AddNormalWoman = () => {
     setLoading(true);
 
     try {
-      const result = await submitForm(formData, capturedImage, t);
+      // Create a copy of formData and properly nest vehicle information
+      const submissionData = { ...formData };
+
+      // Extract vehicle-related fields and nest them under vehicle_info
+      const vehicleInfo: Record<string, string> = {};
+      const vehicleFields = [
+        'manufacture_year',
+        'vehicle_model',
+        'vehicle_color',
+        'chassis_number',
+        'vehicle_number',
+        'license_plate',
+        'license_expiration',
+      ];
+
+      let hasVehicleData = false;
+
+      vehicleFields.forEach((field) => {
+        if (submissionData[field as keyof FormData]) {
+          vehicleInfo[field] = submissionData[
+            field as keyof FormData
+          ] as string;
+          // Remove the field from top level
+          delete submissionData[field as keyof FormData];
+          hasVehicleData = true;
+        }
+      });
+
+      // Only add vehicle_info if we have vehicle data
+      if (hasVehicleData) {
+        submissionData.vehicle_info = vehicleInfo;
+      }
+
+      const result = await submitForm(submissionData, capturedImage, t);
 
       if (result.success) {
         setSubmitSuccess(true);

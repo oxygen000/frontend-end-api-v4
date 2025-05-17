@@ -31,6 +31,9 @@ export interface FormData {
   vehicle_number: string;
   license_expiration: string;
   manufacture_year: string;
+  
+  // Vehicle info nested object for API submission
+  vehicle_info?: Record<string, string>;
 
   // Travel info
   travel_date: string;

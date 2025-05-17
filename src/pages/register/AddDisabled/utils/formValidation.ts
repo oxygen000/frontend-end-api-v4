@@ -112,17 +112,11 @@ export const buildSubmissionFormData = (
     personDetails.additional_notes || ''
   );
 
-  // Do NOT send these fields to avoid conflicts with backend-generated values
-  // formDataToSend.append('employee_id', '');
-  // formDataToSend.append('department', '');
-  // formDataToSend.append('role', '');
-
   // Create a complete data object and append as JSON
   const userData = {
     name: personDetails.name,
     nickname: personDetails.name.split(' ')[0] || '',
     dob: personDetails.dob,
-    date_of_birth: personDetails.dob,
     national_id: personDetails.national_id || '',
     address: personDetails.address || '',
     category: 'disabled',
@@ -139,10 +133,6 @@ export const buildSubmissionFormData = (
     emergency_phone: personDetails.emergency_phone || '',
     additional_notes: personDetails.additional_notes || '',
     gender: personDetails.gender || '',
-    // Remove these fields to avoid sending empty strings that might conflict with backend
-    // employee_id: '',
-    // department: '',
-    // role: '',
   };
 
   // Append the complete user data in JSON format

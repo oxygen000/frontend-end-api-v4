@@ -73,6 +73,8 @@ export interface ChildUser extends BaseUser {
   last_seen_time?: string;
   additional_data?: string;
   medical_condition?: string;
+  unique_id?: string;
+  request_id?: string;
 }
 
 export interface DisabledUser extends BaseUser {
@@ -93,6 +95,8 @@ export interface DisabledUser extends BaseUser {
   area_of_disappearance?: string;
   last_known_location?: string;
   last_seen_time?: string;
+  unique_id?: string;
+  request_id?: string;
 }
 
 // Define types for user data for registration

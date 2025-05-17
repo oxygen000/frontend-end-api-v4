@@ -60,6 +60,10 @@ const registerUser = async (
     const formType = formData.get('form_type') as string;
     const cacheKey = `${name}-${dob}-${formType}-${Date.now()}`;
 
+    // Debug logging to help with troubleshooting
+    console.log(`Registration attempt for ${name}, type: ${formType}`);
+    console.log('Form data fields:', Array.from(formData.keys()));
+
     // Check if this registration is already in progress
     if (registrationInProgress.has(cacheKey)) {
       console.log('Registration already in progress, using existing promise');
@@ -78,6 +82,10 @@ const registerUser = async (
       formData.set('train_multiple', 'true');
     }
 
+    // Add a unique timestamp to prevent ID conflicts
+    const uniqueTimestamp = Date.now();
+    formData.append('timestamp', uniqueTimestamp.toString());
+
     // Fields that should be handled separately because they cause DB schema issues
     const separateFields = [
       'disability_details',
@@ -86,6 +94,9 @@ const registerUser = async (
       'emergency_contact',
       'emergency_phone',
       'special_needs',
+      'unique_id',
+      'unique_submission_id',
+      'date_of_birth',
     ];
 
     // Vehicle-related fields we want to preserve but structure properly
@@ -101,13 +112,23 @@ const registerUser = async (
 
     // Create a filtered copy of form data without problematic fields
     const filteredFormData = new FormData();
+    const removedFields: string[] = [];
+
     for (const pair of formData.entries()) {
-      if (
-        !separateFields.includes(pair[0]) &&
-        !vehicleFields.includes(pair[0])
-      ) {
-        filteredFormData.append(pair[0], pair[1]);
+      const [key, value] = pair;
+      if (!separateFields.includes(key) && !vehicleFields.includes(key)) {
+        filteredFormData.append(key, value);
+      } else {
+        removedFields.push(key);
       }
+    }
+
+    // Log removed fields for troubleshooting
+    if (removedFields.length > 0) {
+      console.log(
+        'Removed fields from form data that are not in DB schema:',
+        removedFields
+      );
     }
 
     // Process JSON fields safely
@@ -118,11 +139,15 @@ const registerUser = async (
         // Remove ID to prevent conflicts
         if (userData.id) {
           delete userData.id;
+          console.log('Removed ID field from user_data to prevent conflicts');
         }
 
-        // Remove problematic fields from user_data
+        // Remove other problematic fields
         separateFields.forEach((field) => {
-          delete userData[field];
+          if (userData[field]) {
+            delete userData[field];
+            console.log(`Removed problematic field ${field} from user_data`);
+          }
         });
 
         // Create a vehicle object for adult users
@@ -174,9 +199,31 @@ const registerUser = async (
         });
 
         if (hasVehicleData) {
-          const userData = { vehicle_info: vehicle };
+          const userData = {
+            vehicle_info: vehicle,
+            unique_id: `registration-${Date.now()}-${Math.floor(Math.random() * 1000000)}`,
+          };
           filteredFormData.set('user_data', JSON.stringify(userData));
         }
+      }
+    }
+
+    // If child_data exists, make sure it has no ID field
+    if (formData.has('child_data')) {
+      try {
+        const childData = JSON.parse(formData.get('child_data') as string);
+        if (childData.id) {
+          delete childData.id;
+        }
+        // Add a unique identifier
+        childData.unique_id = `registration-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+        filteredFormData.set('child_data', JSON.stringify(childData));
+      } catch (e) {
+        console.error('Error parsing child_data:', e);
+        filteredFormData.append(
+          'child_data',
+          formData.get('child_data') as string
+        );
       }
     }
 
@@ -184,128 +231,27 @@ const registerUser = async (
     const registrationPromise = new Promise<RegistrationResult>(
       (resolve, reject) => {
         // Choose the appropriate endpoint based on form type
-        const file = filteredFormData.get('file') as File;
         const formType = filteredFormData.get('form_type')?.toString() || '';
 
-        console.log(`Processing registration for form type: ${formType}`);
+        console.log(
+          `Processing registration for form type: ${formType} using main endpoint`
+        );
 
-        // Use specialized endpoints first for better schema compatibility
-        if (formType === 'disabled') {
-          // Use then/catch pattern instead of async/await
-          registerDisabled(filteredFormData, file)
-            .then((result) => {
-              // Only resolve with specialized endpoint result if we get a valid user ID
-              if (result?.user_id || result?.user?.id) {
-                console.log(
-                  'Disabled registration successful with specialized endpoint'
-                );
-                clearCaches().then(() => {
-                  // Clear caches after successful registration
-                  resolve(result);
-                });
-              } else {
-                console.warn(
-                  'Disabled registration returned incomplete data, falling back to main endpoint'
-                );
-                return registerWithMainEndpoint(filteredFormData);
-              }
-            })
-            .then((mainResult) => {
-              // This will only run if the previous block returns a promise
-              if (mainResult) {
-                clearCaches().then(() => {
-                  // Clear caches after successful registration
-                  resolve(mainResult);
-                });
-              }
-            })
-            .catch((error) => {
-              console.error(
-                'Disabled registration failed, falling back to main endpoint',
-                error
-              );
-              registerWithMainEndpoint(filteredFormData)
-                .then((result) => {
-                  clearCaches().then(() => {
-                    // Clear caches after successful registration
-                    resolve(result);
-                  });
-                })
-                .catch((mainError) => {
-                  createFallbackResponse(
-                    filteredFormData,
-                    resolve,
-                    reject
-                  )(mainError);
-                });
-            });
-        } else if (formType === 'child') {
-          // Use then/catch pattern instead of async/await
-          registerChild(filteredFormData, file)
-            .then((result) => {
-              // Only resolve with specialized endpoint result if we get a valid user ID
-              if (result?.user_id || result?.user?.id) {
-                console.log(
-                  'Child registration successful with specialized endpoint'
-                );
-                clearCaches().then(() => {
-                  // Clear caches after successful registration
-                  resolve(result);
-                });
-              } else {
-                console.warn(
-                  'Child registration returned incomplete data, falling back to main endpoint'
-                );
-                return registerWithMainEndpoint(filteredFormData);
-              }
-            })
-            .then((mainResult) => {
-              // This will only run if the previous block returns a promise
-              if (mainResult) {
-                clearCaches().then(() => {
-                  // Clear caches after successful registration
-                  resolve(mainResult);
-                });
-              }
-            })
-            .catch((error) => {
-              console.error(
-                'Child registration failed, falling back to main endpoint',
-                error
-              );
-              registerWithMainEndpoint(filteredFormData)
-                .then((result) => {
-                  clearCaches().then(() => {
-                    // Clear caches after successful registration
-                    resolve(result);
-                  });
-                })
-                .catch((mainError) => {
-                  createFallbackResponse(
-                    filteredFormData,
-                    resolve,
-                    reject
-                  )(mainError);
-                });
-            });
-        } else {
-          // For man, woman or adult types, use main endpoint directly
-          console.log(`Using main endpoint for form type: ${formType}`);
+        try {
+          // Always use the main endpoint for all form types to avoid ID conflicts
+          console.log('Using main registration endpoint for all form types');
           registerWithMainEndpoint(filteredFormData)
-            .then((result) => {
-              clearCaches().then(() => {
-                // Clear caches after successful registration
-                resolve(result);
-              });
+            .then(async (result) => {
+              await clearCaches();
+              resolve(result);
             })
-            .catch((mainError) => {
-              console.error('Main endpoint registration failed', mainError);
-              createFallbackResponse(
-                filteredFormData,
-                resolve,
-                reject
-              )(mainError);
+            .catch((error) => {
+              console.error('Main endpoint registration failed:', error);
+              reject(error);
             });
+        } catch (error) {
+          console.error('Error setting up registration:', error);
+          reject(error);
         }
       }
     );
@@ -364,51 +310,45 @@ const registerWithMainEndpoint = async (
       userObj: !!response.data?.user,
     });
 
+    // Even if we get a 200 response but no user data, create a synthetic response
+    // This ensures the UI gets something workable back
+    if (
+      response.status === 200 &&
+      (!response.data || (!response.data.user_id && !response.data.user))
+    ) {
+      console.log('Creating synthetic response from successful API call');
+
+      // Generate a temporary ID that can be used by the client
+      const tempId = `temp-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+
+      // Try to get a name from the form data
+      const userName = (formData.get('name') as string) || 'User';
+
+      // Create a minimal response object
+      const syntheticResponse: RegistrationResult = {
+        status: 'success',
+        message: 'Registration was successful, but no user ID was returned',
+        user_id: tempId,
+        user: {
+          id: tempId,
+          name: userName,
+          form_type: (formData.get('form_type') as string) || 'unknown',
+          category: (formData.get('category') as string) || 'unknown',
+          created_at: new Date().toISOString(),
+          // Required fields for the User type
+          face_id: tempId,
+          image_path: '/static/default-avatar.png',
+        },
+      };
+
+      return syntheticResponse;
+    }
+
     return response.data;
   } catch (error) {
     console.error('Main registration endpoint error:', error);
     throw error;
   }
-};
-
-/**
- * Creates a fallback response with temporary ID when all registration attempts fail
- */
-const createFallbackResponse = (
-  formData: FormData,
-  resolve: (value: RegistrationResult) => void,
-  reject: (reason: Error) => void
-) => {
-  return (error: Error) => {
-    console.error('All registration attempts failed:', error);
-
-    try {
-      // Create a fallback response with a temporary ID
-      const userName = formData.get('name')?.toString() || 'Unknown';
-      const formType = formData.get('form_type')?.toString() || 'unknown';
-      const tempId = `temp-${Date.now()}`;
-
-      const fallbackResponse: RegistrationResult = {
-        status: 'success',
-        message: 'Registration successful but no data returned from server',
-        user_id: tempId,
-        user: {
-          id: tempId,
-          name: userName,
-          face_id: `face-${tempId}`,
-          image_path: '',
-          created_at: new Date().toISOString(),
-          form_type: formType,
-        },
-      };
-
-      console.log('Using fallback response:', fallbackResponse);
-      resolve(fallbackResponse);
-    } catch (fallbackError) {
-      console.error('Failed to create fallback response:', fallbackError);
-      reject(error);
-    }
-  };
 };
 
 /**
@@ -420,6 +360,10 @@ const registerDisabled = async (
 ): Promise<RegistrationResult> => {
   console.log('Using specialized disabled registration endpoint');
   try {
+    // Generate a unique ID for this request to prevent conflicts
+    const uniqueId = `disabled-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+    console.log(`Generated unique ID for disabled registration: ${uniqueId}`);
+
     // Prepare the user data object
     let userData: DisabledUser;
 
@@ -438,6 +382,8 @@ const registerDisabled = async (
         disability_details: '',
         additional_notes: (formData.get('additional_notes') as string) || '',
         phone_number: (formData.get('phone_number') as string) || '',
+        unique_id: uniqueId,
+        request_id: uniqueId,
       };
 
       // If file was provided in formData, extract it
@@ -454,6 +400,16 @@ const registerDisabled = async (
           if ('id' in parsedData) {
             delete parsedData.id;
           }
+
+          // If the parsed data has its own unique_id, use that
+          if (parsedData.unique_id) {
+            userData.unique_id = parsedData.unique_id;
+            userData.request_id = parsedData.unique_id;
+            console.log(
+              `Using existing unique ID from data: ${parsedData.unique_id}`
+            );
+          }
+
           userData = { ...userData, ...parsedData };
         }
       } catch (e) {
@@ -463,10 +419,29 @@ const registerDisabled = async (
       // Use the provided user data directly, but remove ID if present
       const userDataCopy = { ...formData };
       if ('id' in userDataCopy) {
-        delete userDataCopy.id;
+        delete (userDataCopy as unknown as Record<string, unknown>).id;
       }
+
+      // Add unique identifier if not already present
+      if (!userDataCopy.unique_id) {
+        userDataCopy.unique_id = uniqueId;
+        userDataCopy.request_id = uniqueId;
+      }
+
       userData = userDataCopy;
     }
+
+    // Force remove ID to prevent unique constraint failures - triple-check
+    if ('id' in userData) {
+      delete (userData as unknown as Record<string, unknown>).id;
+    }
+
+    // Log the request to help debug
+    console.log('Registering disabled user with data:', {
+      name: userData.name,
+      uniqueId: userData.unique_id,
+      idPresent: 'id' in userData,
+    });
 
     // Create a new FormData object specifically for this endpoint
     const apiFormData = new FormData();
@@ -479,35 +454,32 @@ const registerDisabled = async (
       apiFormData.append('file', image);
     }
 
-    console.log(
-      'Sending data to /disabled endpoint:',
-      JSON.stringify(userData, null, 2)
-    );
-    console.log(
-      'Sending image:',
-      image ? `${image.name} (${image.size} bytes)` : 'None'
-    );
-
     // Use the /api/disabled endpoint which works with the existing schema
-    const response = await apiClient.post('/disabled', apiFormData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    try {
+      console.log('Making API request to /disabled endpoint...');
+      const response = await apiClient.post('/disabled', apiFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-    console.log('Disabled registration response:', response.data);
+      console.log('Disabled registration response:', response.data);
 
-    // Convert the response to our expected RegistrationResult format
-    if (response.data && response.data.user) {
-      const result: RegistrationResult = {
-        status: 'success',
-        message: 'User registered successfully',
-        user_id: response.data.user.id,
-        user: response.data.user,
-      };
-      return result;
-    } else {
-      throw new Error('Invalid response from disabled registration endpoint');
+      // Convert the response to our expected RegistrationResult format
+      if (response.data && response.data.user) {
+        const result: RegistrationResult = {
+          status: 'success',
+          message: 'User registered successfully',
+          user_id: response.data.user.id,
+          user: response.data.user,
+        };
+        return result;
+      } else {
+        throw new Error('Invalid response from disabled registration endpoint');
+      }
+    } catch (apiError) {
+      console.error('API error details:', apiError);
+      throw apiError;
     }
   } catch (error) {
     console.error('Error in specialized disabled registration:', error);
@@ -524,8 +496,12 @@ const registerChild = async (
 ): Promise<RegistrationResult> => {
   console.log('Using specialized child registration endpoint');
   try {
+    // Generate a unique ID for this request to prevent conflicts
+    const uniqueId = `child-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+    console.log(`Generated unique ID for child registration: ${uniqueId}`);
+
     // Prepare the user data object
-    let userData: ChildUser;
+    let userData: ChildUser & { unique_id?: string; request_id?: string };
 
     if (formData instanceof FormData) {
       // Extract data from FormData
@@ -548,6 +524,8 @@ const registerChild = async (
         last_seen_time: (formData.get('last_seen_time') as string) || '',
         additional_notes: (formData.get('additional_notes') as string) || '',
         medical_condition: (formData.get('medical_condition') as string) || '',
+        unique_id: uniqueId,
+        request_id: uniqueId,
       };
 
       // If file was provided in formData, extract it
@@ -559,11 +537,24 @@ const registerChild = async (
       try {
         const userDataJson = formData.get('user_data');
         if (userDataJson && typeof userDataJson === 'string') {
-          const parsedData = JSON.parse(userDataJson) as Partial<ChildUser>;
+          const parsedData = JSON.parse(userDataJson) as Partial<ChildUser> & {
+            unique_id?: string;
+            request_id?: string;
+          };
           // Remove ID if present
           if ('id' in parsedData) {
             delete parsedData.id;
           }
+
+          // If the parsed data has its own unique_id, use that
+          if (parsedData.unique_id) {
+            userData.unique_id = parsedData.unique_id;
+            userData.request_id = parsedData.unique_id;
+            console.log(
+              `Using existing unique ID from data: ${parsedData.unique_id}`
+            );
+          }
+
           userData = { ...userData, ...parsedData };
         }
       } catch (e) {
@@ -571,11 +562,27 @@ const registerChild = async (
       }
     } else {
       // Use the provided user data directly, but remove ID if present
-      const userDataCopy = { ...formData };
+      const userDataCopy = { ...formData } as ChildUser & {
+        unique_id?: string;
+        request_id?: string;
+      };
+
       if ('id' in userDataCopy) {
-        delete userDataCopy.id;
+        delete (userDataCopy as unknown as Record<string, unknown>).id;
       }
+
+      // Add unique identifier if not already present
+      if (!userDataCopy.unique_id) {
+        userDataCopy.unique_id = uniqueId;
+        userDataCopy.request_id = uniqueId;
+      }
+
       userData = userDataCopy;
+    }
+
+    // Force remove ID to prevent unique constraint failures
+    if ('id' in userData) {
+      delete (userData as unknown as Record<string, unknown>).id;
     }
 
     // Create a new FormData object specifically for this endpoint
@@ -584,31 +591,46 @@ const registerChild = async (
     // Add user data as JSON
     apiFormData.append('user_data', JSON.stringify(userData));
 
+    // DO NOT add child_data as a separate field - it causes duplication
+    // apiFormData.append('child_data', JSON.stringify(userData));
+
     // Add image if provided
     if (image) {
       apiFormData.append('file', image);
     }
 
+    // Log what we're sending to help debug
+    console.log(
+      'Sending data to /children endpoint with unique_id:',
+      userData.unique_id
+    );
+
     // Use the /api/children endpoint which works with the existing schema
-    const response = await apiClient.post('/children', apiFormData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    try {
+      console.log('Making API request to /children endpoint...');
+      const response = await apiClient.post('/children', apiFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-    console.log('Child registration response:', response.data);
+      console.log('Child registration response:', response.data);
 
-    // Convert the response to our expected RegistrationResult format
-    if (response.data && response.data.user) {
-      const result: RegistrationResult = {
-        status: 'success',
-        message: 'User registered successfully',
-        user_id: response.data.user.id,
-        user: response.data.user,
-      };
-      return result;
-    } else {
-      throw new Error('Invalid response from child registration endpoint');
+      // Convert the response to our expected RegistrationResult format
+      if (response.data && response.data.user) {
+        const result: RegistrationResult = {
+          status: 'success',
+          message: 'User registered successfully',
+          user_id: response.data.user.id,
+          user: response.data.user,
+        };
+        return result;
+      } else {
+        throw new Error('Invalid response from child registration endpoint');
+      }
+    } catch (apiError) {
+      console.error('API error details:', apiError);
+      throw apiError;
     }
   } catch (error) {
     console.error('Error in specialized child registration:', error);

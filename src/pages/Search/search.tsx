@@ -89,13 +89,13 @@ const Search: React.FC = () => {
         console.error('Error fetching fresh data:', error);
 
         // Fall back to cached data if API fails
-        const cachedData = sessionStorage.getItem('searchData');
-        if (cachedData) {
+      const cachedData = sessionStorage.getItem('searchData');
+      if (cachedData) {
           console.log('Using cached data as fallback');
-          const parsedData = JSON.parse(cachedData);
-          setData(parsedData);
-          setFilteredData(parsedData);
-          setLoading(false);
+        const parsedData = JSON.parse(cachedData);
+        setData(parsedData);
+        setFilteredData(parsedData);
+        setLoading(false);
         } else {
           // No cache, propagate the error
           throw error;
@@ -421,7 +421,7 @@ const Search: React.FC = () => {
       .finally(() => {
         // Clear refreshing status when done
         setRefreshing(false);
-      });
+    });
   };
 
   const closeModal = () => {
