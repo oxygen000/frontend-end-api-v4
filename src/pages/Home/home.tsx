@@ -105,12 +105,22 @@ function Home() {
 
     {/* الخط العمودي أسفل العنصر */}
     {id < 4 && (
-      <div className="w-1 h-10  bg-white mt-4 rounded block sm:hidden" />
+       <motion.div
+       className="w-1 h-10 bg-white mt-4 rounded block sm:hidden"
+       initial={{ opacity: 0, scaleY: 0 }}
+       animate={{ opacity: 1, scaleY: 1 }}
+       transition={{ duration: 0.4, delay: id * 0.2 }}
+     />
     )}
 
     {/* الخط الأفقي بين الأعمدة على الشاشات الكبيرة */}
     {index < buttons.length - 1 && (
-      <div className="hidden md:block absolute top-8 right-[-50%] w-full h-1 bg-white z-0" />
+      <motion.div
+      className="hidden md:block absolute top-8 right-[-50%] w-full h-1 bg-white z-0"
+      initial={{ opacity: 0, scaleX: 0 }}
+      animate={{ opacity: 1, scaleX: 1 }}
+      transition={{ duration: 0.4, delay: id * 0.2 }}
+    />
     )}
   </motion.div>
 ))}

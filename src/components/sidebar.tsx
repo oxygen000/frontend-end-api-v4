@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslationWithFallback } from '../hooks/useTranslationWithFallback';
 import { useState } from 'react';
 import i18n from 'i18next';
 import { FiGlobe } from 'react-icons/fi';
+import PopupChoiceAdd from './PopupChoice/PopupChoiceAdd';
 
 type SidebarProps = {
   isOpen: boolean;
@@ -12,15 +13,18 @@ type SidebarProps = {
 
 function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { t, isRTL } = useTranslationWithFallback();
+  const [isPopupAddOpen, setIsPopupAddOpen] = useState(false);
   const [showLanguageOptions, setShowLanguageOptions] = useState(false);
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
     setShowLanguageOptions(false);
   };
+  const closePopup = () => setIsPopupAddOpen(false);
 
   const currentLanguage = i18n.language;
 
+  const navigate = useNavigate();
   // Define RTL-specific sidebar variants
   const sidebarVariants = {
     hidden: { x: isRTL ? '100%' : '-100%' },
@@ -56,7 +60,7 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <h2
                   className={`text-2xl font-bold ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('sidebar.navigation', 'Navigation')}
+                   {t('home.title', 'SMART FACE ID POLICE EDITION')}
                 </h2>
               </div>
 
@@ -66,19 +70,25 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
                   to="/identification"
                   className={`block px-3 py-2 rounded hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('identification.title', 'Identification')}
+                  {t('home.identificationButton', 'Identification Of Unidentified')}
                 </Link>
                 <Link
-                  to="/Search"
+                  to="/identification"
                   className={`block px-3 py-2 rounded hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('common.search', 'Search')}
+                  {t('home.searchButton', 'Search For Missing Persons')}
                 </Link>
+                <button
+                  onClick={() => setIsPopupAddOpen(true)}
+                  className={`block px-3 py-2 rounded w-full hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
+                >
+                  {t('home.addButton', 'Add New Data')}
+                </button>
                 <Link
-                  to="/"
+                  to="/search"
                   className={`block px-3 py-2 rounded hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('sidebar.settings', 'Settings')}
+                  {t('home.bigDataButton', 'Big Data')}
                 </Link>
 
                 {/* Language Switcher */}
@@ -114,19 +124,31 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 
               {/* Logout Button */}
               <div className="pt-6 border-t border-gray-700">
-                <Link
-                to={"login"}
+                <button
+                onClick={() => navigate('/login')}
                   className={`w-full ${isRTL ? 'text-right' : 'text-left'} px-3 py-2 rounded hover:bg-red-600 transition`}
                 >
                   {t('auth.logout', 'Logout')}
-                </Link>
+                </button>
               </div>
             </div>
           </motion.aside>
         </>
       )}
+       {/* النوافذ المنبثقة */}
+       <PopupChoiceAdd
+        isOpen={isPopupAddOpen}
+        onClose={closePopup}
+        title={t('popups.addTitle', 'Select the type of data to add')}
+        cancelText={t('common.cancel', 'cancel')}
+      />
+
     </AnimatePresence>
+     
+
   );
+  
 }
+
 
 export default Sidebar;
