@@ -77,7 +77,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
               {t('registration.uploadImage', 'Upload Image')}
             </label>
             <div
-              className="cursor-pointer"
+              className="cursor-pointer "
               onClick={() => document.getElementById('fileInput')?.click()}
             >
               <AnimatedFaceIcon

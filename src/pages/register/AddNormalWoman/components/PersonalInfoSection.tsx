@@ -14,7 +14,6 @@ interface PersonalInfoSectionProps {
   ) => void;
   nextSection: () => void;
   t: (key: string, fallback: string) => string;
-  errors?: Record<string, string>;
 }
 
 const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
@@ -22,16 +21,20 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
   handleInputChange,
   nextSection,
   t,
-  errors = {},
+  
 }) => {
   return (
-    <motion.div
+   <motion.div
       variants={sectionVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
       className="space-y-4"
     >
+      <h3 className="text-base sm:text-lg font-semibold mb-2">
+        {t('registration.personalInfo', 'Personal Information')}
+      </h3>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('registration.fullName', 'Full Name')}
@@ -39,21 +42,8 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           value={formData.name}
           onChange={handleInputChange}
           required
-          error={errors.name}
-          placeholder={t('registration.fullName', 'Enter your full name')}
+          
         />
-
-        <Input
-          label={t('registration.nickname', 'Nickname')}
-          name="nickname"
-          value={formData.nickname}
-          onChange={handleInputChange}
-          placeholder={t('registration.nickname', 'Enter your nickname')}
-          error={errors.nickname}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('registration.dateOfBirth', 'Date of Birth')}
           name="dob"
@@ -61,37 +51,99 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           value={formData.dob}
           onChange={handleInputChange}
           required
-          error={errors.dob}
         />
 
+        <Input
+          label={t('registration.nickname', 'Nickname')}
+          name="nickname"
+          value={formData.nickname || ''}
+          onChange={handleInputChange}
+
+        />
+        <Input
+          label={t('registration.mothers_name', 'mother name')}
+          name="mothers_name"
+          value={formData.mothers_name || ''}
+          onChange={handleInputChange}
+          
+        />
+        <Input
+          label={t('registration.marital_status', 'Marital Status')}
+          name="marital_status"
+          value={formData.marital_status || ''}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <h3 className="text-base sm:text-lg font-semibold mb-2 mt-6">
+        {t('registration.personalInfo', 'Personal Information')}
+      </h3>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('registration.nationalId', 'National ID')}
           name="national_id"
           value={formData.national_id}
           onChange={handleInputChange}
           required
-          error={errors.national_id}
-          placeholder={t('registration.nationalId', 'Enter your national ID')}
+          
+        />
+        <Input
+          label={t(
+            'registration.educational_qualification',
+            'Educational Qualification'
+          )}
+          name="educational_qualification"
+          value={formData.educational_qualification || ''}
+          onChange={handleInputChange}
+          required
+        />
+        <Input
+          label={t('registration.occupation', 'Occupation')}
+          name="occupation"
+          value={formData.occupation || ''}
+          onChange={handleInputChange}
+          
         />
       </div>
 
-      <Input
-        label={t('registration.address', 'Address')}
-        name="address"
-        value={formData.address}
-        onChange={handleInputChange}
-        error={errors.address}
-        placeholder={t('registration.address', 'Enter your full address')}
-      />
+      <h3 className="text-base sm:text-lg font-semibold mb-2 mt-6">
+        {t('registration.location', 'Location & Occupation')}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input
+          label={t('registration.governorate', 'governorate')}
+          name="governorate"
+          value={formData.governorate || ''}
+          onChange={handleInputChange}
+        
+        />
 
-      <Input
-        label={t('registration.job', 'Occupation')}
-        name="job"
-        value={formData.job}
-        onChange={handleInputChange}
-        error={errors.job}
-        placeholder={t('registration.job', 'Enter your occupation')}
-      />
+        <Input
+          label={t('registration.address', 'Address')}
+          name="address"
+          value={formData.address || ''}
+          onChange={handleInputChange}
+         
+        />
+
+        <Input
+          label={t('registration.issuing_authority', 'Issuing Authority')}
+          name="issuing_authority"
+          value={formData.issuing_authority || ''}
+          onChange={handleInputChange}
+          
+        />
+
+        <Input
+          label={t('registration.issue_date', 'Issue Date')}
+          name="issue_date"
+          type="date"
+          value={formData.issue_date || ''}
+          onChange={handleInputChange}
+            
+        />
+        </div>
 
       <SectionButtons onNext={nextSection} />
     </motion.div>

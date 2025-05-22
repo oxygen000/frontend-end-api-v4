@@ -1,0 +1,107 @@
+{
+  "title": "جميع البيانات المسجلة",
+  "subtitle": "عرض والبحث في جميع البيانات المسجلة في النظام",
+  "placeholder": "ابحث عن أي بيانات مسجلة بالاسم، الرقم القومي، الهاتف، القسم، أو العنوان",
+  "noResults": "لا توجد نتائج",
+  "loading": "جاري البحث...",
+  "error": "حدث خطأ أثناء البحث",
+  "formType": "نوع النموذج",
+  "formTypes": {
+    "": "جميع النماذج",
+    "child": "طفل",
+    "disabled": "معاق",
+    "man": "ذكر",
+    "woman": "أنثى"
+  },
+  "filters": {
+    "title": "تصفية النتائج",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين",
+    "clear": "مسح الكل",
+    "dateRange": "نطاق التاريخ",
+    "status": "الحالة",
+    "type": "النوع",
+    "department": "القسم",
+    "governorate": "المحافظة",
+    "policeStation": "قسم الشرطة"
+
+  },
+
+  "sort": {
+    "title": "ترتيب النتائج",
+    "sortBy": "ترتيب حسب",
+    "sortFields": {
+      "name": "الاسم",
+      "date": "التاريخ",
+      "status": "الحالة",
+      "type": "النوع",
+      "department": "القسم"
+    },
+    "order": {
+      "asc": "تصاعدي",
+      "desc": "تنازلي"
+    }
+  },
+
+  "user": {
+    "singular": "مستخدم",
+    "plural": "مستخدمين",
+    "details": "تفاصيل المستخدم",
+    "role": "الدور",
+    "department": "القسم",
+    "status": "الحالة",
+    "lastLogin": "آخر تسجيل دخول",
+    "accountCreated": "تاريخ إنشاء الحساب"
+  },
+
+  "identification": {
+    "title": "تحديد الهوية",
+    "identifyPerson": "تحديد الشخص",
+    "uploadPhoto": "رفع صورة",
+    "takePhoto": "التقاط صورة",
+    "searching": "جاري البحث...",
+    "faceRecognized": "تم التعرف على الوجه!",
+    "noMatch": "لم يتم العثور على تطابق",
+    "multipleMatches": "تم العثور على عدة تطابقات",
+    "confidence": "نسبة الثقة",
+    "viewDetails": "عرض التفاصيل",
+    "tryAgain": "حاول مرة أخرى",
+    "error": "حدث خطأ أثناء تحديد الهوية",
+    "readyForScan": "جاهز للمسح"
+  },
+
+  "disabilities": {
+    "title": "الإعاقات",
+    "types": {
+      "physical": "إعاقة حركية",
+      "visual": "إعاقة بصرية",
+      "hearing": "إعاقة سمعية",
+      "intellectual": "إعاقة ذهنية",
+      "multiple": "إعاقات متعددة",
+      "other": "أخرى"
+    },
+    "severity": {
+      "mild": "خفيفة",
+      "moderate": "متوسطة",
+      "severe": "شديدة"
+    },
+    "needs": {
+      "mobility": "احتياجات حركية",
+      "communication": "احتياجات تواصل",
+      "medical": "احتياجات طبية",
+      "assistance": "مساعد شخصي",
+      "other": "احتياجات أخرى"
+    }
+  },
+
+  "specialNeeds": {
+    "title": "احتياجات خاصة",
+    "medical": "احتياجات طبية",
+    "dietary": "احتياجات غذائية",
+    "mobility": "احتياجات حركية",
+    "communication": "احتياجات تواصل",
+    "sensory": "احتياجات حسية",
+    "behavioral": "احتياجات سلوكية",
+    "other": "احتياجات أخرى"
+  }
+}

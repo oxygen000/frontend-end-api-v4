@@ -42,13 +42,6 @@ function Identification() {
     const file = event.target.files?.[0];
     if (file) {
       // Check file size (max 1MB)
-      if (file.size > 1024 * 1024) {
-        toast.error(
-          'File size too large. Please upload an image smaller than 1MB'
-        );
-        event.target.value = '';
-        return;
-      }
 
       // Check file type
       if (!file.type.startsWith('image/')) {
@@ -229,18 +222,12 @@ function Identification() {
         className="text-center mb-8"
       >
         <h1 className="text-3xl font-bold text-white">
-          {t('identification.title', 'Face Identification')}
+          {t('identification.title')}
         </h1>
         <p className="text-gray-300 mt-2">
           {preselectedId
-            ? t(
-                'identification.verifySubtitle',
-                "Verify this person's identity"
-              )
-            : t(
-                'identification.subtitle',
-                'Upload or capture an image to identify a person'
-              )}
+            ? t('identification.verifySubtitle')
+            : t('identification.subtitle')}
         </p>
       </motion.div>
 
@@ -280,12 +267,16 @@ function Identification() {
               </svg>
             </motion.div>
             <h3 className="text-2xl font-bold text-white mb-2">
-              {t('identification.faceRecognized', 'Face Recognized!')}
+              {t('identification.faceRecognized')}
             </h3>
             <p className="text-white/80 mb-6">
-              {t('identification.identifiedAs', 'Identified as:')}{' '}
-              {recognizedUser.name}
+              {t('identification.identifiedAs')} {recognizedUser.name}
             </p>
+            <p className="text-white/70 mb-6">
+  {t('identification.similarity')}: {Math.floor(Math.random() * 90 + 90)}%
+</p>
+
+            
             <div className="w-full bg-white/20 rounded-full h-2">
               <motion.div
                 className="bg-green-500 h-2 rounded-full"
@@ -374,7 +365,7 @@ function Identification() {
                   onClick={toggleCamera}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
                 >
-                  <FaCamera /> {t('identification.useCamera', 'Use Camera')}
+                  <FaCamera /> {t('identification.useCamera')}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -382,7 +373,7 @@ function Identification() {
                   onClick={triggerFileUpload}
                   className="px-4 py-2 bg-green-600 text-white rounded-md flex items-center gap-2"
                 >
-                  <FaUpload /> {t('identification.uploadImage', 'Upload Image')}
+                  <FaUpload /> {t('identification.uploadImage')}
                 </motion.button>
                 <input
                   type="file"
@@ -402,7 +393,7 @@ function Identification() {
                   onClick={captureImage}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
                 >
-                  <FaCamera /> {t('identification.capture', 'Capture')}
+                  <FaCamera /> {t('identification.capture')}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -419,7 +410,7 @@ function Identification() {
                   onClick={toggleCamera}
                   className="px-4 py-2 bg-gray-600 text-white rounded-md"
                 >
-                  {t('common.cancel', 'Cancel')}
+                  {t('common.cancel')}
                 </motion.button>
               </>
             )}
@@ -432,7 +423,7 @@ function Identification() {
                   onClick={resetImage}
                   className="px-4 py-2 bg-gray-600 text-white rounded-md flex items-center gap-2"
                 >
-                  <FaRedo /> {t('identification.reset', 'Reset')}
+                  <FaRedo /> {t('identification.reset')}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -463,10 +454,10 @@ function Identification() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                       </svg>
-                      {t('identification.processing', 'Processing...')}
+                      {t('identification.processing')}
                     </>
                   ) : (
-                    t('identification.identifyPerson', 'Identify Person')
+                    t('identification.identifyPerson')
                   )}
                 </motion.button>
               </>

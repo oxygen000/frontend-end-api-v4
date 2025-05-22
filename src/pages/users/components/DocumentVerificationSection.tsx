@@ -83,6 +83,32 @@ function DocumentVerificationSection({
             </span>
           </div>
         )}
+
+        {/* Display frozen data if present in additional_data */}
+        {(() => {
+          let frozenValue = null;
+          if (user.additional_data) {
+            try {
+              const data =
+                typeof user.additional_data === 'string'
+                  ? JSON.parse(user.additional_data)
+                  : user.additional_data;
+              frozenValue = data.frozen || data.frozen_data || null;
+            } catch {
+              // Not JSON or no frozen data
+            }
+          }
+          return frozenValue ? (
+            <div className="flex justify-between items-center">
+              <span className="text-white/70">
+                {t('users.frozenData', 'Frozen Data:')}
+              </span>
+              <span className="text-white font-medium">
+                {String(frozenValue)}
+              </span>
+            </div>
+          ) : null;
+        })()}
       </div>
     </motion.div>
   );

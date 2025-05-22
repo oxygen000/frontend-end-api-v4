@@ -36,19 +36,19 @@ const PopupChoiceIdentification: React.FC<PopupChoiceIdentificationProps> = ({
           <Link
             to="/identification"
             className={`${iconButtonStyle} bg-blue-700 hover:bg-blue-800`}
-            aria-label={t('registration.man', 'Male')}
+            aria-label={t('forms:man.title')}
           >
             <FaMale />
-            <span className="text-sm">{t('search.formTypes.man', 'Male')}</span>
+            <span className="text-sm">{t('search:formTypes.man')}</span>
           </Link>
           <Link
             to="/identification"
             className={`${iconButtonStyle} bg-pink-600 hover:bg-pink-700`}
-            aria-label={t('registration.female', 'Female')}
+            aria-label={t('forms:woman.title')}
           >
             <FaFemale />
             <span className="text-sm">
-              {t('search.formTypes.female', 'Female')}
+              {t('search:formTypes.woman')}
             </span>
           </Link>
         </div>

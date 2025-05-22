@@ -3,8 +3,6 @@ import type {
   DisabledFormSection,
 } from '../types/disabled-form';
 
-// Define TranslationFunction type based on useTranslationWithFallback hook
-type TranslationFunction = (key: string, fallback?: string) => string;
 
 /**
  * Validates the form based on the current section
@@ -17,34 +15,198 @@ type TranslationFunction = (key: string, fallback?: string) => string;
 export const validateForm = (
   personDetails: DisabledFormData,
   currentSection: DisabledFormSection,
-  capturedImage: string | null,
-  t: TranslationFunction
+  capturedImage: string | null
 ): string[] => {
   const errors: string[] = [];
 
-  // Validate based on current section
+  // Section 1: Basic Information
   if (currentSection === 1) {
-    if (!personDetails.name)
-      errors.push(t('validation.required', "Person's Name is required"));
+    if (!personDetails.name?.trim())
+      errors.push("Please enter the person's name. You cannot proceed without it.");
+
     if (!personDetails.dob)
-      errors.push(t('validation.required', 'Date of Birth is required'));
+      errors.push("Date of birth is required. Please select it to continue.");
+
     if (!personDetails.gender)
-      errors.push(t('validation.required', 'Gender is required'));
-  } else if (currentSection === 2) {
-    if (!personDetails.phone_number)
-      errors.push(t('validation.required', 'Phone Number is required'));
-    if (!personDetails.address)
-      errors.push(t('validation.required', 'Address is required'));
-  } else if (currentSection === 3) {
-    if (!personDetails.disability_type)
-      errors.push(t('validation.required', 'Disability Type is required'));
-  } else if (currentSection === 4) {
-    if (!personDetails.image && !capturedImage)
-      errors.push(t('validation.required', "Person's Photo is required"));
+      errors.push("Gender is required. Please select male or female to proceed.");
+  }
+
+  // Section 2: Contact Information
+  else if (currentSection === 2) {
+    if (!personDetails.phone_number?.trim())
+      errors.push("Primary phone number is required for contact. Please enter it.");
+
+    if (
+      personDetails.phone_number &&
+      !/^[0-9]{10,11}$/.test(personDetails.phone_number.replace(/\D/g, ''))
+    ) {
+      errors.push("Primary phone number is invalid. It must contain  11 digits.");
+    }
+
+    if (
+      personDetails.second_phone_number &&
+      !/^[0-9]{10,11}$/.test(personDetails.second_phone_number.replace(/\D/g, ''))
+    ) {
+      errors.push("Secondary phone number is invalid. It must contain 11 digits.");
+    }
+  }
+
+  // Section 3: Reporter Info
+  else if (currentSection === 3) {
+    if (
+      personDetails.guardian_phone &&
+      !/^[0-9]{10,11}$/.test(personDetails.guardian_phone.replace(/\D/g, ''))
+    ) {
+      errors.push("Guardian's phone number is invalid. It must contain 11 digits.");
+    }
+
+    if (
+      personDetails.reporter_secondary_phone &&
+      !/^[0-9]{10,11}$/.test(personDetails.reporter_secondary_phone.replace(/\D/g, ''))
+    ) {
+      errors.push("Secondary phone number of the reporter is invalid. Please check and correct it.");
+    }
+  }
+
+  // Section 4: Missing Information
+  else if (currentSection === 4) {
+    if (
+      personDetails.disappearance_date &&
+      !/^\d{4}-\d{2}-\d{2}$/.test(personDetails.disappearance_date)
+    ) {
+      errors.push("Disappearance date is invalid. Please use format: YYYY-MM-DD (e.g., 2024-05-22).");
+    }
+
+    if (
+      personDetails.disappearance_time &&
+      !/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(personDetails.disappearance_time)
+    ) {
+      errors.push("Disappearance time is invalid. Please use format: HH:MM (e.g., 14:30).");
+    }
+
+    if (
+      personDetails.first_friend_phone &&
+      !/^[0-9]{10,11}$/.test(personDetails.first_friend_phone.replace(/\D/g, ''))
+    ) {
+      errors.push("First friend's phone number is invalid. It must contain 11 digits.");
+    }
+
+    if (
+      personDetails.second_friend_phone &&
+        !/^[0-9]{10,11}$/.test(personDetails.second_friend_phone.replace(/\D/g, ''))
+    ) {
+      errors.push("Second friend's phone number is invalid. It must contain 11 digits.");
+    }
+  }
+
+  // Section 5: Image Upload
+  else if (currentSection === 5) {
+    if (!personDetails.image && !capturedImage) {
+      errors.push("A personal photo is required. You cannot proceed without uploading or capturing a photo.");
+    }
+
+    if (personDetails.image && personDetails.image.size > 5 * 1024 * 1024) {
+      errors.push("The uploaded image is too large. Maximum size allowed is 5MB.");
+    }
+
+    if (personDetails.image && !personDetails.image.type.startsWith('image/')) {
+      errors.push("Invalid file type. Please upload an image file (e.g., JPG or PNG).");
+    }
   }
 
   return errors;
 };
+
+
+// Define the type for user data
+interface UserData {
+  // Unique ID and form type
+  unique_id: string;
+  form_type: string;
+  category: string;
+
+  // Basic user information
+  full_name: string;
+  name: string;
+  date_of_birth: string;
+  dob: string;
+  national_id: string;
+  address: string;
+  gender: string;
+  age?: string;
+
+  // Contact information
+  phone_number: string;
+  service_provider: string;
+  phone_company: string;
+  secondary_phone: string;
+  second_phone_number: string;
+
+  // Disability information (required fields)
+  disability_type: string;
+  disability_details: string;
+  disability_description: string;
+  medical_condition: string;
+  medical_history: string;
+  special_needs: string;
+  emergency_contact: string;
+  emergency_phone: string;
+
+  // Guardian/Reporter information (required fields)
+  guardian_name: string;
+  guardian_phone: string;
+  reporter_name: string;
+  reporter_phone: string;
+  reporter_relationship: string;
+  relationship: string;
+  reporter_address: string;
+
+  // Additional reporter fields
+  reporter_occupation: string;
+  reporter_education: string;
+  reporter_secondary_phone: string;
+  reporter_national_id: string;
+
+  // Medical information
+  distinctive_mark: string;
+  treating_physician: string;
+  physician_phone: string;
+  medication: string;
+
+  // Missing person information (optional)
+  area_of_disappearance: string;
+  last_sighting: string;
+  last_seen_time: string;
+  clothes_description: string;
+  disappearance_date: string;
+  disappearance_time: string;
+  was_accompanied: string;
+  friends: string;
+  first_friend: string;
+  second_friend: string;
+  first_friend_phone: string;
+  second_friend_phone: string;
+  previous_incidents: string;
+  previous_disputes: string;
+  missing_person_occupation: string;
+  missing_person_education: string;
+  gone_missing_before: string;
+  reason_for_location: string;
+
+  // Police report information (optional)
+  absence_report_number: string;
+  absence_report_date: string;
+  police_station: string;
+  security_directorate: string;
+  governorate: string;
+
+  // Additional information
+  additional_notes: string;
+
+  // Timestamps
+  created_at: string;
+  updated_at: string;
+}
 
 /**
  * Builds form data for API submission
@@ -59,90 +221,172 @@ export const buildSubmissionFormData = (
   // Create a FormData object to handle file upload
   const formDataToSend = new FormData();
 
-  // Log if capturedImage exists (avoids unused parameter warning)
-  if (capturedImage !== null) {
-    console.debug('Using captured image from webcam');
-  }
+  // Generate a unique ID for this submission
+  const uniqueSubmissionId = `${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
 
-  // Basic user fields - match exactly what the backend expects
-  formDataToSend.append('name', personDetails.name);
-  formDataToSend.append('nickname', personDetails.name.split(' ')[0] || '');
-  formDataToSend.append('dob', personDetails.dob);
-  formDataToSend.append('national_id', personDetails.national_id || '');
-  formDataToSend.append('address', personDetails.address || '');
-  formDataToSend.append('gender', personDetails.gender || '');
+  // Prepare form data for submission
+  // Map frontend fields to backend expected fields
+  const userData: UserData = {
+    // Unique ID and form type
+    unique_id: uniqueSubmissionId,
+    form_type: 'disabled',
+    category: 'disabled',
 
-  // Ensure these fields are set, as they are required by the backend
-  formDataToSend.append('phone_number', personDetails.phone_number || '');
-  formDataToSend.append('phone_company', personDetails.phone_company || '');
-  formDataToSend.append(
-    'second_phone_number',
-    personDetails.second_phone_number || ''
-  );
-
-  formDataToSend.append('category', 'disabled');
-  formDataToSend.append('form_type', 'disabled');
-
-  // Ensure bypass parameters are set to true
-  formDataToSend.append('bypass_angle_check', 'true');
-  formDataToSend.append('train_multiple', 'true');
-
-  // Disability-specific fields
-  formDataToSend.append('disability_type', personDetails.disability_type || '');
-  formDataToSend.append(
-    'disability_details',
-    personDetails.disability_description || ''
-  );
-  formDataToSend.append(
-    'disability_description',
-    personDetails.disability_description || ''
-  );
-  formDataToSend.append(
-    'medical_condition',
-    personDetails.medical_condition || ''
-  );
-  formDataToSend.append('special_needs', personDetails.special_needs || '');
-  formDataToSend.append(
-    'emergency_contact',
-    personDetails.emergency_contact || ''
-  );
-  formDataToSend.append('emergency_phone', personDetails.emergency_phone || '');
-  formDataToSend.append(
-    'additional_notes',
-    personDetails.additional_notes || ''
-  );
-
-  // Create a complete data object and append as JSON
-  const userData = {
-    name: personDetails.name,
-    nickname: personDetails.name.split(' ')[0] || '',
-    dob: personDetails.dob,
+    // Basic user information
+    full_name: personDetails.name,
+    name: personDetails.name, // Required for database NOT NULL constraint
+    date_of_birth: personDetails.dob,
+    dob: personDetails.dob, // Include both formats for compatibility
     national_id: personDetails.national_id || '',
     address: personDetails.address || '',
-    category: 'disabled',
-    form_type: 'disabled',
+    gender: personDetails.gender || '',
+
+    // Contact information
     phone_number: personDetails.phone_number || '',
-    phone_company: personDetails.phone_company || '',
-    second_phone_number: personDetails.second_phone_number || '',
-    disability_type: personDetails.disability_type || '',
+    service_provider: personDetails.phone_company || '',
+    phone_company: personDetails.phone_company || '', // Add both field names for compatibility
+    secondary_phone: personDetails.second_phone_number || '',
+    second_phone_number: personDetails.second_phone_number || '', // Add both field names for compatibility
+
+    // Disability information (required fields)
+    disability_type: personDetails.disability_type || 'physical',
     disability_details: personDetails.disability_description || '',
     disability_description: personDetails.disability_description || '',
     medical_condition: personDetails.medical_condition || '',
+    medical_history: personDetails.medical_condition || '', // Include both for compatibility
     special_needs: personDetails.special_needs || '',
     emergency_contact: personDetails.emergency_contact || '',
     emergency_phone: personDetails.emergency_phone || '',
+
+    // Guardian/Reporter information (required fields)
+    guardian_name: personDetails.guardian_name || '',
+    guardian_phone: personDetails.guardian_phone || '',
+    reporter_name: personDetails.guardian_name || '', // Map to both fields
+    reporter_phone: personDetails.guardian_phone || '', // Map to both fields
+    reporter_relationship: personDetails.relationship || '',
+    relationship: personDetails.relationship || '', // Add both field names for compatibility
+    reporter_address: personDetails.reporter_address || '',
+
+    // Additional reporter fields
+    reporter_occupation: personDetails.reporter_occupation || '',
+    reporter_education: personDetails.reporter_education || '',
+    reporter_secondary_phone: personDetails.reporter_secondary_phone || '',
+    reporter_national_id: personDetails.reporter_national_id || '',
+
+    // Medical information
+    distinctive_mark: personDetails.distinctive_mark || '',
+    treating_physician: personDetails.treating_physician || '',
+    physician_phone: personDetails.physician_phone || '',
+    medication: personDetails.medication || '',
+
+    // Missing person information (optional)
+    area_of_disappearance: personDetails.area_of_disappearance || '',
+    last_sighting: personDetails.last_sighting || '',
+    last_seen_time: personDetails.last_seen_time || '',
+    clothes_description: personDetails.clothes_description || '',
+    disappearance_date: personDetails.disappearance_date || '',
+    disappearance_time: personDetails.disappearance_time || '',
+    was_accompanied: personDetails.was_accompanied || '',
+    friends: personDetails.friends || '',
+    first_friend: personDetails.first_friend || '',
+    second_friend: personDetails.second_friend || '',
+    first_friend_phone: personDetails.first_friend_phone || '',
+    second_friend_phone: personDetails.second_friend_phone || '',
+    previous_incidents: personDetails.previous_incidents || '',
+    previous_disputes: personDetails.previous_disputes || '',
+    missing_person_occupation: personDetails.missing_person_occupation || '',
+    missing_person_education: personDetails.missing_person_education || '',
+    gone_missing_before: personDetails.gone_missing_before || '',
+    reason_for_location: personDetails.reason_for_location || '',
+
+    // Police report information (optional)
+    absence_report_number: personDetails.absence_report_number || '',
+    absence_report_date: personDetails.absence_report_date || '',
+    police_station: personDetails.police_station || '',
+    security_directorate: personDetails.security_directorate || '',
+    governorate: personDetails.governorate || '',
+
+    // Additional information
     additional_notes: personDetails.additional_notes || '',
-    gender: personDetails.gender || '',
+
+    // Timestamps
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   };
+
+  // Calculate age if not provided
+  const age = personDetails.age || calculateAgeFromDOB(personDetails.dob);
+  if (age) {
+    userData.age = age;
+  }
+
+  // Add form metadata
+  formDataToSend.append('form_type', 'disabled');
+  formDataToSend.append('category', 'disabled');
 
   // Append the complete user data in JSON format
   formDataToSend.append('user_data', JSON.stringify(userData));
-
-  // For disabled_data, we need to ensure it's properly formatted JSON
   formDataToSend.append('disabled_data', JSON.stringify(userData));
+
+  // Handle image upload
+  if (personDetails.image) {
+    formDataToSend.append('image', personDetails.image);
+    formDataToSend.append('file', personDetails.image); // Add both field names for compatibility
+  } else if (capturedImage) {
+    const imageFile = prepareImageFile(null, capturedImage);
+    if (imageFile) {
+      formDataToSend.append('image', imageFile);
+      formDataToSend.append('file', imageFile); // Add both field names for compatibility
+    }
+  }
+
+  // Add bypass parameters for face recognition
+  formDataToSend.append('bypass_angle_check', 'true');
+  formDataToSend.append('train_multiple', 'true');
+
+  // Add direct field mappings for critical fields that must be present as form fields
+  formDataToSend.append('name', personDetails.name);
+  formDataToSend.append('full_name', personDetails.name);
+  formDataToSend.append('dob', personDetails.dob);
+  formDataToSend.append('date_of_birth', personDetails.dob);
+  formDataToSend.append('gender', personDetails.gender || '');
+  formDataToSend.append(
+    'disability_type',
+    personDetails.disability_type || 'physical'
+  );
+  formDataToSend.append('unique_id', uniqueSubmissionId);
 
   return formDataToSend;
 };
+
+/**
+ * Calculates age from a date of birth string
+ * @param dob Date of birth in YYYY-MM-DD format
+ * @returns Age as a string or empty string if invalid
+ */
+function calculateAgeFromDOB(dob: string): string {
+  if (!dob) return '';
+
+  try {
+    const birthDate = new Date(dob);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age.toString();
+  } catch (error) {
+    console.error('Error calculating age from DOB:', error);
+    return '';
+  }
+}
 
 /**
  * Prepares the image file for submission from either file upload or webcam capture

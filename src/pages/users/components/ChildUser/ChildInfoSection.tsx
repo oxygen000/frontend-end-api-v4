@@ -1,27 +1,6 @@
 import { motion } from 'framer-motion';
-import { FiUser } from 'react-icons/fi';
-
-// Define a minimal User type for the required fields
-interface User {
-  form_type: string;
-  guardian_name?: string | null;
-  guardian_id?: string | null;
-  address?: string | null;
-  guardian_phone?: string | null;
-  second_phone_number?: string | null;
-  category?: string | null;
-  name: string;
-  date_of_birth?: string | null;
-  dob?: string | null;
-  national_id?: string | null;
-  phone_number?: string | null;
-  area_of_disappearance?: string | null;
-  last_seen_time?: string | null;
-  physical_description?: string | null;
-  last_clothes?: string | null;
-  additional_data?: string | null;
-  medical_condition?: string | null;
-}
+import { FiUser, FiInfo, FiMapPin } from 'react-icons/fi';
+import type { User } from '../../types/types';
 
 interface ChildInfoSectionProps {
   user: User;
@@ -39,10 +18,9 @@ const ChildInfoSection = ({
   t,
   maskSensitiveInfo,
   formatDate,
-  calculateAge,
 }: ChildInfoSectionProps) => (
   <>
-    {/* Reporter's Information */}
+    {/* 1. Reporter's Information */}
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -59,42 +37,44 @@ const ChildInfoSection = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.guardianName', "Reporter's Name:")}
+            {t('users.reporterName', "Reporter's Name:")}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.guardian_name)}
+            {maskSensitiveInfo(user.reporter_name || user.guardian_name)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.guardianId', 'National ID:')}
+            {t('users.reporterNationalId', 'National ID:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.guardian_id)}
+            {maskSensitiveInfo(user.reporter_national_id || user.guardian_id)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('registration.address', 'Address:')}
+            {t('users.reporterAddress', 'Address:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.address)}
+            {maskSensitiveInfo(user.reporter_address || user.address)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.guardianPhone', 'Phone Number:')}
+            {t('users.reporterPhone', 'Phone Number:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.guardian_phone)}
+            {maskSensitiveInfo(user.reporter_phone || user.guardian_phone)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.secondaryPhone', 'Additional Phone:')}
+            {t('users.reporterSecondaryPhone', 'Additional Phone:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.second_phone_number)}
+            {maskSensitiveInfo(
+              user.reporter_secondary_phone || user.second_phone_number
+            )}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
@@ -105,20 +85,37 @@ const ChildInfoSection = ({
             )}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.category)}
+            {maskSensitiveInfo(user.reporter_relationship || user.category)}
+          </span>
+        </div>
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('users.reporterOccupation', 'Reporter Occupation:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(user.reporter_occupation)}
+          </span>
+        </div>
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('users.reporterEducation', 'Reporter Education:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(user.reporter_education)}
           </span>
         </div>
       </div>
     </motion.div>
-    {/* Missing Person's Information */}
+
+    {/* 2. Missing Person Information */}
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className={`bg-gradient-to-br from-amber-500/20 to-amber-500/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-amber-500/30 shadow-lg mt-4 sm:mt-6`}
+      className={`bg-gradient-to-br from-amber-500/20 to-amber-500/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-amber-500/30 shadow-lg mt-4`}
     >
       <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
-        <FiUser
+        <FiInfo
           className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} text-amber-400`}
           size={20}
         />
@@ -127,25 +124,15 @@ const ChildInfoSection = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('registration.fullName', 'Name:')}
+            {t('users.fullName', 'Full Name:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.name)}
+            {maskSensitiveInfo(user.full_name || user.name)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('forms.child.age', 'Age:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {user.date_of_birth || user.dob
-              ? calculateAge(String(user.date_of_birth || user.dob))
-              : t('users.notAvailable', 'N/A')}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('registration.nationalId', 'National ID (if available):')}
+            {t('users.nationalId', 'National ID:')}
           </span>
           <span className="text-white font-medium text-sm">
             {maskSensitiveInfo(user.national_id)}
@@ -153,15 +140,59 @@ const ChildInfoSection = ({
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('registration.phoneNumber', 'Phone Number:')}
+            {t('users.gender', 'Gender:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.phone_number)}
+            {maskSensitiveInfo(user.gender)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.areaOfDisappearance', 'Place of Disappearance:')}
+            {t('users.dateOfBirth', 'Date of Birth:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {formatDate(user.dob || user.date_of_birth)}
+          </span>
+        </div>
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('users.distinctiveMark', 'Distinctive Marks:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(
+              user.distinctive_mark 
+            )}
+          </span>
+        </div>
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('users.clothes', 'Clothes Description:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(user.clothes_description)}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* 3. Location of Disappearance */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+      className={`bg-gradient-to-br from-amber-500/20 to-amber-500/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-amber-500/30 shadow-lg mt-4`}
+    >
+      <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
+        <FiMapPin
+          className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} text-amber-400`}
+          size={20}
+        />
+        {t('forms.child.disappearanceDetails', 'Disappearance Details')}
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('users.areaOfDisappearance', 'Area of Disappearance:')}
           </span>
           <span className="text-white font-medium text-sm">
             {maskSensitiveInfo(user.area_of_disappearance)}
@@ -169,70 +200,26 @@ const ChildInfoSection = ({
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('forms.child.dateOfDisappearance', 'Date of Disappearance:')}
+            {t('users.disappearanceDate', 'Disappearance Date:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {formatDate(user.last_seen_time)}
+            {formatDate(user.disappearance_date)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('forms.child.lastSeenLocation', 'Last Seen Location:')}
+            {t('users.disappearanceTime', 'Disappearance Time:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.area_of_disappearance)}
+            {maskSensitiveInfo(user.disappearance_time)}
           </span>
         </div>
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('forms.child.distinguishingMark', 'Distinguishing Mark:')}
+            {t('users.governorate', 'Governorate:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.physical_description)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.lastClothes', 'Clothing Description:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.last_clothes)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('forms.child.previousDisputes', 'Previous Disputes:')}
-          </span>
-          <span className="text-white font-medium text-sm" dir="auto">
-            {/* Parse JSON if additional_data is a JSON string */}
-            {(() => {
-              try {
-                if (
-                  user.additional_data &&
-                  user.additional_data.startsWith('{')
-                ) {
-                  const parsedData = JSON.parse(user.additional_data);
-                  if (typeof parsedData === 'object') {
-                    return (
-                      parsedData.additional_notes ||
-                      parsedData.additional_data ||
-                      user.additional_data
-                    );
-                  }
-                }
-                return user.additional_data;
-              } catch {
-                return user.additional_data;
-              }
-            })() || t('users.notAvailable', 'N/A')}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('forms.child.medicalHistory', 'Medical History:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.medical_condition)}
+            {maskSensitiveInfo(user.governorate)}
           </span>
         </div>
       </div>

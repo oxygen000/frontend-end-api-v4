@@ -108,7 +108,7 @@ const Search: React.FC = () => {
       setFilteredData([]);
       setLoading(false);
     }
-  }, []);
+  }, [ ]);
 
   // Separate function to fetch from API
   const fetchFromAPI = async (retryCount = 0, maxRetries = 3) => {

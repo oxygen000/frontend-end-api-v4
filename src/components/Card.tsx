@@ -5,8 +5,9 @@ import { useTranslationWithFallback } from '../hooks/useTranslationWithFallback'
 // Define the User type for props
 interface User {
   id: string;
+  full_name: string;
   name: string;
-  nickname?: string;  // Make nickname optional
+  nickname?: string; // Make nickname optional
   department?: string;
   role?: string;
   image_path?: string;
@@ -57,7 +58,7 @@ const Card: React.FC<CardProps> = ({ user }) => {
       return user.image_url;
     }
     // Return default avatar based on user name
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`;
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random`;
   };
 
   return (
@@ -68,17 +69,17 @@ const Card: React.FC<CardProps> = ({ user }) => {
       <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/30">
         <img
           src={getImageUrl()}
-          alt={user.name}
+          alt={user.full_name}
           className="w-full h-full object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`;
+            target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random`;
           }}
         />
       </div>
 
       <div className="text-center">
-        <h3 className="text-xl font-semibold text-white">{user.name}</h3>
+        <h3 className="text-xl font-semibold text-white">{user.full_name}</h3>
         {user.nickname && (
           <p className="text-white/70 text-sm mt-1">({user.nickname})</p>
         )}
@@ -86,28 +87,22 @@ const Card: React.FC<CardProps> = ({ user }) => {
 
       <div className="w-full space-y-2">
         <div className="flex justify-between items-center">
-          <p className="text-white/70">
-            {t('registration.phoneNumber', 'Phone:')}
-          </p>
+          <p className="text-white/70">{t('common:phoneNumber', 'Phone:')}</p>
           <p className="font-bold text-white">
-            {user.phone_number || t('users.notAvailable', 'N/A')}
+            {user.phone_number || t('common:notAvailable', 'N/A')}
           </p>
         </div>
 
         <div className="flex justify-between items-center">
-          <p className="text-white/70">{t('users.id', 'ID:')}</p>
+          <p className="text-white/70">{t('common:id', 'ID:')}</p>
           <p className="font-bold text-white">
-            {user.national_id ||
-              user.national_id ||
-              t('users.notAvailable', 'N/A')}
+            {user.national_id || t('common:notAvailable', 'N/A')}
           </p>
         </div>
 
         {user.address && (
           <div className="flex justify-between items-center">
-            <p className="text-white/70">
-              {t('registration.address', 'Address:')}
-            </p>
+            <p className="text-white/70">{t('common:address', 'Address:')}</p>
             <p className="font-bold text-white text-right">{user.address}</p>
           </div>
         )}
@@ -117,7 +112,7 @@ const Card: React.FC<CardProps> = ({ user }) => {
         to={`/users/${user.id}`}
         className="w-full mt-4 py-2 text-center bg-blue-600/70 hover:bg-blue-700 text-white rounded-lg transition-colors duration-300"
       >
-        {t('common.view', 'View Details')}
+        {t('common:viewDetails', 'View Details')}
       </Link>
     </div>
   );

@@ -1,0 +1,36 @@
+{
+  "title": "Female Registration",
+  "sections": {
+    "personal": "Personal Information",
+    "contact": "Contact Information",
+    "vehicle": "Vehicle Information",
+    "travel": "Travel Information",
+    "case": "Case Information",
+    "criminal": "Criminal Record",
+    "photo": "Photo"
+  },
+  "form": {
+    "errors": {
+      "required": "This field is required",
+      "invalidImage": "Please upload a valid image file",
+      "imageTooLarge": "Image size must be less than 5MB",
+      "invalidFileType": "Only JPG, PNG, and JPEG files are allowed",
+      "cameraError": "Error accessing camera",
+      "captureError": "Error capturing image",
+      "uploadError": "Error uploading image",
+      "validationError": "Please check the form for errors",
+      "duplicateSubmission": "A submission is already in progress. Please wait.",
+      "timeout": "Registration timed out. Please try again.",
+      "network": "Network error. Please check your connection.",
+      "submission": "Error submitting form. Please try again.",
+      "unknown": "An unexpected error occurred. Please try again."
+    },
+    "success": {
+      "title": "Registration Successful",
+      "message": "The person has been registered successfully",
+      "referenceId": "Reference ID",
+      "newRegistration": "Register Another Person"
+    },
+    "submitting": "Registering information..."
+  }
+}

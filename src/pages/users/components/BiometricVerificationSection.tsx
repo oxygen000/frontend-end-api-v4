@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FiUser } from 'react-icons/fi';
-import type { TranslationFunction } from '../types/types';
+import type { TranslationFunction, FormatDateFunction } from '../types/types';
 import type { User } from '../types/types';
 
 interface BiometricVerificationSectionProps {
@@ -8,7 +8,7 @@ interface BiometricVerificationSectionProps {
   isIdentityRevealed: boolean;
   isRTL: boolean;
   t: TranslationFunction;
-  formatDate: (date: string | null | undefined) => string;
+  formatDate: FormatDateFunction;
 }
 
 function BiometricVerificationSection({

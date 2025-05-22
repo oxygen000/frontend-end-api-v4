@@ -7,19 +7,19 @@ import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallba
 // Component imports
 import UserProfileHeader from './components/UserProfileHeader';
 import UserImageModal from './components/UserImageModal';
-import VehicleInfoSection from './components/VehicleInfoSection';
-import PersonalInfoSection from './components/PersonalInfoSection';
-import TravelInfoSection from './components/TravelInfoSection';
-import CaseInfoSection from './components/CaseInfoSection';
+import VehicleInfoSection from './components/AdultUser/VehicleInfoSection';
+import DataAdultUser from './components/AdultUser/DataAdultUser';
+import TravelInfoSection from './components/AdultUser/TravelInfoSection';
+import CaseInfoSection from './components/AdultUser/CaseInfoSection';
 import IdentityVerificationSection from './components/IdentityVerificationSection';
-import ChildInfoSection from './components/ChildInfoSection';
-import CommonInfoSection from './components/CommonInfoSection';
+import ChildInfoSection from './components/ChildUser/ChildInfoSection';
 import PhoneNumbersSection from './components/PhoneNumbersSection';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import ActionsSection from './components/ActionsSection';
 import BiometricVerificationSection from './components/BiometricVerificationSection';
 import DocumentVerificationSection from './components/DocumentVerificationSection';
-import DisabledInfoDisplay from './components/DisabledInfoDisplay';
+import ChildUserDisplay from './components/ChildUser/ChildUserDisplay';
+import DisabledUserDisplay from './components/DisabledUser/DisabledUserDisplay';
 
 // Types and utilities
 import type { User } from './types/types';
@@ -126,14 +126,103 @@ function Userdata() {
     user.form_type === 'man' ||
     user.form_type === 'woman';
 
-  // Always check for vehicle information for all users
-  const hasVehicleInfo =
-    user.vehicle_model ||
-    user.license_plate ||
-    user.vehicle_color ||
-    user.chassis_number ||
-    user.vehicle_number ||
-    user.license_expiration;
+  if (isChildRecord) {
+    return (
+      <ChildUserDisplay
+        user={user}
+        isRTL={isRTL}
+        t={t}
+        navigate={(to) => {
+          if (typeof to === 'number') {
+            navigate(to); // Navigate by delta
+          } else {
+            navigate(to); // Navigate to path
+          }
+        }}
+        onDelete={handleDelete}
+      />
+    );
+  }
+  if (isDisabledPerson) {
+    return (
+      <DisabledUserDisplay
+        user={user}
+        isRTL={isRTL}
+        t={t}
+        navigate={(to) => {
+          if (typeof to === 'number') {
+            navigate(to); // Navigate by delta
+          } else {
+            navigate(to); // Navigate to path
+          }
+        }}
+        onDelete={handleDelete}
+      />
+    );
+  }
+
+  // Always check for vehicle information for all users - only consider ACTUAL values
+  const hasVehicleInfo = Boolean(
+    // Legacy fields
+    (user.vehicle_model && user.vehicle_model.trim()) ||
+      (user.license_plate && user.license_plate.trim()) ||
+      (user.vehicle_color && user.vehicle_color.trim()) ||
+      (user.chassis_number && user.chassis_number.trim()) ||
+      (user.vehicle_number && user.vehicle_number.trim()) ||
+      (user.license_expiration && user.license_expiration.trim()) ||
+      // New fields
+      user.has_vehicle === 1 ||
+      user.has_motorcycle === 1 ||
+      (user.color && user.color.trim()) ||
+      (user.license_expiration_date && user.license_expiration_date.trim()) ||
+      (user.manufacture_year && user.manufacture_year.trim()) ||
+      (user.traffic_department && user.traffic_department.trim()) ||
+      (user.brand && user.brand.trim()) ||
+      (user.license_type && user.license_type.trim()) ||
+      (user.traffic_unit && user.traffic_unit.trim()) ||
+      // Also check for nested vehicle_info if it exists
+      (user.vehicle_info &&
+        Object.values(user.vehicle_info).some((value) =>
+          Boolean(value && String(value).trim())
+        )) ||
+      // Penalty fields
+      (user.vehicle_penalty && user.vehicle_penalty.trim()) ||
+      (user.penalty_amount && user.penalty_amount.trim()) ||
+      (user.penalty_date && user.penalty_date.trim()) ||
+      (user.penalty_location && user.penalty_location.trim()) ||
+      (user.penalty_info &&
+        Object.values(user.penalty_info).some((v) => v && String(v).trim()))
+  );
+
+  // Check for travel information - only consider ACTUAL values
+  const hasTravelInfo = Boolean(
+    // Legacy fields
+    (user.travel_date && user.travel_date.trim()) ||
+      (user.travel_destination && user.travel_destination.trim()) ||
+      (user.arrival_airport && user.arrival_airport.trim()) ||
+      (user.arrival_date && user.arrival_date.trim()) ||
+      (user.flight_number && user.flight_number.trim()) ||
+      (user.return_date && user.return_date.trim()) ||
+      // New fields
+      (user.passport_number && user.passport_number.trim()) ||
+      (user.departure_airport && user.departure_airport.trim()) ||
+      (user.departure_country && user.departure_country.trim()) ||
+      (user.departure_destination && user.departure_destination.trim()) ||
+      (user.departure_date && user.departure_date.trim()) ||
+      (user.departure_time && user.departure_time.trim()) ||
+      (user.departure_airline && user.departure_airline.trim()) ||
+      (user.departure_flight_number && user.departure_flight_number.trim()) ||
+      (user.destination && user.destination.trim()) ||
+      (user.departure_datetime && user.departure_datetime.trim()) ||
+      (user.arrival_origin && user.arrival_origin.trim()) ||
+      (user.arrival_destination && user.arrival_destination.trim()) ||
+      (user.arrival_airline && user.arrival_airline.trim()) ||
+      (user.arrival_flight_number && user.arrival_flight_number.trim()) ||
+      (user.arrival_time && user.arrival_time.trim()) ||
+      (user.arrival_datetime && user.arrival_datetime.trim()) ||
+      (user.return_airport && user.return_airport.trim()) ||
+      (user.return_flight_number && user.return_flight_number.trim())
+  );
 
   // Helper function for masking sensitive information with isIdentityRevealed check
   const maskInfo = (value: string | null | undefined) => {
@@ -177,14 +266,6 @@ function Userdata() {
         {/* Left column - Main information */}
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Personal Information */}
-          <PersonalInfoSection
-            user={user}
-            isRTL={isRTL}
-            t={t}
-            showEmptyFields={showEmptyFields}
-            maskSensitiveInfo={maskInfo}
-            formatDate={formatDate}
-          />
 
           {/* Child Information Section */}
           {isChildRecord && (
@@ -199,30 +280,33 @@ function Userdata() {
             />
           )}
 
-          {/* Disabled Person Information Section */}
-          {isDisabledPerson && (
-            <DisabledInfoDisplay
-              user={user}
-              isRTL={isRTL}
-              t={t}
-              maskSensitiveInfo={maskInfo}
-              formatDate={formatDate}
-            />
-          )}
+          
 
           {/* Adult Information Section (both man and woman) */}
           {isAdult && (
             <>
-              {/* Vehicle Information (shown for all adults regardless of gender) */}
-              <VehicleInfoSection user={user} isRTL={isRTL} t={t} />
-
-              {/* Travel Information */}
-              <TravelInfoSection
+              <DataAdultUser
                 user={user}
                 isRTL={isRTL}
                 t={t}
+                showEmptyFields={showEmptyFields}
+                maskSensitiveInfo={maskInfo}
                 formatDate={formatDate}
               />
+              {/* Vehicle Information - only show when vehicle data exists */}
+              {hasVehicleInfo && (
+                <VehicleInfoSection user={user} isRTL={isRTL} t={t} />
+              )}
+
+              {/* Travel Information - only show when travel data exists */}
+              {hasTravelInfo && (
+                <TravelInfoSection
+                  user={user}
+                  isRTL={isRTL}
+                  t={t}
+                  formatDate={formatDate}
+                />
+              )}
 
               {/* Case Information */}
               <CaseInfoSection
@@ -234,14 +318,7 @@ function Userdata() {
             </>
           )}
 
-          {/* Common Information Section */}
-          <CommonInfoSection
-            user={user}
-            isRTL={isRTL}
-            t={t}
-            maskSensitiveInfo={maskInfo}
-            formatDate={formatDate}
-          />
+        
 
           {/* Phone Numbers Section */}
           <PhoneNumbersSection

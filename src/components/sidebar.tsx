@@ -60,7 +60,7 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <h2
                   className={`text-2xl font-bold ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                   {t('home.title', 'SMART FACE ID POLICE EDITION')}
+                  {t('common:appTitle', 'SMART FACE ID POLICE EDITION')}
                 </h2>
               </div>
 
@@ -70,25 +70,28 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
                   to="/identification"
                   className={`block px-3 py-2 rounded hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('home.identificationButton', 'Identification Of Unidentified')}
+                  {t(
+                    'common:identificationButton',
+                    'Identification Of Unidentified'
+                  )}
                 </Link>
                 <Link
                   to="/identification"
                   className={`block px-3 py-2 rounded hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('home.searchButton', 'Search For Missing Persons')}
+                  {t('common:searchButton', 'Search For Missing Persons')}
                 </Link>
                 <button
                   onClick={() => setIsPopupAddOpen(true)}
                   className={`block px-3 py-2 rounded w-full hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('home.addButton', 'Add New Data')}
+                  {t('common:addButton', 'Add New Data')}
                 </button>
                 <Link
                   to="/search"
                   className={`block px-3 py-2 rounded hover:bg-gray-700 transition ${isRTL ? 'text-right' : 'text-left'}`}
                 >
-                  {t('home.bigDataButton', 'Big Data')}
+                  {t('common:bigDataButton', 'Big Data')}
                 </Link>
 
                 {/* Language Switcher */}
@@ -125,30 +128,25 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
               {/* Logout Button */}
               <div className="pt-6 border-t border-gray-700">
                 <button
-                onClick={() => navigate('/login')}
+                  onClick={() => navigate('/login')}
                   className={`w-full ${isRTL ? 'text-right' : 'text-left'} px-3 py-2 rounded hover:bg-red-600 transition`}
                 >
-                  {t('auth.logout', 'Logout')}
+                  {t('auth:logout', 'Logout')}
                 </button>
               </div>
             </div>
           </motion.aside>
         </>
       )}
-       {/* النوافذ المنبثقة */}
-       <PopupChoiceAdd
+      {/* Popup windows */}
+      <PopupChoiceAdd
         isOpen={isPopupAddOpen}
         onClose={closePopup}
-        title={t('popups.addTitle', 'Select the type of data to add')}
-        cancelText={t('common.cancel', 'cancel')}
+        title={t('common:addTitle', 'Select the type of data to add')}
+        cancelText={t('common:cancel', 'Cancel')}
       />
-
     </AnimatePresence>
-     
-
   );
-  
 }
-
 
 export default Sidebar;

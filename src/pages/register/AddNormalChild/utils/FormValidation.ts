@@ -3,99 +3,96 @@ import type { FormData } from '../types/types';
 export const validateForm = (
   formData: FormData,
   currentSection: number,
-  capturedImage: string | null,
-  t: (key: string, fallback: string) => string
+  capturedImage: string | null
 ): string[] => {
   const errors: string[] = [];
 
-  // Validate based on current section
+  // Validation logic depending on the current step in the form wizard
+
   if (currentSection === 1) {
-    if (!formData.name) {
-      errors.push(
-        t('forms.child.childFullName', "Child's Name") +
-          ' ' +
-          t('validation.required', 'is required')
-      );
+    // Section 1: Basic Information - required for identification
+    if (!formData.full_name) {
+      errors.push("Child's Name is required");
     }
     if (!formData.dob) {
-      errors.push(
-        t('forms.child.age', 'Date of Birth') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
+      errors.push('Date of Birth is required');
     }
     if (!formData.gender) {
-      errors.push(
-        t('registration.gender', 'Gender') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
+      errors.push('Gender is required');
     }
-  } else if (currentSection === 2) {
-    if (!formData.guardian_name) {
-      errors.push(
-        t('forms.child.reporterName', "Guardian's Name") +
-          ' ' +
-          t('validation.required', 'is required')
-      );
+    if (!formData.address) {
+      errors.push('Address is required');
     }
-    if (!formData.guardian_phone) {
-      errors.push(
-        t('forms.child.reporterPhone', "Guardian's Phone") +
-          ' ' +
-          t('validation.required', 'is required')
-      );
-    }
-    if (!formData.relationship) {
-      errors.push(
-        t('forms.child.relationshipToMissing', 'Relationship to child') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
-    }
-    if (!formData.phone_company) {
-      errors.push(
-        t('registration.phoneCompany', 'Telecom Company') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
-    }
-  } else if (currentSection === 3) {
-    if (!formData.last_seen_time) {
-      errors.push(
-        t('forms.child.dateOfDisappearance', 'Last Seen (Date & Time)') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
-    }
-    if (!formData.last_seen_clothes) {
-      errors.push(
-        t('forms.child.clothes', 'Clothes Worn') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
-    }
-    if (!formData.last_seen_location) {
-      errors.push(
-        t('forms.child.disappearanceLocation', 'Last Known Location') +
-          ' ' +
-          t('validation.required', 'is required')
-      );
-    }
-  } else if (currentSection === 4) {
-    if (!capturedImage && !formData.image) {
-      errors.push(
-        t('forms.child.recentPhoto', "Child's Photo") +
-          ' ' +
-          t('validation.required', 'is required')
-      );
+    if (
+      formData.national_id &&
+      formData.national_id.length > 0 &&
+      formData.national_id.length < 14
+    ) {
+      errors.push('National ID should be 14 digits');
     }
 
-    // Validate image size if exists
+  } else if (currentSection === 2) {
+    // Section 2: Contact Information - optional but should be valid if provided
+    if (
+      formData.missing_person_phone &&
+      formData.missing_person_phone.length > 0 &&
+      formData.missing_person_phone.length < 11
+    ) {
+      errors.push('Phone Number should be 11 digits');
+    }
+
+  } else if (currentSection === 3) {
+    // Section 3: Reporter Information - mandatory for case follow-up
+    if (!formData.reporter_name) {
+      errors.push("Reporter's Name is required");
+    }
+    if (!formData.reporter_phone) {
+      errors.push("Reporter's Phone is required");
+    }
+    if (!formData.reporter_relationship) {
+      errors.push('Relationship to Reporter is required');
+    }
+    if (
+      formData.reporter_phone &&
+      formData.reporter_phone.length < 11
+    ) {
+      errors.push("Reporter's Phone should be 11 digits");
+    }
+    if (!formData.reporter_address) {
+      errors.push("Reporter's Address is required");
+    }
+
+  } else if (currentSection === 4) {
+    // Section 4: Medical Information - optional, limited to 500 characters
+    if (
+      formData.medical_condition &&
+      formData.medical_condition.length > 500
+    ) {
+      errors.push('Medical History is too long (max 500 characters)');
+    }
+
+  } else if (currentSection === 5) {
+    // Section 5: Disappearance Details - required for investigation
+    if (!formData.disappearance_date) {
+      errors.push('Date of Disappearance is required');
+    }
+    if (!formData.clothes_description) {
+      errors.push('Clothes Worn is required');
+    }
+    if (!formData.area_of_disappearance) {
+      errors.push('Last Known Location is required');
+    }
+
+  } else if (currentSection === 6) {
+    // Section 6: Police Report - optional, no validation required currently
+
+  } else if (currentSection === 7) {
+    // Section 7: Image Upload - required for identification
+    if (!capturedImage && !formData.image) {
+      errors.push("Child's Photo is required");
+    }
     if (formData.image && formData.image.size > 5 * 1024 * 1024) {
-      errors.push(
-        t('validation.imageSizeLimit', 'Image size should be less than 5MB')
-      );
+      errors.push('Image size should be less than 5MB');
     }
   }
 

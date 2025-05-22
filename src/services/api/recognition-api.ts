@@ -9,11 +9,15 @@ import type { RecognitionResult } from './types';
  * Recognize a face using file upload
  * @param file The image file to analyze
  * @param preselectedId Optional user ID to narrow search
- * @returns Recognition result with user data if recognized
+ * @param includeThreshold Optional similarity threshold (0-1) to include similar faces
+ * @param maxResults Optional maximum number of similar results to return
+ * @returns Recognition result with user data if recognized and similar matches
  */
 const recognizeFace = async (
   file: File,
-  preselectedId?: string
+  preselectedId?: string,
+  includeThreshold: number = 0.6,
+  maxResults: number = 5
 ): Promise<RecognitionResult> => {
   try {
     const formData = new FormData();
@@ -22,6 +26,11 @@ const recognizeFace = async (
     if (preselectedId) {
       formData.append('id', preselectedId);
     }
+
+    // Add parameters for similar faces
+    formData.append('include_similar', 'true');
+    formData.append('similarity_threshold', includeThreshold.toString());
+    formData.append('max_results', maxResults.toString());
 
     const response = await apiClient.post('/recognize', formData, {
       headers: {
@@ -44,11 +53,15 @@ const recognizeFace = async (
  * Recognize a face using base64 image
  * @param base64Image Base64-encoded image data
  * @param preselectedId Optional user ID to narrow search
- * @returns Recognition result with user data if recognized
+ * @param includeThreshold Optional similarity threshold (0-1) to include similar faces
+ * @param maxResults Optional maximum number of similar results to return
+ * @returns Recognition result with user data if recognized and similar matches
  */
 const recognizeFaceBase64 = async (
   base64Image: string,
-  preselectedId?: string
+  preselectedId?: string,
+  includeThreshold: number = 0.6,
+  maxResults: number = 5
 ): Promise<RecognitionResult> => {
   try {
     // Ensure the base64 string is properly formatted
@@ -69,6 +82,11 @@ const recognizeFaceBase64 = async (
     if (preselectedId) {
       formData.append('id', preselectedId);
     }
+
+    // Add parameters for similar faces
+    formData.append('include_similar', 'true');
+    formData.append('similarity_threshold', includeThreshold.toString());
+    formData.append('max_results', maxResults.toString());
 
     const response = await apiClient.post('/recognize', formData, {
       headers: {

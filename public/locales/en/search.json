@@ -1,0 +1,122 @@
+{
+  "title": "All Registered Data",
+  "subtitle": "View and search through all registered data in the system",
+  "placeholder": "Search any registered data by name, ID, phone, department, or address",
+  "toggleFilters": "Toggle filters",
+  "switchToListView": "Switch to list view",
+  "switchToGridView": "Switch to grid view",
+  "filterOptions": "Filter Options",
+  "formType": "Form Type",
+  "all": "All",
+  "formTypes": {
+    "": "All Form Types",
+    "child": "Child",
+    "disabled": "Disabled",
+    "man": "Man",
+    "woman": "Woman"
+  },
+  "sortBy": "Sort By",
+  "sortFields": {
+    "name": "Name",
+    "date": "Date"
+  },
+  "found": "Found",
+  "userSingular": "user",
+  "userPlural": "users",
+  "noResults": "No results found",
+  "tryDifferent": "Try a different search term or adjust filters",
+  "userDetails": "User Details",
+  "refreshing": "Refreshing data...",
+  "refreshingText": "Refreshing...",
+  "retrying": "Retrying...",
+  "gridView": "Grid View",
+  "listView": "List View",
+  "filters": {
+    "title": "Filter Results",
+    "apply": "Apply",
+    "reset": "Reset",
+    "clear": "Clear All",
+    "dateRange": "Date Range",
+    "status": "Status",
+    "type": "Type",
+    "department": "Department",
+    "governorate": "Governorate",
+    "policeStation": "Police Station"
+  },
+  "refresh": "Refresh Data",
+  "showing": "Showing",
+  "of": "of",
+  "peopleWithDisabilities": "people with disabilities",
+  "searchDisabilities": "Search people with disabilities...",
+  "disabilityType": "Disability Type",
+  "hasMedicalCondition": "Has Medical Condition",
+  "sortByName": "Sort by Name",
+  "sortByDate": "Sort by Date",
+  "specialNeeds": {
+    "title": "Special Needs",
+    "medical": "Medical Needs",
+    "dietary": "Dietary Needs",
+    "mobility": "Mobility Needs",
+    "communication": "Communication Needs",
+    "sensory": "Sensory Needs",
+    "behavioral": "Behavioral Needs",
+    "other": "Other Needs"
+  },
+  "children": "children",
+  "searchChildren": "Search children...",
+  "hasGuardianPhone": "Has Guardian Phone",
+  "hasPhysicalDescription": "Has Physical Description",
+  "childrenSearch": "Children Search",
+  "disabilitiesSearch": "Disabilities Search",
+  "specialNeedsSearch": "Special Needs Search",
+  "peopleWithSpecialNeeds": "people with special needs",
+  "searchSpecialNeeds": "Search people with special needs...",
+  "specialNeedsType": "Special Needs Type",
+  "hasEmergencyContact": "Has Emergency Contact",
+  "loading": "Searching...",
+  "error": "An error occurred while searching",
+  "user": {
+    "role": "Role",
+    "department": "Department",
+    "status": "Status",
+    "lastLogin": "Last Login",
+    "accountCreated": "Account Created"
+  },
+  "identification": {
+    "title": "Face Identification",
+    "identifyPerson": "Identify Person",
+    "uploadPhoto": "Upload Photo",
+    "takePhoto": "Take Photo",
+    "searching": "Searching...",
+    "faceRecognized": "Face Recognized!",
+    "noMatch": "No match found",
+    "multipleMatches": "Multiple matches found",
+    "confidence": "Confidence",
+    "viewDetails": "View Details",
+    "tryAgain": "Try Again",
+    "error": "An error occurred during identification"
+  },
+  "disabilities": {
+    "title": "Disabilities",
+    "types": {
+      "physical": "Physical Disability",
+      "visual": "Visual Impairment",
+      "hearing": "Hearing Impairment",
+      "intellectual": "Intellectual Disability",
+      "multiple": "Multiple Disabilities",
+      "other": "Other"
+    },
+    "severity": {
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe"
+    },
+    "needs": {
+      "mobility": "Mobility Needs",
+      "communication": "Communication Needs",
+      "medical": "Medical Needs",
+      "assistance": "Personal Assistance",
+      "other": "Other Needs"
+    }
+  }
+}

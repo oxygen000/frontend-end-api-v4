@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import Card from '../../../components/Card';
-import type { ApiUser } from '../types';
+import type { ApiUser, User } from '../types';
 
 interface ResultsGridProps {
   displayedData: ApiUser[];
@@ -29,7 +29,7 @@ const ResultsGrid: React.FC<ResultsGridProps> = ({
             whileTap="tap"
             layoutId={user.id}
           >
-            <Card user={user} />
+<Card user={user as User} />
           </motion.div>
         ))
       ) : (

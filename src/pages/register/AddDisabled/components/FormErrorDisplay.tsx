@@ -1,13 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { errorVariants, transition } from '../../../../config/animations';
+import { useTranslationWithFallback } from '../../../../hooks/useTranslationWithFallback';
 
 interface FormErrorDisplayProps {
   errors: string[];
 }
 
 const FormErrorDisplay: React.FC<FormErrorDisplayProps> = ({ errors }) => {
-  if (errors.length === 0) return null;
+  const { t } = useTranslationWithFallback();
+
+  if (!errors.length) return null;
 
   return (
     <motion.div
@@ -16,13 +19,14 @@ const FormErrorDisplay: React.FC<FormErrorDisplayProps> = ({ errors }) => {
       animate="visible"
       exit="exit"
       transition={transition}
-      className="bg-red-500/20 p-3 rounded-lg border border-red-500/30"
+      className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4"
     >
-      <ul className="list-disc pl-5">
+      <h4 className="text-red-400 font-medium mb-2">
+        {t('form.errors.title', 'Please fix the following errors:')}
+      </h4>
+      <ul className="list-disc list-inside space-y-1 text-red-300">
         {errors.map((error, index) => (
-          <li key={index} className="text-red-200">
-            {error}
-          </li>
+          <li key={index}>{t(`form.errors.${error}`, error)}</li>
         ))}
       </ul>
     </motion.div>

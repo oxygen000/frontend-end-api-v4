@@ -55,49 +55,38 @@ const PopupChoiceAdd: React.FC<PopupChoiceAddProps> = ({
           {title}
         </h2>
 
-        <div className="flex flex-row gap-3 justify-center items-center w-full">
+        <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => handleFinalChoice(PERSON_CATEGORIES.MAN)}
             className={`${iconButtonStyle} bg-blue-700 hover:bg-blue-800`}
-            aria-label={t('search.formTypes.man', 'Man')}
+            aria-label={t('forms:man.title')}
           >
             <FaMale />
-            <span className="text-sm">
-              {t('search.formTypes.man', 'Man')}
-            </span>
+            <span className="text-sm">{t('search:formTypes.man')}</span>
           </button>
-
           <button
             onClick={() => handleFinalChoice(PERSON_CATEGORIES.WOMAN)}
             className={`${iconButtonStyle} bg-pink-600 hover:bg-pink-700`}
-            aria-label={t('search.formTypes.female', 'Woman')}
+            aria-label={t('forms:woman.title')}
           >
             <FaFemale />
-            <span className="text-sm">
-              {t('search.formTypes.female', 'Woman')}
-            </span>
+            <span className="text-sm">{t('search:formTypes.woman')}</span>
           </button>
-
           <button
             onClick={() => handleFinalChoice(PERSON_CATEGORIES.CHILD)}
             className={`${iconButtonStyle} bg-yellow-600 hover:bg-yellow-700`}
-            aria-label={t('search.formTypes.child', 'Child')}
+            aria-label={t('forms:child.title')}
           >
             <FaChild />
-            <span className="text-sm">
-              {t('search.formTypes.child', 'Child')}
-            </span>
+            <span className="text-sm">{t('search:formTypes.child')}</span>
           </button>
-
           <button
             onClick={() => handleFinalChoice(PERSON_CATEGORIES.DISABLED)}
             className={`${iconButtonStyle} bg-purple-600 hover:bg-purple-700`}
-            aria-label={t('search.formTypes.disabled', 'Disabled')}
+            aria-label={t('forms:disabled.title')}
           >
             <FaWheelchair />
-            <span className="text-sm">
-              {t('search.formTypes.disabled', 'Disabled')}
-            </span>
+            <span className="text-sm">{t('search:formTypes.disabled')}</span>
           </button>
         </div>
 

@@ -109,7 +109,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
                 <div className="absolute inset-0 pointer-events-none">
                   {/* Face alignment guide */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 border-2 border-pink-400 rounded-full opacity-50"></div>
+                    <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64  border-pink-400  opacity-50"></div>
                   </div>
                   <svg
                     width="100%"
@@ -125,14 +125,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
                     />
                   </svg>
                 </div>
-                <button
-                  type="button"
-                  onClick={toggleCameraFacingMode}
-                  className="absolute bottom-2 right-2 bg-pink-600 text-white p-2 rounded-full hover:bg-pink-700"
-                  aria-label="Switch camera"
-                >
-                  <FaSync className="text-sm" />
-                </button>
+                
               </div>
 
               <div className="flex space-x-2 mt-3 sm:mt-4">

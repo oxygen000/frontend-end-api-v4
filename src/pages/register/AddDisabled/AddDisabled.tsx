@@ -1,3 +1,9 @@
+/**
+ * AddDisabled Component
+ *
+ * This component handles the registration form for disabled persons.
+ * It includes multiple form sections and manages form state and validation.
+ */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -5,11 +11,7 @@ import { toast } from 'react-hot-toast';
 import { registrationApi } from '../../../services/api';
 import { useTranslationWithFallback } from '../../../hooks/useTranslationWithFallback';
 import SuccessAnimation from '../../../components/SuccessAnimation';
-import {
-  errorVariants,
-  transition,
-  formVariants,
-} from '../../../config/animations';
+import { errorVariants, formVariants } from '../../../config/animations';
 
 // Import types and form components
 import type {
@@ -19,37 +21,70 @@ import type {
 import { initialFormData } from './types/disabled-form';
 import BasicInformationSection from './components/BasicInformationSection';
 import ContactInformationSection from './components/ContactInformationSection';
-import DisabilityInformationSection from './components/DisabilityInformationSection';
-import PhotoCaptureSection from './components/PhotoCaptureSection';
+import ReporterInformationSection from './components/ReporterInformationSection';
+import MissingInformationSection from './components/MissingInformationSection';
+import PhotoCaptureSection from './components/ImageSection';
 
 // Import utility functions
-import {
-  validateForm,
-  buildSubmissionFormData,
-  prepareImageFile,
-} from './utils/formValidation';
+import { validateForm, buildSubmissionFormData } from './utils/formValidation';
+import type { RegistrationResult } from '../../../services/api/types';
 
 // Track submissions to prevent duplicates
 const pendingSubmissions = new Set<string>();
 
+/**
+ * AddDisabled Component Function
+ *
+ * This component handles the registration form for disabled persons.
+ */
 function AddDisabled() {
-  const { t } = useTranslationWithFallback();
+  // Translation hook
+  const { t } = useTranslationWithFallback('forms/disabled');
+
+  // Form state
   const [currentSection, setCurrentSection] = useState<DisabledFormSection>(1);
+  const [formData, setFormData] = useState<DisabledFormData>(initialFormData);
+  const [formErrors, setFormErrors] = useState<string[]>([]);
+
+  // Image capture state
   const [useCamera, setUseCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [formErrors, setFormErrors] = useState<string[]>([]);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
-  const [formData, setFormData] = useState<DisabledFormData>(initialFormData);
 
-  // Event handlers
+  // Submission state
+  const [loading, setLoading] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
+
+  /**
+   * Image handling functions
+   */
+  const handleToggleCamera = () => setUseCamera((prev) => !prev);
+  const handleImageCapture = (image: string | null) => setCapturedImage(image);
+  const handleFileSelect = (file: File | null) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setCapturedImage(e.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setCapturedImage(null);
+    }
+  };
+
+  /**
+   * Form input change handler
+   *
+   * Handles changes to form inputs, including nested fields.
+   *
+   * @param e - The change event
+   */
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
     const { name, value } = e.target;
+
+    // Handle nested fields (e.g., "section.field")
     if (name.includes('.')) {
       const [section, field] = name.split('.');
       setFormData((prev) => ({
@@ -62,6 +97,7 @@ function AddDisabled() {
         },
       }));
     } else {
+      // Handle top-level fields
       setFormData((prev) => ({
         ...prev,
         [name]: value,
@@ -69,42 +105,33 @@ function AddDisabled() {
     }
   };
 
-  const handleFileSelect = (file: File | null) => {
-    setFormData((prev) => ({
-      ...prev,
-      image: file,
-    }));
-  };
+  /**
+   * Navigation functions
+   */
 
-  const handleToggleCamera = () => {
-    setUseCamera(!useCamera);
-    setFormData((prev) => ({
-      ...prev,
-      useCamera: !useCamera,
-      image: null,
-    }));
-    setCapturedImage(null);
-  };
-
-  const handleImageCapture = (imageSrc: string | null) => {
-    setCapturedImage(imageSrc);
-  };
-
-  // Navigation functions
+  /**
+   * Move to the next form section
+   *
+   * Validates the current section before proceeding.
+   * If validation fails, displays errors and scrolls to them.
+   */
   const nextSection = () => {
-    const errors = validateForm(formData, currentSection, capturedImage, t);
+    // Validate the current section
+    const errors = validateForm(formData, currentSection, capturedImage,);
     setFormErrors(errors);
 
     if (errors.length === 0) {
+      // If no errors, proceed to next section
       setCurrentSection((currentSection + 1) as DisabledFormSection);
-      // Scroll to top of form when changing sections
+
+      // Scroll to the top of the form
       setTimeout(() => {
         document
           .querySelector('form')
           ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     } else {
-      // If there are errors, scroll to the error section
+      // If errors, scroll to the error messages
       setTimeout(() => {
         document
           .querySelector('.bg-red-500\\/20')
@@ -113,9 +140,13 @@ function AddDisabled() {
     }
   };
 
+  /**
+   * Move to the previous form section
+   */
   const prevSection = () => {
     setCurrentSection((currentSection - 1) as DisabledFormSection);
-    // Scroll to top of form when changing sections
+
+    // Scroll to the top of the form
     setTimeout(() => {
       document
         .querySelector('form')
@@ -123,270 +154,347 @@ function AddDisabled() {
     }, 100);
   };
 
-  // Form submission
+  /**
+   * Form submission handler
+   *
+   * Validates all form sections, prepares form data, and submits it to the API.
+   * Handles success and error cases, including timeouts and network errors.
+   *
+   * @param e - The form submission event
+   */
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const errors = validateForm(formData, 4, capturedImage, t);
-    setFormErrors(errors);
-
-    if (errors.length > 0) {
-      // Scroll to errors
-      setTimeout(() => {
-        document
-          .querySelector('.bg-red-500\\/20')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-      return;
-    }
-
-    // Generate submission key to detect duplicate submissions
-    const submissionKey = `${formData.name}-${formData.dob}-${Date.now()}`;
-
-    // Prevent duplicate submissions
-    if (pendingSubmissions.has(submissionKey)) {
-      toast.error('A submission is already in progress');
-      return;
-    }
-
-    // Mark as pending
-    pendingSubmissions.add(submissionKey);
+    setFormErrors([]);
     setLoading(true);
-    toast.loading('Registering information...', {
-      id: 'disabled-registration',
-    });
 
     try {
-      // Build form data for submission
-      const formDataToSend = buildSubmissionFormData(formData, capturedImage);
-
-      // Process and attach the image file
-      const imageFile = prepareImageFile(formData.image, capturedImage);
-      if (imageFile) {
-        formDataToSend.append('file', imageFile);
-      } else {
-        pendingSubmissions.delete(submissionKey);
-        toast.dismiss('disabled-registration');
-        throw new Error('Please provide a photo');
+      // Validate all sections before submission
+      const allSectionErrors = [];
+      for (let section = 1; section <= 6; section++) {
+        const sectionErrors = validateForm(
+          formData,
+          section as DisabledFormSection,
+          capturedImage,
+          
+        );
+        if (sectionErrors.length > 0) {
+          allSectionErrors.push(...sectionErrors);
+        }
       }
 
-      // Send the registration request
-      try {
-        const responseData = await registrationApi.registerUser(formDataToSend);
-        console.log('Response data from registerUser:', responseData);
+      // If validation fails, show errors and return
+      if (allSectionErrors.length > 0) {
+        setFormErrors(allSectionErrors);
+        setLoading(false);
 
-        // Clear pending submission immediately
+        // Scroll to first error
+        setTimeout(() => {
+          document
+            .querySelector('.bg-red-500\\/20')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+        return;
+      }
+
+      // Generate a unique key for this submission
+      const submissionKey = `${formData.name}-${Date.now()}`;
+
+      // Check if this submission is already pending
+      if (pendingSubmissions.has(submissionKey)) {
+        setFormErrors([
+          t(
+            'form.errors.duplicateSubmission',
+            'A submission is already in progress. Please wait.'
+          ),
+        ]);
+        setLoading(false);
+        return;
+      }
+
+      // Mark as pending
+      pendingSubmissions.add(submissionKey);
+
+      // Show loading toast
+      toast.loading(t('form.submitting', 'Registering information...'), {
+        id: 'disabled-registration',
+        duration: 30000, // 30 second timeout
+      });
+
+      // Set a timeout for the entire submission process
+      const submissionTimeout = setTimeout(() => {
+        if (pendingSubmissions.has(submissionKey)) {
+          pendingSubmissions.delete(submissionKey);
+          toast.error(
+            t(
+              'form.errors.timeout',
+              'Registration timed out. Please try again.'
+            ),
+            {
+              id: 'disabled-registration',
+            }
+          );
+          setLoading(false);
+          setFormErrors([
+            t(
+              'form.errors.timeout',
+              'Registration timed out. Please try again.'
+            ),
+          ]);
+        }
+      }, 30000); // 30 second timeout
+
+      // Prepare form data for submission
+      const formDataToSend = buildSubmissionFormData(formData, capturedImage);
+
+      try {
+        // Send the registration request with timeout
+        const response = (await Promise.race([
+          registrationApi.registerUser(formDataToSend),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Request timeout')), 25000)
+          ),
+        ])) as RegistrationResult;
+
+        // Clear timeout
+        clearTimeout(submissionTimeout);
+
+        // Clear pending submission
         pendingSubmissions.delete(submissionKey);
 
-        // Handle successful registration
-        setSubmitSuccess(true);
+        // Extract user ID from response
+        let userId = '';
 
-        // Clear form data immediately to prevent duplicate submissions
-        setFormData({ ...initialFormData });
-        setCapturedImage(null);
-
-        // If we didn't get proper data back, try to recreate it
-        let userId, userName;
-
-        // If we have a proper response, use it
-        if (responseData?.user_id || responseData?.user?.id) {
-          userId = responseData.user_id || responseData.user?.id || '';
-          userName = responseData.user?.name || formData.name;
+        if (response?.user_id || response?.user?.id) {
+          userId = response.user_id || response.user?.id || '';
+        } else if (response?.user?.face_id) {
+          userId = response.user.face_id;
         } else {
-          // Create a fallback temporary response object
-          userId = `temp-${Date.now()}`;
-          userName = formData.name;
-
-          // Save the form data to localStorage for potential recovery
-          try {
-            const formDataObj: Record<string, string> = {};
-            formDataToSend.forEach((value, key) => {
-              if (typeof value === 'string') {
-                formDataObj[key] = value;
-              }
-            });
-
-            localStorage.setItem(
-              `temp_registration_${userId}`,
-              JSON.stringify({
-                id: userId,
-                name: userName,
-                form_type: 'disabled',
-                timestamp: new Date().toISOString(),
-                data: formDataObj,
-              })
-            );
-
-            console.log(
-              `Saved form data to localStorage with key: temp_registration_${userId}`
-            );
-          } catch (e) {
-            console.error('Failed to save form data to localStorage:', e);
-          }
+          // Fallback to form data if response is incomplete
+          userId = formData.national_id || formData.name;
         }
 
-        // Store the ID for reference
-        setRegisteredUserId(userId);
-        toast.success(`${userName} registered successfully!`, {
+        // Show success toast
+        toast.success(t('form.success', 'Registration successful!'), {
           id: 'disabled-registration',
         });
 
-        // Show success animation
+        // Update state for success animation
+        setRegisteredUserId(userId);
         setSubmitSuccess(true);
 
-        // Reset form data after animation plays
+        // Reset form after success animation
         setTimeout(() => {
-          // Reset success state to show the form again
-          setSubmitSuccess(false);
-
-          // Make sure form is fully reset
-          setFormData({ ...initialFormData });
+          setFormData(initialFormData);
           setCapturedImage(null);
+          setUseCamera(false);
           setCurrentSection(1);
-          setLoading(false);
-          console.log('Form reset completed after success animation');
         }, 3500);
-      } catch (err) {
+      } catch (error) {
+        // Clear timeout
+        clearTimeout(submissionTimeout);
+
+        // Clear pending submission
         pendingSubmissions.delete(submissionKey);
-        handleRegistrationError(err);
+
+        // Handle specific error types
+        if (error instanceof Error) {
+          if (error.message === 'Request timeout') {
+            toast.error(
+              t(
+                'form.errors.timeout',
+                'Registration timed out. Please try again.'
+              ),
+              {
+                id: 'disabled-registration',
+              }
+            );
+            setFormErrors([
+              t(
+                'form.errors.timeout',
+                'Registration timed out. Please try again.'
+              ),
+            ]);
+          } else if (error.message.includes('network')) {
+            toast.error(
+              t(
+                'form.errors.network',
+                'Network error. Please check your connection.'
+              ),
+              {
+                id: 'disabled-registration',
+              }
+            );
+            setFormErrors([
+              t(
+                'form.errors.network',
+                'Network error. Please check your connection.'
+              ),
+            ]);
+          } else {
+            console.error('Error submitting form:', error);
+            toast.error(
+              t(
+                'form.errors.submission',
+                'Error submitting form. Please try again.'
+              ),
+              {
+                id: 'disabled-registration',
+              }
+            );
+            setFormErrors([
+              t(
+                'form.errors.submission',
+                'Error submitting form. Please try again.'
+              ),
+            ]);
+          }
+        } else {
+          console.error('Unknown error submitting form:', error);
+          toast.error(
+            t(
+              'form.errors.unknown',
+              'An unexpected error occurred. Please try again.'
+            ),
+            {
+              id: 'disabled-registration',
+            }
+          );
+          setFormErrors([
+            t(
+              'form.errors.unknown',
+              'An unexpected error occurred. Please try again.'
+            ),
+          ]);
+        }
       }
-    } catch (err) {
-      pendingSubmissions.delete(submissionKey);
-      handleRegistrationError(err);
+    } catch (error) {
+      console.error('Error in form submission:', error);
+      setFormErrors([
+        t(
+          'form.errors.validationError',
+          'Error validating form. Please check your inputs.'
+        ),
+      ]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Error handling helper
-  const handleRegistrationError = (err: unknown) => {
-    console.error('Registration error:', err);
+  /**
+   * Define section items for progress indicator
+   * Each section has an ID and a name that is displayed in the UI
+   */
+  const sections = [
+    { id: 1, name: t('sections.1', 'Basic Information') },
+    { id: 2, name: t('sections.2', 'Contact Information') },
+    { id: 3, name: t('sections.3', 'Reporter Information') },
+    { id: 4, name: t('sections.4', 'Missing Information') },
+    { id: 5, name: t('sections.5', 'Photo Capture') },
+  ];
 
-    // Check for specific face angle error
-    let errorMessage = 'An error occurred during registration';
-
-    if (err instanceof Error) {
-      errorMessage = err.message;
-
-      // Provide more user-friendly message for face angle errors
-      if (
-        errorMessage.includes('Face angle') ||
-        errorMessage.includes('face is not')
-      ) {
-        errorMessage =
-          "The uploaded photo doesn't meet our requirements. Please upload a clear front-facing photo where the person is looking directly at the camera.";
-      }
-      // Handle unique constraint errors
-      else if (errorMessage.includes('UNIQUE constraint failed')) {
-        errorMessage =
-          'Registration could not be completed. Please try again with a different image.';
-      }
-    }
-
-    toast.error(errorMessage, { id: 'disabled-registration' });
-    setFormErrors([errorMessage]);
-    setLoading(false);
-  };
-
+  /**
+   * Component render
+   */
   return (
-    <div className="min-h-screen p-4 sm:p-6 ">
-      <Link
-        to="/home"
-        className="inline-flex items-center text-white hover:text-purple-300 transition-colors font-medium"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 mr-2"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+    <div className="min-h-screen p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Back button */}
+        <Link
+          to="/home"
+          className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors font-medium mb-6"
+          aria-label={t('common.back', 'Back')}
         >
-          <path
-            fillRule="evenodd"
-            d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-            clipRule="evenodd"
-          />
-        </svg>
-        {t('common.back', 'Back to Home')}
-      </Link>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {t('common.back', 'Back')}
+        </Link>
 
-      {/* Form Progress Indicator - Hide when showing success */}
-      {!submitSuccess && (
-        <div className="max-w-2xl mx-auto mt-6 mb-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white text-center mb-2">
-            {t('forms.disabled.title', 'Disabled Person Registration')}
-          </h1>
-          <p className="text-white/70 text-center mb-6">
-            {currentSection}/{5}
-          </p>
+        {/* Form Progress Indicator - Hide when showing success */}
+        {!submitSuccess && (
+          <div className="max-w-3xl mx-auto mt-6 mb-6">
+            {/* Form title */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-4 tracking-tight">
+              {t('title', 'Register Disabled Person')}
+            </h1>
 
-          <div className="flex justify-center py-2 mb-4">
-            <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-              {[1, 2, 3, 4, 5].map((step, idx) => (
-                <React.Fragment key={step}>
-                  {idx > 0 && (
-                    <div className="w-6 sm:w-10 md:w-16 h-1 bg-gray-300/30 rounded-full">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          currentSection >= step
-                            ? 'bg-gradient-to-r from-purple-500 to-violet-600'
-                            : 'bg-gray-300/30'
-                        }`}
-                        style={{
-                          width:
-                            currentSection > step
-                              ? '100%'
-                              : currentSection === step
-                                ? '50%'
-                                : '0%',
-                        }}
-                      ></div>
-                    </div>
-                  )}
+            {/* Progress text */}
+            <p className="text-white/80 text-center mb-8 text-lg">
+              {t('progress.current', {
+                current: currentSection,
+                total: 6,
+              })}
+            </p>
+
+            {/* Progress indicator */}
+            <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50">
+              <div className="flex items-center text-center justify-center gap-6">
+                {sections.map((section) => (
                   <div
-                    className={`w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm md:text-base ${
-                      currentSection === step
-                        ? 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg shadow-purple-700/30 scale-110'
-                        : currentSection > step
-                          ? 'bg-gradient-to-r from-purple-400 to-violet-500 text-white'
-                          : 'bg-gray-200/20 text-white/70'
-                    }`}
+                    key={section.id}
+                    className="flex flex-col items-center relative"
                   >
-                    {step}
+                    {/* Section number circle */}
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        currentSection >= section.id
+                          ? 'bg-purple-500 text-white'
+                          : 'bg-gray-700 text-gray-400'
+                      }`}
+                    >
+                      {section.id}
+                    </div>
+
+                    {/* Section name */}
+                    <span
+                      className={`text-sm mt-2 ${
+                        currentSection >= section.id
+                          ? 'text-purple-400'
+                          : 'text-gray-400'
+                      }`}
+                    >
+                      {t(`sections.${section.id}`, section.name)}
+                    </span>
                   </div>
-                </React.Fragment>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait">
+
+          
+        {/* Show success animation or form sections */}
         {submitSuccess ? (
-          <SuccessAnimation
-            title={t('registration.success', 'Registration Successful!')}
-            message={t(
-              'registration.successDescription',
-              'User has been registered successfully.'
-            )}
-            id={registeredUserId}
-            idLabel={t('registration.caseReferenceId', 'Registration ID:')}
-          />
-        ) : (
+            <SuccessAnimation
+              title={t('registration.success', 'Registration Successful!')}
+              message={t(
+                'registration.successDescription',
+                'User has been registered successfully.'
+              )}
+              id={registeredUserId}
+              idLabel={t('registration.caseReferenceId', 'Registration ID:')}
+            />
+          ) : (
           <motion.form
             onSubmit={handleFormSubmit}
-            className="w-full max-w-2xl mx-auto 
-                      bg-white/10 backdrop-blur-lg 
-                      p-5 sm:p-8 
-                      mt-4 sm:mt-6 
-                      rounded-2xl 
-                      shadow-[0_10px_40px_-5px_rgba(147,51,234,0.3)] 
-                      text-white 
-                      border border-white/20 
-                      space-y-6 sm:space-y-8"
             variants={formVariants}
             initial="hidden"
             animate="visible"
-            exit="exit"
+            className="bg-gray-800/50 backdrop-blur-sm p-5 sm:p-6 lg:p-8 rounded-xl border border-gray-700/50 mb-10"
           >
-            {/* Display form errors */}
+            {/* Display validation errors if any */}
             <AnimatePresence>
               {formErrors.length > 0 && (
                 <motion.div
@@ -394,65 +502,63 @@ function AddDisabled() {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  transition={transition}
-                  className="bg-red-500/20 p-4 rounded-xl border border-red-500/30 mb-4"
+                  className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6"
+                  role="alert"
+                  aria-live="assertive"
                 >
-                  <div className="flex items-start">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-red-400 mr-2 mt-0.5 flex-shrink-0"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <ul className="list-disc pl-5 space-y-1">
-                      {formErrors.map((error, index) => (
-                        <li key={index} className="text-red-100 text-sm">
-                          {error}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <h4 className="text-red-400 font-semibold mb-2">
+                    {t(
+                      'common.errorsFound',
+                      'Please fix the following errors:'
+                    )}
+                  </h4>
+                  <ul className="list-disc list-inside text-white/80 space-y-1">
+                    {formErrors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Sections */}
+            {/* Form sections - Only one is shown at a time */}
             <AnimatePresence mode="wait">
-              {currentSection === 1 && (
+              {/* Section 1: Basic Information */}
+              {currentSection === 1 ? (
                 <BasicInformationSection
-                  personDetails={formData}
-                  handleInputChange={handleInputChange}
+                  formData={formData}
+                  onChange={handleInputChange}
                   onNext={nextSection}
+                  onPrev={prevSection}
                 />
-              )}
-
-              {currentSection === 2 && (
+              ) : /* Section 2: Contact Information */
+              currentSection === 2 ? (
                 <ContactInformationSection
-                  personDetails={formData}
-                  handleInputChange={handleInputChange}
+                  formData={formData}
+                  onChange={handleInputChange}
                   onNext={nextSection}
                   onPrev={prevSection}
                 />
-              )}
-
-              {currentSection === 3 && (
-                <DisabilityInformationSection
-                  personDetails={formData}
-                  handleInputChange={handleInputChange}
+              ) : /* Section 3: Reporter Information */
+              currentSection === 3 ? (
+                <ReporterInformationSection
+                  formData={formData}
+                  onChange={handleInputChange}
                   onNext={nextSection}
                   onPrev={prevSection}
                 />
-              )}
-
-              {currentSection === 4 && (
+              ) : /* Section 4: Missing Information */
+              currentSection === 4 ? (
+                <MissingInformationSection
+                  formData={formData}
+                  onChange={handleInputChange}
+                  onNext={nextSection}
+                  onPrev={prevSection}
+                />
+              ) : (
+                /* Section 5: Photo Capture */
                 <PhotoCaptureSection
-                  personDetails={formData}
+                  formData={formData}
                   useCamera={useCamera}
                   toggleCamera={handleToggleCamera}
                   capturedImage={capturedImage}
@@ -463,12 +569,19 @@ function AddDisabled() {
                   loading={loading}
                 />
               )}
+
             </AnimatePresence>
+          
+
           </motion.form>
         )}
-      </AnimatePresence>
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
 
+/**
+ * Export the AddDisabled component as the default export
+ */
 export default AddDisabled;

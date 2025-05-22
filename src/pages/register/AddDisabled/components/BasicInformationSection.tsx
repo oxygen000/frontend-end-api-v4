@@ -5,23 +5,23 @@ import type { DisabledFormData } from '../types/disabled-form';
 import SectionButtons from './SectionButtons';
 import { sectionVariants, transition } from '../../../../config/animations';
 import { useTranslationWithFallback } from '../../../../hooks/useTranslationWithFallback';
-
 interface BasicInformationSectionProps {
-  personDetails: DisabledFormData;
-  handleInputChange: (
+  formData: DisabledFormData;
+  onChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
   onNext: () => void;
+  onPrev?: () => void;
 }
 
 const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
-  personDetails,
-  handleInputChange,
+  formData,
+  onChange,
   onNext,
 }) => {
-  const { t } = useTranslationWithFallback();
+  const { t } = useTranslationWithFallback('forms/disabled');
 
   return (
     <motion.div
@@ -30,48 +30,104 @@ const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
       animate="visible"
       exit="exit"
       transition={transition}
-      className="space-y-4"
+      className="space-y-4 sm:space-y-5"
     >
-      <h3 className="text-base sm:text-lg font-semibold">
-        {t('registration.personalInfo', 'Basic Information')}
+      <h3 className="text-base text-white sm:text-lg font-semibold mb-3 border-b border-purple-400/30 pb-2">
+        {t('sections.basic', 'Basic Information')}
       </h3>
-      <Input
-        label={t('registration.fullName', 'Full Name')}
-        name="name"
-        value={personDetails.name}
-        onChange={handleInputChange}
-      />
-      <Input
-        label={t('registration.dateOfBirth', 'Date of Birth')}
-        name="dob"
-        type="date"
-        value={personDetails.dob}
-        onChange={handleInputChange}
-      />
-      <div>
-        <label className="block font-medium mb-1">
-          {t('registration.gender', 'Gender')}
-        </label>
-        <select
-          name="gender"
-          value={personDetails.gender}
-          onChange={handleInputChange}
-          className="w-full px-4 py-2 bg-white/10 border text-black border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-        >
-          <option value="">
-            {t('registration.selectGender', 'Select Gender')}
-          </option>
-          <option value="male">{t('registration.male', 'Male')}</option>
-          <option value="female">{t('registration.female', 'Female')}</option>
-        </select>
+
+      {/* Personal Information */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
+        <Input
+          label={t('basic.fullName', 'Full Name')}
+          name="name"
+          value={formData.name}
+          onChange={onChange}
+          required
+          placeholder={t('basic.fullNamePlaceholder', 'Enter full name')}
+        />
+        <Input
+          label={t('basic.nationalId', 'National ID')}
+          name="national_id"
+          value={formData.national_id}
+          onChange={onChange}
+          placeholder={t(
+            'basic.nationalIdPlaceholder',
+            'Enter national ID if available'
+          )}
+        />
+
+        <Input
+          label={t('basic.dateOfBirth', 'Date of Birth')}
+          name="dob"
+          type="date"
+          value={formData.dob}
+          onChange={onChange}
+          required
+        />
+        <Input 
+        label={t('basic.address', 'address')}
+        name="age"
+        value={formData.address}
+        onChange={onChange}
+        required
+        placeholder={t('basic.addressPlaceholder', 'Enter address')}
+        />
+
+        <div>
+          <label className="block text-white font-medium mb-1 text-sm sm:text-base">
+            {t('basic.gender', 'Gender')}{' '}
+            <span className="text-red-500">*</span>
+          </label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={onChange}
+            className="w-full px-3 sm:px-4 py-2 bg-white/10 text-white border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
+            style={{ colorScheme: 'dark' }}
+            required
+          >
+            <option value="" className="text-black bg-white">
+              {t('basic.selectGender', 'Select Gender')}
+            </option>
+            <option value="male" className="text-black bg-white">
+              {t('basic.male', 'Male')}
+            </option>
+            <option value="female" className="text-black bg-white">
+              {t('basic.female', 'Female')}
+            </option>
+          </select>
+        </div>
+
+        <Input
+          label={t('basic.distinctive_mark', 'distinctive_mark')}
+          name="distinctive_mark"
+          value={formData.distinctive_mark || ''}
+          onChange={onChange}
+          required
+          placeholder={t('basic.distinctive_mark', 'Enter distinctive_mark')}
+        />
+        <Input
+          label={t('basic.reporter_occupation', 'Missing Person Occupation')}
+          name="missing_person_occupation"
+          value={formData.missing_person_occupation || ''}
+          onChange={onChange}
+          required
+          placeholder={t('basic.reporter_occupation', 'Enter occupation')}
+        />
+        <Input
+          label={t('basic.reporter_education', 'Missing Person Education')}
+          name="missing_person_education"
+          value={formData.missing_person_education || ''}
+          onChange={onChange}
+          required
+          placeholder={t('basic.reporter_education', 'Enter education level')}
+        />
       </div>
-      <Input
-        label={t('registration.nationalId', 'National ID')}
-        name="national_id"
-        value={personDetails.national_id}
-        onChange={handleInputChange}
-      />
-      <SectionButtons onNext={onNext} />
+
+      <div className="mt-6">
+        <SectionButtons onNext={onNext} />
+      </div>
     </motion.div>
   );
 };

@@ -1,6 +1,7 @@
 export interface User {
   id: string;
-  name: string;
+  full_name: string;
+  name:string;
   nickname: string;
   employee_id?: string;
   department?: string;
@@ -19,6 +20,7 @@ export interface User {
 export interface ApiUser {
   id: string;
   name: string;
+  full_name?: string;
   nickname?: string;
   employee_id?: string;
   department?: string;

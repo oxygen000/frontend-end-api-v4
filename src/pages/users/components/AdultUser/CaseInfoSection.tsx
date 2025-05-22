@@ -1,21 +1,12 @@
 import { motion } from 'framer-motion';
 import { FiAlertCircle } from 'react-icons/fi';
-
-// Define a minimal User type for the required fields
-interface User {
-  has_criminal_record: number;
-  case_details?: string | null;
-  police_station?: string | null;
-  case_number?: string | null;
-  judgment?: string | null;
-  accusation?: string | null;
-}
+import type { User, MaskSensitiveInfoFunction } from '../../types/types';
 
 interface CaseInfoSectionProps {
   user: User;
   isRTL: boolean;
   t: (key: string, defaultText?: string) => string;
-  maskSensitiveInfo: (value: string | null | undefined) => string;
+  maskSensitiveInfo: MaskSensitiveInfoFunction;
 }
 
 const CaseInfoSection = ({
@@ -30,7 +21,12 @@ const CaseInfoSection = ({
     user.police_station ||
     user.case_number ||
     user.judgment ||
-    user.accusation;
+    user.accusation ||
+    user.record_number ||
+    user.governorate ||
+    user.dossier_number ||
+    user.charge ||
+    user.sentence;
 
   if (!hasCaseInfo) return null;
 
@@ -46,32 +42,30 @@ const CaseInfoSection = ({
         {t('users.caseInfo', 'Case Information')}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+      
+
+        {/* Record Number */}
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.hasCriminalRecord', 'Has Criminal Record:')}
+            {t('registration.recordNumber', 'Record Number:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {user.has_criminal_record === 1
-              ? t('common.yes', 'Yes')
-              : t('common.no', 'No')}
+            {maskSensitiveInfo(user.record_number)}
           </span>
         </div>
+
+        {/* Governorate */}
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.caseDetails', 'Case Details:')}
+            {t('registration.governorate', 'Governorate:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.case_details)}
+            {maskSensitiveInfo(user.governorate)}
           </span>
         </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.policeStation', 'Police Station:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.police_station)}
-          </span>
-        </div>
+
+      
+
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
             {t('users.caseNumber', 'Case Number:')}
@@ -80,6 +74,27 @@ const CaseInfoSection = ({
             {maskSensitiveInfo(user.case_number)}
           </span>
         </div>
+
+        {/* Dossier Number */}
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('registration.dossierNumber', 'Dossier Number:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(user.dossier_number)}
+          </span>
+        </div>
+
+        {/* Charge */}
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('registration.charge', 'Charge:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(user.charge || user.accusation)}
+          </span>
+        </div>
+
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
             {t('users.judgment', 'Judgment:')}
@@ -88,12 +103,23 @@ const CaseInfoSection = ({
             {maskSensitiveInfo(user.judgment)}
           </span>
         </div>
+
+        {/* Sentence */}
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
-            {t('users.accusation', 'Accusation:')}
+            {t('registration.sentence', 'Sentence:')}
           </span>
           <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.accusation)}
+            {maskSensitiveInfo(user.sentence)}
+          </span>
+        </div>
+
+        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
+          <span className="text-white/70 text-sm">
+            {t('users.caseDetails', 'Case Details:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {maskSensitiveInfo(user.case_details)}
           </span>
         </div>
       </div>

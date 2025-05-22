@@ -63,21 +63,21 @@ const SuccessAnimation: React.FC<SuccessAnimationProps> = ({
 
   // Use translations or fallback to props
   const translatedTitle =
-    title || t('registration.success', 'Registration Successful!');
+    title || t('common:registrationSuccess', 'Registration Successful!');
   const translatedMessage =
     message ||
     t(
-      'successAnimation.message',
+      'common:successMessage',
       'The information has been recorded successfully.'
     );
   const translatedSubtitle =
     subtitle ||
-    t('successAnimation.subtitle', 'Starting new registration in a moment...');
+    t('common:startingNewRegistration', 'Starting new registration in a moment...');
   const translatedIdLabel =
-    idLabel || t('registration.caseReferenceId', 'Registration ID:');
+    idLabel || t('common:registrationId', 'Registration ID:');
   const translatedIdNote =
     idNote ||
-    t('successAnimation.idNote', 'Please save this ID for future reference');
+    t('common:saveIdNote', 'Please save this ID for future reference');
 
   // Icon animation variants
   const checkmarkVariants = {

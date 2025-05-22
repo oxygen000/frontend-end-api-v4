@@ -1,11 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { FiX } from 'react-icons/fi';
-
-// Define a minimal User type for the required fields
-interface User {
-  image_path?: string | null;
-  name: string;
-}
+import { FiX, FiPhone } from 'react-icons/fi';
+import type { User } from '../types/types';
 
 interface UserImageModalProps {
   user: User;
@@ -69,12 +64,22 @@ const UserImageModal = ({
               alt={user.name}
               className="max-h-[85vh] max-w-full object-contain"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3 text-center">
-              {user.name}
-              {isChildRecord && (
-                <span className="ml-2 text-sm opacity-70">
-                  {t('forms.child.viewImage')}
-                </span>
+            <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3">
+              <div className="text-center">
+                {user.name}
+                {isChildRecord && (
+                  <span className="ml-2 text-sm opacity-70">
+                    {t('forms.child.viewImage')}
+                  </span>
+                )}
+              </div>
+              {user.missing_person_phone && (
+                <div className="text-center mt-1 flex items-center justify-center">
+                  <FiPhone className="mr-2" />
+                  <span>
+                    {t('users.missing_person_phone', "Missing Person's Phone")}: {user.missing_person_phone}
+                  </span>
+                </div>
               )}
             </div>
           </motion.div>

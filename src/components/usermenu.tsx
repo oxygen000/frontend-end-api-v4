@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslationWithFallback } from '../hooks/useTranslationWithFallback';
 import { users } from '../types/users';
-import type { User } from '../types/users';
+
+// Define User interface locally
+interface User {
+  id: number;
+  username?: string;
+  fullName?: string;
+  profileImageUrl?: string;
+}
 
 function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,13 +55,11 @@ function UserMenu() {
             currentUser?.profileImageUrl ||
             `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.fullName || currentUser?.username || '')}&background=random`
           }
-          alt={t('users.userAvatar', 'User Avatar')}
+          alt={t('common:userAvatar', 'User Avatar')}
           className="w-8 h-8 rounded-full mr-2"
         />
         <span className="text-sm font-medium hidden md:block">
-          {currentUser?.fullName ||
-            currentUser?.username ||
-            t('users.myProfile', 'My Profile')}
+        Police Officer
         </span>
         {/* Animated arrow */}
         <motion.svg
@@ -93,7 +98,7 @@ function UserMenu() {
                 }}
                 className="w-full text-left p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300"
               >
-                {t('users.myProfile', 'My Profile')}
+               Police Officer
               </button>
             </li>
             <li>
@@ -104,7 +109,7 @@ function UserMenu() {
                 }}
                 className="w-full text-left p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300"
               >
-                {t('sidebar.settings', 'Settings')}
+                {t('common:settings', 'Settings')}
               </button>
             </li>
             <li>
@@ -112,7 +117,7 @@ function UserMenu() {
                 onClick={handleLogout}
                 className="w-full text-left p-2 text-red-600 hover:bg-red-50 rounded-lg transition duration-300"
               >
-                {t('auth.logout', 'Logout')}
+                {t('auth:logout', 'Logout')}
               </button>
             </li>
           </ul>

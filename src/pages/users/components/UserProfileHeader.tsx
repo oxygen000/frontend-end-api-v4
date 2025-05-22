@@ -1,15 +1,6 @@
 import { motion } from 'framer-motion';
-import { FiMaximize, FiCalendar, FiAlertCircle } from 'react-icons/fi';
-
-// Define a minimal User type for the required fields
-interface User {
-  image_path?: string | null;
-  name: string;
-  form_type: string;
-  department?: string | null;
-  created_at: string;
-  has_criminal_record?: number;
-}
+import { FiMaximize, FiCalendar, FiAlertCircle, FiPhone } from 'react-icons/fi';
+import type { User } from '../types/types';
 
 interface UserProfileHeaderProps {
   user: User;
@@ -48,7 +39,11 @@ const UserProfileHeader = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={`bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-white/30 shadow-lg mb-4 sm:mb-6 ${
-        isChildRecord ? 'from-amber-500/20 to-amber-500/10' : ''
+        isChildRecord
+          ? 'from-amber-500/20 to-amber-500/10'
+          : user.form_type == 'disabled'
+            ? 'from-purple-500/20 to-purple-500/10'
+            : ' '
       }`}
     >
       <div className="flex flex-col md:flex-row items-center md:items-start gap-4 sm:gap-6">
@@ -64,6 +59,22 @@ const UserProfileHeader = ({
                   {t('forms.child.clickToEnlarge')}
                 </span>
               )}
+              {user.form_type == 'disabled' && (
+                <span className="sr-only">
+                  {t('forms.disabled.clickToEnlarge')}
+                </span>
+              )}
+              {user.form_type == 'man' && (
+                <span className="sr-only">
+                  {t('forms.man.clickToEnlarge')}
+                </span>
+              )}
+              {user.form_type == 'woman' && (
+                <span className="sr-only">
+                  {t('forms.woman.clickToEnlarge')}
+                </span>
+              )}
+              
             </div>
           )}
           {user?.image_path ? (
@@ -81,11 +92,16 @@ const UserProfileHeader = ({
         <div className="text-center md:text-left flex-1">
           <div className="flex items-center justify-center md:justify-start flex-wrap">
             <h1 className="text-xl sm:text-2xl font-bold text-white">
-              {user.name}
+              {user.name} {user.nickname && <span className="ml-2 text-gray-400">({user.nickname})</span>}
             </h1>
           </div>
           <p className="text-white/70 mt-1 flex flex-wrap items-center justify-center md:justify-start gap-2">
-            
+            {user.missing_person_phone && (
+              <span className="inline-flex items-center bg-blue-500/30 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
+                <FiPhone className={`${isRTL ? 'ml-1' : 'mr-1'}`} />
+                {t('users.missing_person_phone', "Missing Person's Phone")}: {user.missing_person_phone}
+              </span>
+            )}
             {user.department && (
               <span className="bg-blue-500/30 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                 {user.department}
@@ -96,7 +112,24 @@ const UserProfileHeader = ({
                 {t('users.childRecord', 'Child Record')}
               </span>
             )}
+            {user.form_type == 'disabled' && (
+              <span className="bg-purple-500/50 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
+                {t('users.disabledPerson', 'Disabled Person')}
+              </span>
+            )}
+            {user.form_type === 'man' && (
+              <span className="bg-blue-600/50 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
+                {t('users.man', 'Man')}
+              </span>
+            )}
+            {user.form_type === 'woman' && (
+              <span className="bg-pink-500/50 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
+                {t('users.woman', 'Woman')}
+              </span>
+            )}
           </p>
+
+          
           <p className="text-white/70 mt-2 flex items-center justify-center md:justify-start text-sm">
             <FiCalendar className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
             {t('users.registeredOn', 'Registered on')} {user.created_at}

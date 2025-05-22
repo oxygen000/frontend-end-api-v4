@@ -1,14 +1,5 @@
 import { motion } from 'framer-motion';
-
-// Define a minimal User type for the required fields
-interface User {
-  employee_id?: string | null;
-  form_type: string;
-  date_of_birth?: string | null;
-  address?: string | null;
-  occupation?: string | null;
-  has_criminal_record?: number;
-}
+import type { User } from '../types/types';
 
 interface IdentityVerificationSectionProps {
   user: User;

@@ -1,15 +1,19 @@
 import { motion } from 'framer-motion';
 import { FiUser } from 'react-icons/fi';
-import type { TranslationFunction } from '../types/types';
-import type { User } from '../types/types';
-import { SECTION_COLORS } from '../types/types';
+import type {
+  TranslationFunction,
+  FormatDateFunction,
+  MaskSensitiveInfoFunction,
+} from '../../types/types';
+import type { User } from '../../types/types';
+import { SECTION_COLORS } from '../../types/types';
 
 interface DisabledInfoDisplayProps {
   user: User;
   isRTL: boolean;
   t: TranslationFunction;
-  maskSensitiveInfo: (value: string | null | undefined) => string;
-  formatDate: (date: string | null | undefined) => string;
+  maskSensitiveInfo: MaskSensitiveInfoFunction;
+  formatDate: FormatDateFunction;
 }
 
 function DisabledInfoDisplay({

@@ -1,0 +1,62 @@
+{
+  "title": "نموذج تسجيل الطفل",
+  "childFullName": "الاسم الكامل للطفل",
+  "dateOfBirth": "تاريخ الميلاد",
+  "childId": "الرقم القومي للطفل (اختياري)",
+  "locationInfo": "معلومات الموقع",
+  "physicalDescription": "الوصف الجسدي",
+  "reporterInfo": "بيانات المبلغ / الدرجة الأولى",
+  "missingPersonInfo": "معلومات الشخص المفقود",
+  "age": "العمر",
+  "yearsOld": "سنوات",
+  "dateOfDisappearance": "تاريخ الاختفاء",
+  "lastSeenLocation": "آخر مكان شوهد فيه",
+  "distinguishingMark": "العلامات المميزة",
+  "previousDisputes": "خلافات سابقة",
+  "relationshipToMissing": "صلة القرابة",
+  "viewImage": "عرض الصورة",
+  "clickToEnlarge": "انقر لتكبير الصورة",
+  "close": "إغلاق",
+  "previousDispute": "خلافات سابقة",
+  "closeImage": "إغلاق الصورة",
+  "reporterName": "الاسم",
+  "reporterNationalId": "الرقم القومي",
+  "reporterAddress": "العنوان",
+  "reporterPhone": "رقم الهاتف",
+  "reporterAltPhone": "رقم هاتف بديل",
+  "phoneNumber": "رقم الهاتف",
+  "disappearanceLocation": "مكان الاختفاء",
+  "clothes": "وصف الملابس",
+  "recentPhoto": "صورة حديثة",
+  "additionalData": "خلافات سابقة",
+  "medicalCondition": "التاريخ الطبي",
+ 
+  "form": {
+    "errors": {
+      "required": "هذا الحقل مطلوب",
+      "invalidImage": "يرجى تحميل ملف صورة صالح",
+      "imageTooLarge": "يجب أن يكون حجم الصورة أقل من 5 ميجابايت",
+      "invalidFileType": "يُسمح فقط بملفات JPG و PNG و JPEG",
+      "cameraError": "خطأ في الوصول إلى الكاميرا",
+      "captureError": "خطأ في التقاط الصورة",
+      "uploadError": "خطأ في تحميل الصورة",
+      "validationError": "يرجى التحقق من النموذج للأخطاء",
+      "duplicateSubmission": "هناك عملية إرسال قيد التقدم بالفعل. يرجى الانتظار.",
+      "timeout": "انتهت مهلة التسجيل. يرجى المحاولة مرة أخرى.",
+      "network": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+      "submission": "خطأ في إرسال النموذج. يرجى المحاولة مرة أخرى.",
+      "unknown": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+    },
+    "success": {
+      "title": "تم التسجيل بنجاح",
+      "message": "تم تسجيل الطفل بنجاح",
+      "referenceId": "الرقم المرجعي",
+      "newRegistration": "تسجيل طفل آخر"
+    },
+    "submitting": "جاري تسجيل المعلومات..."
+  },
+
+  "medicalSection":"المعلومات الطبية",
+  "medicalHistory":"التاريخ الطبي"
+  
+}

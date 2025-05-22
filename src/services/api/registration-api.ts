@@ -90,24 +90,15 @@ const registerUser = async (
     const separateFields = [
       'disability_details',
       'disability_description',
-      'relationship',
       'emergency_contact',
       'emergency_phone',
       'special_needs',
       'unique_id',
+      'request_id',
       'unique_submission_id',
       'date_of_birth',
-    ];
-
-    // Vehicle-related fields we want to preserve but structure properly
-    const vehicleFields = [
-      'manufacture_year',
-      'vehicle_model',
-      'vehicle_color',
-      'chassis_number',
-      'vehicle_number',
-      'license_plate',
-      'license_expiration',
+      // IMPORTANT: DO NOT filter out full_name field - it's required by backend
+      // If full_name is in this list, it will be removed from the formData
     ];
 
     // Create a filtered copy of form data without problematic fields
@@ -116,7 +107,7 @@ const registerUser = async (
 
     for (const pair of formData.entries()) {
       const [key, value] = pair;
-      if (!separateFields.includes(key) && !vehicleFields.includes(key)) {
+      if (!separateFields.includes(key)) {
         filteredFormData.append(key, value);
       } else {
         removedFields.push(key);
@@ -135,43 +126,140 @@ const registerUser = async (
     if (formData.has('user_data')) {
       try {
         const userData = JSON.parse(formData.get('user_data') as string);
-
-        // Remove ID to prevent conflicts
         if (userData.id) {
           delete userData.id;
-          console.log('Removed ID field from user_data to prevent conflicts');
         }
 
-        // Remove other problematic fields
-        separateFields.forEach((field) => {
-          if (userData[field]) {
+        // Remove fields that cause database errors
+        const fieldsToRemove = ['unique_id', 'request_id'];
+        fieldsToRemove.forEach((field) => {
+          if (field in userData) {
             delete userData[field];
-            console.log(`Removed problematic field ${field} from user_data`);
+            console.log(
+              `Removed ${field} from user_data JSON to prevent DB errors`
+            );
           }
         });
 
-        // Create a vehicle object for adult users
+        // Make sure 'name' field is explicitly set from full_name for database compatibility
+        if (!userData.name && userData.full_name) {
+          userData.name = userData.full_name;
+          console.log('Setting name field from full_name to prevent DB errors');
+        } else if (!userData.full_name && userData.name) {
+          userData.full_name = userData.name;
+          console.log('Setting full_name field from name to prevent DB errors');
+        }
+
+        // Ensure both date_of_birth and dob are set properly for all form types
+        if (userData.date_of_birth && !userData.dob) {
+          userData.dob = userData.date_of_birth;
+          console.log('Setting dob from date_of_birth for compatibility');
+        } else if (userData.dob && !userData.date_of_birth) {
+          userData.date_of_birth = userData.dob;
+          console.log('Setting date_of_birth from dob for compatibility');
+        }
+
+        // Ensure phone fields use consistent naming
+        if (userData.phone_company && !userData.service_provider) {
+          userData.service_provider = userData.phone_company;
+          console.log(
+            'Setting service_provider from phone_company for compatibility'
+          );
+        } else if (userData.service_provider && !userData.phone_company) {
+          userData.phone_company = userData.service_provider;
+          console.log(
+            'Setting phone_company from service_provider for compatibility'
+          );
+        }
+
+        // Log expiration_year for debugging
+        console.log(
+          'User data expiration_year before processing:',
+          userData.expiration_year
+        );
+
+        // Process new field mappings to ensure compatibility with backend
+        // These mappings ensure UI field names match backend field names
+        if (userData.education) {
+          userData.educational_qualification = userData.education;
+          console.log('Mapped education to educational_qualification');
+        }
+
+        if (userData.issuingAuthority) {
+          userData.issuing_authority = userData.issuingAuthority;
+          console.log('Mapped issuingAuthority to issuing_authority');
+        }
+
+        // Handle vehicle fields directly, not as nested objects
+        // Ensure has_vehicle is properly set
+        if (userData.has_vehicle === '1' || userData.has_vehicle === true) {
+          // Make sure it's set as a string '1' for consistency
+          userData.has_vehicle = '1';
+        } else {
+          userData.has_vehicle = '0';
+        }
+
+        // Handle motorcycle field consistently
         if (
-          formType === 'man' ||
-          formType === 'woman' ||
-          formType === 'adult'
+          userData.has_motorcycle === '1' ||
+          userData.has_motorcycle === true
         ) {
-          const vehicle: Record<string, string> = {};
-          let hasVehicleData = false;
+          userData.has_motorcycle = '1';
+          // Also set the dedicated motorcycle field for UI consistency
+          userData.motorcycle = true;
+        } else {
+          userData.has_motorcycle = '0';
+          userData.motorcycle = false;
+        }
 
-          // Collect vehicle data
-          vehicleFields.forEach((field) => {
-            const value = formData.get(field) as string;
-            if (value) {
-              vehicle[field] = value;
-              hasVehicleData = true;
-            }
-          });
+        // Ensure vehicle_type is properly set
+        if (userData.vehicle_type && userData.vehicle_info) {
+          userData.vehicle_info.vehicle_type = userData.vehicle_type;
+        }
 
-          // Only add vehicle data if at least one field has a value
-          if (hasVehicleData) {
-            userData.vehicle_info = vehicle;
+        // Ensure expiration_year is set if available
+        if (userData.expiration_year) {
+          console.log(
+            'Preserving expiration_year in processed userData:',
+            userData.expiration_year
+          );
+        }
+        // If expiration_year is missing but license_expiration has a year, extract it
+        else if (
+          userData.license_expiration &&
+          userData.license_expiration.length >= 4
+        ) {
+          const yearPart = userData.license_expiration.substring(0, 4);
+          if (/^\d{4}$/.test(yearPart)) {
+            userData.expiration_year = yearPart;
+            console.log(
+              'Setting expiration_year from license_expiration year part:',
+              userData.expiration_year
+            );
           }
+        }
+
+        // Force form_type to be 'man' or 'woman' rather than 'adult'
+        if (formType === 'adult') {
+          if (formData.get('category') === 'male') {
+            userData.form_type = 'man';
+            console.log('Changed form_type from adult to man');
+          } else if (formData.get('category') === 'female') {
+            userData.form_type = 'woman';
+            console.log('Changed form_type from adult to woman');
+          }
+        }
+
+        // If form_type isn't set properly, set it based on category
+        if (userData.category === 'male' && userData.form_type === 'adult') {
+          userData.form_type = 'man';
+          console.log('Setting form_type to man based on category');
+        } else if (
+          userData.category === 'female' &&
+          userData.form_type === 'adult'
+        ) {
+          userData.form_type = 'woman';
+          console.log('Setting form_type to woman based on category');
         }
 
         // Replace with processed user_data
@@ -183,28 +271,6 @@ const registerUser = async (
           'user_data',
           formData.get('user_data') as string
         );
-      }
-    } else {
-      // If no user_data was provided, but there are vehicle fields, create a new object
-      if (formType === 'man' || formType === 'woman' || formType === 'adult') {
-        const vehicle: Record<string, string> = {};
-        let hasVehicleData = false;
-
-        vehicleFields.forEach((field) => {
-          const value = formData.get(field) as string;
-          if (value) {
-            vehicle[field] = value;
-            hasVehicleData = true;
-          }
-        });
-
-        if (hasVehicleData) {
-          const userData = {
-            vehicle_info: vehicle,
-            unique_id: `registration-${Date.now()}-${Math.floor(Math.random() * 1000000)}`,
-          };
-          filteredFormData.set('user_data', JSON.stringify(userData));
-        }
       }
     }
 
@@ -225,6 +291,40 @@ const registerUser = async (
           formData.get('child_data') as string
         );
       }
+    }
+
+    // Make sure both name and full_name fields are set
+    if (!formData.get('name') && formData.get('full_name')) {
+      formData.append('name', formData.get('full_name') as string);
+      console.log('Setting name field from full_name in main registration');
+    } else if (!formData.get('full_name') && formData.get('name')) {
+      formData.append('full_name', formData.get('name') as string);
+      console.log('Setting full_name field from name in main registration');
+    }
+
+    // Make sure both relationship and reporter_relationship are set
+    if (
+      !formData.get('reporter_relationship') &&
+      formData.get('relationship')
+    ) {
+      formData.append(
+        'reporter_relationship',
+        formData.get('relationship') as string
+      );
+      console.log(
+        'Setting reporter_relationship field from relationship in main registration'
+      );
+    } else if (
+      !formData.get('relationship') &&
+      formData.get('reporter_relationship')
+    ) {
+      formData.append(
+        'relationship',
+        formData.get('reporter_relationship') as string
+      );
+      console.log(
+        'Setting relationship field from reporter_relationship in main registration'
+      );
     }
 
     // Create a promise for the registration process
@@ -287,6 +387,56 @@ const registerWithMainEndpoint = async (
     // Check for important fields
     console.log('form_type:', formData.get('form_type'));
     console.log('category:', formData.get('category'));
+
+    // CRITICAL: Check for full_name field - this is required by the backend
+    console.log('CRITICAL CHECK - full_name field:', formData.get('full_name'));
+    if (!formData.get('full_name')) {
+      console.error('CRITICAL ERROR: full_name is missing from form data');
+      // Force add full_name from name if available
+      if (formData.get('name')) {
+        formData.append('full_name', formData.get('name') as string);
+        console.log(
+          'Added missing full_name field from name:',
+          formData.get('name')
+        );
+      }
+    }
+
+    // Debug reporter fields
+    console.log('Reporter fields in final request:');
+    console.log('reporter_name:', formData.get('reporter_name'));
+    console.log('reporter_phone:', formData.get('reporter_phone'));
+    console.log('reporter_national_id:', formData.get('reporter_national_id'));
+    console.log(
+      'reporter_relationship:',
+      formData.get('reporter_relationship')
+    );
+    console.log('reporter_address:', formData.get('reporter_address'));
+    console.log('reporter_occupation:', formData.get('reporter_occupation'));
+    console.log('reporter_education:', formData.get('reporter_education'));
+    console.log('relationship:', formData.get('relationship'));
+
+    // Try to parse user_data JSON if it exists and ensure full_name is set
+    try {
+      const userDataJson = formData.get('user_data');
+      if (userDataJson && typeof userDataJson === 'string') {
+        const userData = JSON.parse(userDataJson);
+
+        // Ensure both name and full_name are present in the JSON
+        if (!userData.name && userData.full_name) {
+          userData.name = userData.full_name;
+          console.log('Setting name field from full_name in user_data JSON');
+        } else if (!userData.full_name && userData.name) {
+          userData.full_name = userData.name;
+          console.log('Setting full_name field from name in user_data JSON');
+        }
+
+        // Update user_data in the FormData
+        formData.set('user_data', JSON.stringify(userData));
+      }
+    } catch (e) {
+      console.warn('Failed to parse or update user_data JSON', e);
+    }
 
     // Use a more optimized request with appropriate timeouts
     const response = await apiClient.post('/register/upload', formData, {
@@ -436,6 +586,50 @@ const registerDisabled = async (
       delete (userData as unknown as Record<string, unknown>).id;
     }
 
+    // Make sure both name and full_name fields are set
+    if (!userData.name && userData.full_name) {
+      userData.name = userData.full_name;
+      console.log('Setting name field from full_name in disabled registration');
+    } else if (!userData.full_name && userData.name) {
+      userData.full_name = userData.name;
+      console.log('Setting full_name field from name in disabled registration');
+    }
+
+    // Ensure both date_of_birth and dob are set properly
+    if (userData.date_of_birth && !userData.dob) {
+      userData.dob = userData.date_of_birth;
+      console.log('Setting dob from date_of_birth for compatibility');
+    } else if (userData.dob && !userData.date_of_birth) {
+      userData.date_of_birth = userData.dob;
+      console.log('Setting date_of_birth from dob for compatibility');
+    }
+
+    // Ensure phone fields are set properly
+    if (userData.phone_company && !userData.service_provider) {
+      userData.service_provider = userData.phone_company;
+      console.log(
+        'Setting service_provider from phone_company for compatibility'
+      );
+    } else if (userData.service_provider && !userData.phone_company) {
+      userData.phone_company = userData.service_provider;
+      console.log(
+        'Setting phone_company from service_provider for compatibility'
+      );
+    }
+
+    // Ensure guardian and reporter fields are synced
+    if (userData.guardian_name && !userData.reporter_name) {
+      userData.reporter_name = userData.guardian_name;
+      console.log('Setting reporter_name from guardian_name for compatibility');
+    }
+
+    if (userData.guardian_phone && !userData.reporter_phone) {
+      userData.reporter_phone = userData.guardian_phone;
+      console.log(
+        'Setting reporter_phone from guardian_phone for compatibility'
+      );
+    }
+
     // Log the request to help debug
     console.log('Registering disabled user with data:', {
       name: userData.name,
@@ -519,8 +713,7 @@ const registerChild = async (
         last_clothes: (formData.get('last_clothes') as string) || '',
         area_of_disappearance:
           (formData.get('area_of_disappearance') as string) || '',
-        last_known_location:
-          (formData.get('area_of_disappearance') as string) || '',
+
         last_seen_time: (formData.get('last_seen_time') as string) || '',
         additional_notes: (formData.get('additional_notes') as string) || '',
         medical_condition: (formData.get('medical_condition') as string) || '',
@@ -583,6 +776,19 @@ const registerChild = async (
     // Force remove ID to prevent unique constraint failures
     if ('id' in userData) {
       delete (userData as unknown as Record<string, unknown>).id;
+    }
+
+    // Make sure both name and full_name fields are set
+    const userDataWithFullName = userData as unknown as {
+      name: string;
+      full_name?: string;
+    };
+    if (!userData.name && userDataWithFullName.full_name) {
+      userData.name = userDataWithFullName.full_name;
+      console.log('Setting name field from full_name in child registration');
+    } else if (!userDataWithFullName.full_name && userData.name) {
+      userDataWithFullName.full_name = userData.name;
+      console.log('Setting full_name field from name in child registration');
     }
 
     // Create a new FormData object specifically for this endpoint

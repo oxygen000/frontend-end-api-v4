@@ -7,16 +7,7 @@ import {
   FiHome,
   FiTag,
 } from 'react-icons/fi';
-
-interface User {
-  name: string;
-  nickname?: string | null;
-  dob?: string | null;
-  date_of_birth?: string | null;
-  national_id?: string | null;
-  address?: string | null;
-  category?: string | null;
-}
+import type { User } from '../types/types';
 
 interface CommonInfoSectionProps {
   user: User;
@@ -101,6 +92,20 @@ const CommonInfoSection = ({
           {maskSensitiveInfo(user.category)}
         </span>
       </div>
+      
+      
+      {/* Recognition Status */}
+      {'is_recognized' in user && (
+        <div className="flex justify-between items-center p-3 sm:p-4 bg-white/10 hover:bg-white/15 transition-colors duration-200 rounded-lg">
+          <span className="text-white/70 flex items-center text-sm">
+            <FiInfo className={`${isRTL ? 'ml-2' : 'mr-2'}`} />
+            {t('users.isRecognized', 'Recognition Status:')}
+          </span>
+          <span className="text-white font-medium text-sm">
+            {user.is_recognized ? t('common.yes', 'Yes') : t('common.no', 'No')}
+          </span>
+        </div>
+      )}
     </div>
   </motion.div>
 );

@@ -38,28 +38,26 @@ const PopupChoiceSearch: React.FC<PopupChoiceSearchProps> = ({
           <Link
             to="/identification"
             className="w-full flex items-center justify-center gap-2 px-4 py-4 text-white rounded-lg font-semibold shadow transition-all duration-200 hover:scale-[1.02] text-xl bg-purple-600 hover:bg-purple-700"
-            aria-label={t('search.formTypes.disabled', 'Disabled')}
+            aria-label={t('forms:disabled.title')}
             onClick={onClose}
           >
             <FaWheelchair />
             <span className="text-sm">
-              {t('search.formTypes.disabled', 'Disabled')}
+              {t('search:formTypes.disabled')}
             </span>
           </Link>
           <Link
             to="/identification"
             className="w-full flex items-center justify-center gap-2 px-4 py-4 text-white rounded-lg font-semibold shadow transition-all duration-200 hover:scale-[1.02] text-xl bg-yellow-600 hover:bg-yellow-700"
-            aria-label={t('search.formTypes.child', 'Child')}
+            aria-label={t('forms:child.title')}
             onClick={onClose}
           >
             <FaChild />
             <span className="text-sm">
-              {t('search.formTypes.child', 'Child')}
+              {t('search:formTypes.child')}
             </span>
           </Link>
         </div>
-
-        
 
         <button
           onClick={onClose}
