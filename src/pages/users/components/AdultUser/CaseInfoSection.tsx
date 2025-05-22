@@ -114,14 +114,7 @@ const CaseInfoSection = ({
           </span>
         </div>
 
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.caseDetails', 'Case Details:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.case_details)}
-          </span>
-        </div>
+        
       </div>
     </motion.div>
   );

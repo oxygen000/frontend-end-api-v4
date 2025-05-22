@@ -119,7 +119,6 @@ const TravelInfoSection = ({
  
           <InfoRow label={t('registration.travelDate', 'Travel Date:')} value={formatDate(user.travel_date)} />
           <InfoRow label={t('registration.travelDestination', 'Travel Destination:')} value={user.travel_destination} />
-          <InfoRow label={t('registration.flightNumber', 'Flight Number:')} value={user.flight_number} />
 
       </div>
     </motion.div>

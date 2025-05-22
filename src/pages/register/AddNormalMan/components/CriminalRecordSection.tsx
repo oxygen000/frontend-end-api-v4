@@ -56,9 +56,7 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
     animate={{ opacity: 1, height: 'auto' }}
     className="space-y-4 pt-2"
   >
-    <h4 className="text-sm sm:text-base font-medium text-blue-400 mt-4">
-      {t('registration.caseInformation', 'Case Information')}
-    </h4>
+  
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Input
@@ -136,7 +134,7 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
     />
     </div>
 
-    
+  
   </motion.div>
 )}
 

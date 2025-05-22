@@ -65,16 +65,13 @@ const UserProfileHeader = ({
                 </span>
               )}
               {user.form_type == 'man' && (
-                <span className="sr-only">
-                  {t('forms.man.clickToEnlarge')}
-                </span>
+                <span className="sr-only">{t('forms.man.clickToEnlarge')}</span>
               )}
               {user.form_type == 'woman' && (
                 <span className="sr-only">
                   {t('forms.woman.clickToEnlarge')}
                 </span>
               )}
-              
             </div>
           )}
           {user?.image_path ? (
@@ -92,14 +89,20 @@ const UserProfileHeader = ({
         <div className="text-center md:text-left flex-1">
           <div className="flex items-center justify-center md:justify-start flex-wrap">
             <h1 className="text-xl sm:text-2xl font-bold text-white">
-              {user.name} {user.nickname && <span className="ml-2 text-gray-400">({user.nickname})</span>}
+              {user.name}{' '}
+              {user.nickname && (
+                <span className="ml-2 text-gray-400">({user.nickname})</span>
+              )}
             </h1>
           </div>
           <p className="text-white/70 mt-1 flex flex-wrap items-center justify-center md:justify-start gap-2">
             {user.missing_person_phone && (
               <span className="inline-flex items-center bg-blue-500/30 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                 <FiPhone className={`${isRTL ? 'ml-1' : 'mr-1'}`} />
-                {t('users.missing_person_phone', "Missing Person's Phone")}: {user.missing_person_phone}
+                {t(
+                  'users.missing_person_phone',
+                  "Missing Person's Phone"
+                )}: {user.missing_person_phone}
               </span>
             )}
             {user.department && (
@@ -129,13 +132,15 @@ const UserProfileHeader = ({
             )}
           </p>
 
-          
           <p className="text-white/70 mt-2 flex items-center justify-center md:justify-start text-sm">
             <FiCalendar className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
             {t('users.registeredOn', 'Registered on')} {user.created_at}
           </p>
           {user.has_criminal_record === 1 && (
-            <div className="mt-3 inline-block bg-red-500/30 text-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium">
+            <div
+              className={`mt-3 inline-flex items-center bg-red-500/30 text-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium ${isRTL ? 'text-right flex-row-reverse' : 'text-left'}`}
+              dir={isRTL ? 'rtl' : 'ltr'}
+            >
               <FiAlertCircle className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
               {t('users.hasCriminalRecord', 'Has Criminal Record')}
             </div>

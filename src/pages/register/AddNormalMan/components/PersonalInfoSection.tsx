@@ -80,13 +80,9 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
          
           error={errors.marital_status}
         />
-      </div>
+    
 
-      <h3 className="text-base sm:text-lg font-semibold mb-2 mt-6">
-        {t('registration.personalInfo', 'Personal Information')}
-      </h3>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+     
         <Input
           label={t('registration.nationalId', 'National ID')}
           name="national_id"
@@ -116,12 +112,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           error={errors.occupation}
           
         />
-      </div>
-
-      <h3 className="text-base sm:text-lg font-semibold mb-2 mt-6">
-        {t('registration.location', 'Location & Occupation')}
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ 
         <Input
           label={t('registration.governorate', 'governorate')}
           name="governorate"
@@ -146,14 +137,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           
         />
 
-        <Input
-          label={t('registration.issue_date', 'Issue Date')}
-          name="issue_date"
-          type="date"
-          value={formData.issue_date || ''}
-          onChange={handleInputChange}
-
-        />
+       
       </div>
 
       <SectionButtons onNext={nextSection} />

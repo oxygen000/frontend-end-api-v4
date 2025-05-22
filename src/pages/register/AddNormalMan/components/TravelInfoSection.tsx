@@ -66,10 +66,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
             {t('registration.travelDetails', 'Travel Details')}
           </h4>
 
-          {/* Passport Information Section */}
-          <h4 className="text-sm sm:text-base font-medium text-blue-400 mt-4">
-            {t('registration.passportInfo', 'Passport Information')}
-          </h4>
+          
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -77,10 +74,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="passport_number"
               value={formData.passport_number || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.passportNumberPlaceholder',
-                'Enter passport number'
-              )}
+            
             />
 
             <Input
@@ -91,10 +85,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="passport_issuing_country"
               value={formData.passport_issuing_country || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.passportIssuingCountryPlaceholder',
-                'Country that issued passport'
-              )}
+             
             />
           </div>
 
@@ -116,10 +107,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
             />
           </div>
 
-          {/* Travel Details Section */}
-          <h4 className="text-sm sm:text-base font-medium text-blue-400 mt-4">
-            {t('registration.travelDetails', 'Travel Details')}
-          </h4>
+          
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -127,10 +115,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="departure_country"
               value={formData.departure_country || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.departureCountryPlaceholder',
-                'Country of departure'
-              )}
+             
             />
 
             <Input
@@ -138,10 +123,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="travel_destination"
               value={formData.travel_destination || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.travelDestinationPlaceholder',
-                'Country of destination'
-              )}
+              
             />
             <Input
               label={t('registration.departureAirline', 'Airline')}
@@ -161,10 +143,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="departure_flight_number"
               value={formData.departure_flight_number || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.departureFlightNumberPlaceholder',
-                'Flight number from origin'
-              )}
+             
             />
           </div>
 
@@ -175,10 +154,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               type="date"
               value={formData.travel_date || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.travelDatePlaceholder',
-                'When are you leaving?'
-              )}
+             
             />
             <Input
               label={t('registration.departureTime', 'Departure Time')}
@@ -195,10 +171,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="departure_airport"
               value={formData.departure_airport || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.departureAirportPlaceholder',
-                'Airport of departure'
-              )}
+             
             />
 
             <Input
@@ -206,10 +179,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="arrival_airport"
               value={formData.arrival_airport || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.arrivalAirportPlaceholder',
-                'Destination airport'
-              )}
+          
             />
           </div>
 
@@ -220,10 +190,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               type="date"
               value={formData.arrival_date || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.arrivalDatePlaceholder',
-                'When will you arrive?'
-              )}
+             
             />
 
             <Input
@@ -232,10 +199,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               type="date"
               value={formData.return_date || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.returnDatePlaceholder',
-                'When will you return?'
-              )}
+             
             />
           </div>
 
@@ -245,10 +209,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="return_airport"
               value={formData.return_airport || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.returnAirportPlaceholder',
-                'Return airport'
-              )}
+              
             />
 
             <Input
@@ -259,17 +220,11 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="return_flight_number"
               value={formData.return_flight_number || ''}
               onChange={handleInputChange}
-              placeholder={t(
-                'registration.returnFlightNumberPlaceholder',
-                'Return flight number'
-              )}
+           
             />
           </div>
 
-          {/* Additional Travel Details */}
-          <h4 className="text-sm sm:text-base font-medium text-blue-400 mt-4">
-            {t('registration.accessInformation', 'Access information')}
-          </h4>
+          
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -304,7 +259,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="arrival_flight_number"
               value={formData.arrival_flight_number || ''}
               onChange={handleInputChange}
-                
+
             />
 
             <Input
