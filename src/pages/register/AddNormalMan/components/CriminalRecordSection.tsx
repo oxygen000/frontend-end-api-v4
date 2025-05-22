@@ -4,7 +4,6 @@ import Input from '../../../../components/Input';
 import SectionButtons from '../../../../components/SectionButtons';
 import type { FormData } from '../types/types';
 import { sectionVariants } from '../../../../config/animations';
-import TextArea from '../../../../components/Textarea';
 
 interface CriminalRecordSectionProps {
   formData: FormData;
@@ -137,15 +136,7 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
     />
     </div>
 
-    <div className="mt-2">
-      <TextArea
-        name="case_details"
-        value={formData.case_details || ''}
-        onChange={handleInputChange}
-        label={t('registration.caseDetails', 'Additional Case Details')}
-        className="w-full px-3 sm:px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-white min-h-[80px] resize-y"
-      />
-    </div>
+    
   </motion.div>
 )}
 
