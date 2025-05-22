@@ -137,12 +137,16 @@ const UserProfileHeader = ({
             {t('users.registeredOn', 'Registered on')} {user.created_at}
           </p>
           {user.has_criminal_record === 1 && (
-            <div
-              className={`mt-3 inline-flex items-center bg-red-500/30 text-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium ${isRTL ? 'text-right flex-row-reverse' : 'text-left'}`}
-              dir={isRTL ? 'rtl' : 'ltr'}
-            >
-              <FiAlertCircle className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
-              {t('users.hasCriminalRecord', 'Has Criminal Record')}
+            <div className="w-full flex justify-center md:justify-start mt-3">
+              <div
+                className={`inline-flex items-center bg-red-500/30 text-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                  isRTL ? 'flex-row-reverse' : 'flex-row'
+                }`}
+                dir={isRTL ? 'rtl' : 'ltr'}
+              >
+                <FiAlertCircle className="inline mx-2" />
+                {t('users.hasCriminalRecord', 'Has Criminal Record')}
+              </div>
             </div>
           )}
         </div>
