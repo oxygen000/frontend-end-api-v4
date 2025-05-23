@@ -5,10 +5,12 @@ import DeleteConfirmModal from '../DeleteConfirmModal';
 import IdentityVerificationSection from '../IdentityVerificationSection';
 import BiometricVerificationSection from '../BiometricVerificationSection';
 import DocumentVerificationSection from '../DocumentVerificationSection';
+import InfoRow from '../../../../components/InfoRow';
 import type { User } from '../../types/types';
-import { formatDate, calculateAge, maskSensitiveInfo } from '../../utils/utils';
+import { formatDate,  maskSensitiveInfo } from '../../utils/utils';
 import { useState } from 'react';
 import { SECTION_COLORS } from '../../types/types';
+import { FiUser } from 'react-icons/fi';
 
 interface DisabledUserDisplayProps {
   user: User;
@@ -61,135 +63,175 @@ const DisabledUserDisplay = ({
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-
-           {/* Reporter Information Section */}
-           <div
+          {/* Reporter Information Section */}
+          <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
           >
-            <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
+             <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
               <span
-                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.disabled.icon}`}
+                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
               ></span>
-              {t('sections.reporter', 'Reporter Information')}
+              {t('forms.child.reporterInfo', "Reporter's Information")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               <InfoRow
-                label={t('reporter.name', 'Reporter Name:')}
-                value={maskInfo(user.guardian_name || user.reporter_name)}
+                label={t('users.reporterName', 'Reporter Name:')}
+                value={maskInfo(user.reporter_name)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('reporter.relationship', 'Relationship:')}
-                value={maskInfo(user.reporter_relationship)}
+                label={t('users.reporterRelationship ', 'Reporter Relationship :')}
+                value={maskInfo(user.reporter_relationship )}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('reporter.occupation', 'Reporter Occupation:')}
-                value={maskInfo(user.reporter_occupation)}
-              />
-              <InfoRow
-                label={t('reporter.education', 'Reporter Education:')}
-                value={maskInfo(user.reporter_education)}
-              />
-              <InfoRow
-                label={t(
-                  'reporter.reporterNationalId',
-                  'Reporter National ID:'
-                )}
+                label={t('users.reporterNationalId', 'Reporter National ID:')}
                 value={maskInfo(user.reporter_national_id)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('reporter.phoneNumber', 'Reporter Phone:')}
-                value={maskInfo(user.guardian_phone || user.reporter_phone)}
-              />
-              <InfoRow
-                label={t('reporter.reporterSecondaryPhone', 'Secondary Phone:')}
-                value={maskInfo(user.reporter_secondary_phone)}
-              />
-              <InfoRow
-                label={t('reporter.address', 'Reporter Address:')}
+                label={t('users.reporterAddress', 'Reporter Address:')}
                 value={maskInfo(user.reporter_address)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />    
+              <InfoRow
+                label={t('users.reporterPhone', 'Reporter Phone:')}
+                value={maskInfo(user.reporter_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.reporterOccupation', 'Reporter Occupation:')}
+                value={[
+                  maskInfo(user.reporter_occupation),
+                  user.reporter_education,
+                ]
+                  .filter(Boolean)
+                  .join('، ')}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t(
-                  'reporter.absenceReportNumber',
-                  'Absence Report Number:'
+                  'users.absence_report_number',
+                  'absence_report_number'
                 )}
                 value={maskInfo(user.absence_report_number)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />    
+              <InfoRow
+                label={t('users.absence_report_date', 'absence_report_date')}
+                value={maskInfo(user.absence_report_date)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('reporter.absenceReportDate', 'Report Date:')}
-                value={formatDate(user.absence_report_date)}
-              />
-              <InfoRow
-                label={t('reporter.policeStation', 'Police Station:')}
+                label={t('users.police_station', 'police_station')}
                 value={maskInfo(user.police_station)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.security_directorate', 'security_directorate')}
+                value={maskInfo(user.security_directorate)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.governorate', 'governorate')}
+                value={maskInfo(user.governorate)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+
+              <InfoRow
+                label={t('users.reporterSecondaryPhone', 'Secondary Phone:')}
+                value={maskInfo(user.reporter_secondary_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t(
-                  'reporter.securityDirectorate',
-                  'Security Directorate:'
+                  'forms.child.relationshipToMissing',
+                  'Relationship to Missing Child:'
                 )}
-                value={maskInfo(user.security_directorate)}
+                value={maskInfo(user.reporter_relationship)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.reporterOccupation', 'Reporter Occupation:')}
+                value={maskInfo(user.reporter_occupation)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.reporterEducation', 'Reporter Education:')}
+                value={maskInfo(user.reporter_education)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
             </div>
           </div>
 
-          
           {/* Basic Information Section */}
           <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
           >
             <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
               <span
-                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.disabled.icon}`}
+                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
               ></span>
-              {t('sections.basic', 'Basic Information')}
+              {t(
+                'forms.child.missingPersonInfo',
+                "Missing Person's Information"
+              )}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               <InfoRow
-                label={t('basic.fullName', 'Full Name:')}
-                value={maskInfo(user.name)}
+                label={t('users.fullName', 'Full Name:')}
+                value={maskInfo(user.full_name || user.name)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
+              
               <InfoRow
-                label={t('basic.nationalId', 'National ID:')}
+                label={t('users.nationalId', 'National ID:')}
                 value={maskInfo(user.national_id)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('basic.dateOfBirth', 'Date of Birth:')}
-                value={formatDate(user.dob)}
-              />
-              <InfoRow
-                label={t('basic.age', 'Age:')}
-                value={
-                  user.date_of_birth || user.dob
-                    ? calculateAge(String(user.date_of_birth || user.dob))
-                    : t('common.notAvailable', 'N/A')
-                }
-              />
-              <InfoRow
-                label={t('basic.gender', 'Gender:')}
+                label={t('users.gender', 'Gender:')}
                 value={maskInfo(user.gender)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('basic.address', 'Address:')}
-                value={maskInfo(user.address)}
+                label={t('users.dateOfBirth', 'Date of Birth:')}
+                value={formatDate(user.dob || user.date_of_birth)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('basic.distinctive_mark', 'Distinctive Mark:')}
-                value={maskInfo(user.distinctive_mark)}
+                label={t('users.age', 'Age:')}
+                value={maskInfo(user.age)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.distinctive_mark', 'Distinctive Marks:')}
+                value={formatDate(user.distinctive_mark)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.missing_person_phone', 'Missing Person Phone')}
+                value={maskInfo(user.missing_person_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t(
-                  'basic.reporter_occupation',
-                  'Missing Person Occupation:'
+                  'users.missing_person_education',
+                  'missing_person_education'
                 )}
-                value={maskInfo(user.missing_person_occupation)}
+                value={`${maskInfo(user.missing_person_education)} ${user.missing_person_education}`}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+
+              <InfoRow
+                label={t('users.clothes', 'Clothes Description:')}
+                value={maskInfo(user.clothes_description)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}  
               />
               <InfoRow
-                label={t(
-                  'basic.reporter_education',
-                  'Missing Person Education:'
-                )}
-                value={maskInfo(user.missing_person_education)}
+                label={t('users.medicalCondition', 'Medical Condition:')}
+                value={maskInfo(user.medical_condition)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
             </div>
           </div>
@@ -208,92 +250,170 @@ const DisabledUserDisplay = ({
               <InfoRow
                 label={t('contact.phoneNumber', 'Phone Number:')}
                 value={maskInfo(user.phone_number)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t('contact.phoneCompany', 'Phone Company:')}
                 value={maskInfo(user.phone_company)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t('contact.secondPhoneNumber', 'Secondary Phone:')}
                 value={maskInfo(user.second_phone_number)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t('contact.first_friend', 'First Friend:')}
                 value={maskInfo(user.first_friend)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t('contact.second_friend', 'Second Friend:')}
                 value={maskInfo(user.second_friend)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t('contact.first_friend_phone', 'First Friend Phone:')}
                 value={maskInfo(user.first_friend_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t('contact.second_friend_phone', 'Second Friend Phone:')}
                 value={maskInfo(user.second_friend_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
             </div>
           </div>
-
-         
 
           {/* Missing Information Section */}
           <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
           >
-            <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
+             <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
               <span
-                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.disabled.icon}`}
+                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
               ></span>
-              {t('sections.missing', 'Missing Information')}
+              {t('forms.child.disappearanceDetails', 'Disappearance Details')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               <InfoRow
-                label={t('missing.disappearanceDate', 'Date of Disappearance:')}
-                value={formatDate(user.disappearance_date)}
+                label={t('users.areaOfDisappearance', 'Area of Disappearance:')}
+                value={maskInfo(user.area_of_disappearance)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('missing.disappearanceTime', 'Time of Disappearance:')}
+                label={t('users.disappearanceDate', 'Disappearance Date:')}
+                value={formatDate(user.disappearance_date)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.disappearanceTime', 'Disappearance Time:')}
                 value={maskInfo(user.disappearance_time)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.lastSighting', 'Last Sighting:')}
+                value={maskInfo(user.last_sighting)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
                 label={t(
-                  'missing.areaOfDisappearance',
-                  'Area of Disappearance:'
+                  'users.reasonForLocation',
+                  'Reason for Being at Location:'
                 )}
-                value={maskInfo(user.area_of_disappearance)}
-              />
-              <InfoRow
-                label={t('missing.lastSighting', 'Last Known Location:')}
-                value={maskInfo(user.last_sighting)}
-              />
-              <InfoRow
-                label={t('missing.clothesDescription', 'Clothes Description:')}
-                value={maskInfo(user.clothes_description)}
-              />
-              <InfoRow
-                label={t('missing.reasonForLocation', 'Reason for Location:')}
                 value={maskInfo(user.reason_for_location)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('missing.lastSeenTime', 'Last Seen Time:')}
-                value={maskInfo(user.last_seen_time)}
-              />
-              <InfoRow
-                label={t('missing.wasAccompanied', 'Was Accompanied:')}
+                label={t('users.wasAccompanied', 'Was Accompanied:')}
                 value={maskInfo(user.was_accompanied)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('missing.previousDisputes', 'Previous Disputes:')}
-                value={maskInfo(user.previous_disputes)}
+                label={t('users.governorate', 'Governorate:')}
+                value={maskInfo(user.governorate)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
               <InfoRow
-                label={t('missing.goneMissingBefore', 'Gone Missing Before:')}
-                value={maskInfo(user.gone_missing_before)}
+                label={t('users.treating_physician', 'treating physician:')}
+                value={maskInfo(user.treating_physician)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
               />
+              <InfoRow
+                label={t('users.physician_phone', 'Physician Phone:')}
+                value={maskInfo(user.physician_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.was_accompanied', 'was_accompanied:')}
+                value={maskInfo(user.was_accompanied)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.reason_for_location', 'reason_for_location:')}
+                value={maskInfo(user.reason_for_location)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+                />
             </div>
           </div>
+
+          {/* 4. POLICE REPORT INFORMATION */}
+
+                <div className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}>
+                <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
+              <span
+                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
+              ></span>
+              {t('forms.child.policeReport', 'Police Report Information')}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              <InfoRow
+                label={t('users.previous_disputes', 'previous_disputes:')}
+                value={maskInfo(user.previous_disputes)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.medical_history', 'medical_history:')}
+                value={maskInfo(user.medical_history)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.treating_physician', 'treating_physician:')}
+                value={maskInfo(user.treating_physician)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.physician_phone', 'physician_phone:')}
+                value={maskInfo(user.physician_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+                  />
+              <InfoRow
+                label={t('users.first_friend', 'first_friend:')}
+                value={maskInfo(user.first_friend)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.first_friend_phone', 'first_friend_phone:')}
+                value={maskInfo(user.first_friend_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.second_friend', 'second_friend:')}
+                value={maskInfo(user.second_friend)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.second_friend_phone', 'second_friend_phone:')}
+                value={maskInfo(user.second_friend_phone)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+              <InfoRow
+                label={t('users.gone_missing_before', 'gone_missing_before:')}
+                value={formatDate(user.gone_missing_before)}
+                icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+              />
+            </div>
+                </div>
         </div>
         <div className="lg:col-span-1 space-y-4 sm:space-y-6">
           <ActionsSection
@@ -346,19 +466,5 @@ const DisabledUserDisplay = ({
     </div>
   );
 };
-
-// Helper for info rows
-const InfoRow = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | null | undefined;
-}) => (
-  <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-    <span className="text-white/70 text-sm">{label}</span>
-    <span className="text-white font-medium text-sm">{value || '-'}</span>
-  </div>
-);
 
 export default DisabledUserDisplay;

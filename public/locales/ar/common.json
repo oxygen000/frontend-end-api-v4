@@ -773,6 +773,24 @@
   "childId": "رقم هوية الطفل ",
   "locationInfo": "معلومات الموقع",
   "areaOfDisappearance": "منطقة الاختفاء",
+  "missing": {
+    "disappearanceDate": "تاريخ الاختفاء",
+    "disappearanceTime": "وقت الاختفاء",
+    "areaOfDisappearance": "منطقة الاختفاء",
+    "lastSighting": "آخر مكان شوهد فيه",
+    "lastSightingPlaceholder": "أدخل آخر مكان شوهد فيه",
+    "clothesDescription": "وصف الملابس",
+    "clothesDescriptionPlaceholder": "وصف الملابس المرتدة عند الاختفاء",
+    "reasonForLocation": "سبب التواجد",
+    "reasonForLocationPlaceholder": "أدخل سبب التواجد في الموقع",
+    "lastSeenTime": "وقت الاختفاء",
+    "lastSeenTimePlaceholder": "أدخل آخر مرة التي شوهد فيها",
+    "wasAccompanied": "كان برفقة",
+    "previousDisputes": "خلافات سابقة",
+    
+    "goneMissingBefore": "فُقِد من قبل",
+    "goneMissingBeforePlaceholder": "هل فقد الشخص من قبل؟"
+  },
   "sections": {
     "personal": "المعلومات الشخصية",
     "missing": "معلومات الفقدان",

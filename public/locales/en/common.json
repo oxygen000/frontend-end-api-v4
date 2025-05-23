@@ -533,10 +533,7 @@
       "clothes": "Clothes",
       "previousDisputes": "Previous Disputes",
       "medicalHistory": "Medical History",
-      "disability_description": { "label": "وصف الإعاقة" },
-      "medical_condition": { "label": "الحالة الطبية" },
-      "special_needs": { "label": "احتياجات خاصة" },
-      "emergency_phone": { "label": "هاتف الطوارئ", "placeholder": "أدخل رقم هاتف الطوارئ" },
+      
       "clickToEnlarge": "Click to enlarge"
     },
     "child": {
@@ -620,7 +617,6 @@
     },
     "tryDifferent": "Try different search terms"
   },
-  "visual": "Visual Impairment",
   "missing": {
     "disappearanceDate": "Date of Disappearance",
     "disappearanceTime": "Time of Disappearance",

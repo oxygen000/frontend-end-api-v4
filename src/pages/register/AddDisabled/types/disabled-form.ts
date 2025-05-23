@@ -58,10 +58,9 @@ export interface DisabledFormData {
   // Missing person information (optional)
   area_of_disappearance?: string;
   last_sighting?: string;
-  last_seen_time?: string;
   clothes_description?: string;
-  disappearance_date?: string;
-  disappearance_time?: string;
+  disappearance_date?: string; // Primary date field for when person went missing
+  disappearance_time?: string; // Time component of disappearance
   was_accompanied?: string;
   friends?: string; // Combined field for friend information
   first_friend?: string; // Individual friend fields
@@ -136,7 +135,6 @@ export const initialFormData: DisabledFormData = {
   // Missing person information
   area_of_disappearance: '',
   last_sighting: '',
-  last_seen_time: '',
   clothes_description: '',
   disappearance_date: '',
   disappearance_time: '',
@@ -155,7 +153,6 @@ export const initialFormData: DisabledFormData = {
   additional_notes: '',
 
   missing_person_phone: '',
-
 };
 
 export type DisabledFormSection = 1 | 2 | 3 | 4 | 5 | 6;

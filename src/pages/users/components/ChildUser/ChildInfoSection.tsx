@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FiUser, FiInfo, FiMapPin } from 'react-icons/fi';
 import type { User } from '../../types/types';
+import InfoRow from '../../../../components/InfoRow';
 
 interface ChildInfoSectionProps {
   user: User;
@@ -35,75 +36,51 @@ const ChildInfoSection = ({
         {t('forms.child.reporterInfo', "Reporter's Information")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterName', "Reporter's Name:")}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_name || user.guardian_name)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterNationalId', 'National ID:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_national_id || user.guardian_id)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterAddress', 'Address:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_address || user.address)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterPhone', 'Phone Number:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_phone || user.guardian_phone)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterSecondaryPhone', 'Additional Phone:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(
-              user.reporter_secondary_phone || user.second_phone_number
-            )}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t(
-              'forms.child.relationshipToMissing',
-              'Relationship to Missing Person:'
-            )}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_relationship || user.category)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterOccupation', 'Reporter Occupation:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_occupation)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.reporterEducation', 'Reporter Education:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.reporter_education)}
-          </span>
-        </div>
+        <InfoRow
+          label={t('users.reporterName', "Reporter's Name:")}
+          value={maskSensitiveInfo(user.reporter_name || user.guardian_name)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.reporterNationalId', 'National ID:')}
+          value={maskSensitiveInfo(user.reporter_national_id || user.guardian_id)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.reporterAddress', 'Address:')}
+          value={maskSensitiveInfo(user.reporter_address || user.address)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.reporterPhone', 'Phone Number:')}
+          value={maskSensitiveInfo(user.reporter_phone || user.guardian_phone)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.reporterSecondaryPhone', 'Additional Phone:')}
+          value={maskSensitiveInfo(
+            user.reporter_secondary_phone || user.second_phone_number
+          )}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t(
+            'forms.child.relationshipToMissing',
+            'Relationship to Missing Person:'
+          )}
+          value={maskSensitiveInfo(user.reporter_relationship || user.category)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.reporterOccupation', 'Reporter Occupation:')}
+          value={maskSensitiveInfo(user.reporter_occupation)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.reporterEducation', 'Reporter Education:')}
+          value={maskSensitiveInfo(user.reporter_education)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
       </div>
     </motion.div>
 
@@ -122,57 +99,36 @@ const ChildInfoSection = ({
         {t('forms.child.missingPersonInfo', "Missing Person's Information")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.fullName', 'Full Name:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.full_name || user.name)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.nationalId', 'National ID:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.national_id)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.gender', 'Gender:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.gender)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.dateOfBirth', 'Date of Birth:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {formatDate(user.dob || user.date_of_birth)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.distinctiveMark', 'Distinctive Marks:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(
-              user.distinctive_mark 
-            )}
-          </span>
-        </div>
-        
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.clothes', 'Clothes Description:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.clothes_description)}
-          </span>
-        </div>
+        <InfoRow
+          label={t('users.fullName', 'Full Name:')}
+          value={maskSensitiveInfo(user.full_name || user.name)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.nationalId', 'National ID:')}
+          value={maskSensitiveInfo(user.national_id)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.gender', 'Gender:')}
+          value={maskSensitiveInfo(user.gender)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.dateOfBirth', 'Date of Birth:')}
+          value={formatDate(user.dob || user.date_of_birth)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.distinctiveMark', 'Distinctive Marks:')}
+          value={maskSensitiveInfo(user.distinctive_mark)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.clothes', 'Clothes Description:')}
+          value={maskSensitiveInfo(user.clothes_description)}
+          icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
       </div>
     </motion.div>
 
@@ -191,38 +147,26 @@ const ChildInfoSection = ({
         {t('forms.child.disappearanceDetails', 'Disappearance Details')}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.areaOfDisappearance', 'Area of Disappearance:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.area_of_disappearance)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.disappearanceDate', 'Disappearance Date:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {formatDate(user.disappearance_date)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.disappearanceTime', 'Disappearance Time:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.disappearance_time)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.governorate', 'Governorate:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.governorate)}
-          </span>
-        </div>
+        <InfoRow
+          label={t('users.areaOfDisappearance', 'Area of Disappearance:')}
+          value={maskSensitiveInfo(user.area_of_disappearance)}
+          icon={<FiMapPin className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.disappearanceDate', 'Disappearance Date:')}
+          value={formatDate(user.disappearance_date)}
+          icon={<FiMapPin className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.disappearanceTime', 'Disappearance Time:')}
+          value={maskSensitiveInfo(user.disappearance_time)}
+          icon={<FiMapPin className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+        <InfoRow
+          label={t('users.governorate', 'Governorate:')}
+          value={maskSensitiveInfo(user.governorate)}
+          icon={<FiMapPin className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
       </div>
     </motion.div>
   </>

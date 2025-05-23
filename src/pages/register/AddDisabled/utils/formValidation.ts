@@ -3,7 +3,6 @@ import type {
   DisabledFormSection,
 } from '../types/disabled-form';
 
-
 /**
  * Validates the form based on the current section
  * @param personDetails Form data
@@ -22,16 +21,18 @@ export const validateForm = (
   // Section 1: Basic Information
   if (currentSection === 1) {
     if (!personDetails.name?.trim())
-      errors.push("Please enter the person's name. You cannot proceed without it.");
+      errors.push(
+        "Please enter the person's name. You cannot proceed without it."
+      );
 
     if (!personDetails.dob)
-      errors.push("Date of birth is required. Please select it to continue.");
+      errors.push('Date of birth is required. Please select it to continue.');
 
     if (!personDetails.gender)
-      errors.push("Gender is required. Please select male or female to proceed.");
+      errors.push(
+        'Gender is required. Please select male or female to proceed.'
+      );
   }
-
-
 
   // Section 3: Reporter Info
   else if (currentSection === 3) {
@@ -39,14 +40,20 @@ export const validateForm = (
       personDetails.guardian_phone &&
       !/^[0-9]{10,11}$/.test(personDetails.guardian_phone.replace(/\D/g, ''))
     ) {
-      errors.push("Guardian's phone number is invalid. It must contain 11 digits.");
+      errors.push(
+        "Guardian's phone number is invalid. It must contain 11 digits."
+      );
     }
 
     if (
       personDetails.reporter_secondary_phone &&
-      !/^[0-9]{10,11}$/.test(personDetails.reporter_secondary_phone.replace(/\D/g, ''))
+      !/^[0-9]{10,11}$/.test(
+        personDetails.reporter_secondary_phone.replace(/\D/g, '')
+      )
     ) {
-      errors.push("Secondary phone number of the reporter is invalid. Please check and correct it.");
+      errors.push(
+        'Secondary phone number of the reporter is invalid. Please check and correct it.'
+      );
     }
   }
 
@@ -56,49 +63,66 @@ export const validateForm = (
       personDetails.disappearance_date &&
       !/^\d{4}-\d{2}-\d{2}$/.test(personDetails.disappearance_date)
     ) {
-      errors.push("Disappearance date is invalid. Please use format: YYYY-MM-DD (e.g., 2024-05-22).");
+      errors.push(
+        'Disappearance date is invalid. Please use format: YYYY-MM-DD (e.g., 2024-05-22).'
+      );
     }
 
     if (
       personDetails.disappearance_time &&
       !/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(personDetails.disappearance_time)
     ) {
-      errors.push("Disappearance time is invalid. Please use format: HH:MM (e.g., 14:30).");
+      errors.push(
+        'Disappearance time is invalid. Please use format: HH:MM (e.g., 14:30).'
+      );
     }
 
     if (
       personDetails.first_friend_phone &&
-      !/^[0-9]{10,11}$/.test(personDetails.first_friend_phone.replace(/\D/g, ''))
+      !/^[0-9]{10,11}$/.test(
+        personDetails.first_friend_phone.replace(/\D/g, '')
+      )
     ) {
-      errors.push("First friend's phone number is invalid. It must contain 11 digits.");
+      errors.push(
+        "First friend's phone number is invalid. It must contain 11 digits."
+      );
     }
 
     if (
       personDetails.second_friend_phone &&
-        !/^[0-9]{10,11}$/.test(personDetails.second_friend_phone.replace(/\D/g, ''))
+      !/^[0-9]{10,11}$/.test(
+        personDetails.second_friend_phone.replace(/\D/g, '')
+      )
     ) {
-      errors.push("Second friend's phone number is invalid. It must contain 11 digits.");
+      errors.push(
+        "Second friend's phone number is invalid. It must contain 11 digits."
+      );
     }
   }
 
   // Section 5: Image Upload
   else if (currentSection === 5) {
     if (!personDetails.image && !capturedImage) {
-      errors.push("A personal photo is required. You cannot proceed without uploading or capturing a photo.");
+      errors.push(
+        'A personal photo is required. You cannot proceed without uploading or capturing a photo.'
+      );
     }
 
     if (personDetails.image && personDetails.image.size > 5 * 1024 * 1024) {
-      errors.push("The uploaded image is too large. Maximum size allowed is 5MB.");
+      errors.push(
+        'The uploaded image is too large. Maximum size allowed is 5MB.'
+      );
     }
 
     if (personDetails.image && !personDetails.image.type.startsWith('image/')) {
-      errors.push("Invalid file type. Please upload an image file (e.g., JPG or PNG).");
+      errors.push(
+        'Invalid file type. Please upload an image file (e.g., JPG or PNG).'
+      );
     }
   }
 
   return errors;
 };
-
 
 // Define the type for user data
 interface UserData {
@@ -158,7 +182,6 @@ interface UserData {
   // Missing person information (optional)
   area_of_disappearance: string;
   last_sighting: string;
-  last_seen_time: string;
   clothes_description: string;
   disappearance_date: string;
   disappearance_time: string;
@@ -264,7 +287,6 @@ export const buildSubmissionFormData = (
     // Missing person information (optional)
     area_of_disappearance: personDetails.area_of_disappearance || '',
     last_sighting: personDetails.last_sighting || '',
-    last_seen_time: personDetails.last_seen_time || '',
     clothes_description: personDetails.clothes_description || '',
     disappearance_date: personDetails.disappearance_date || '',
     disappearance_time: personDetails.disappearance_time || '',

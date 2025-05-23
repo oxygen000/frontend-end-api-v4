@@ -95,7 +95,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
         <Input
           label={t('missing.lastSeenTime', 'last seen time')}
           name="last_seen_time"
-          value={formData.last_seen_time|| ''}
+          value={formData.disappearance_time|| ''}
           onChange={onChange}
           
         />

@@ -294,10 +294,7 @@
     "clothesDescriptionPlaceholder": "Describe clothes worn at time of disappearance",
     "wasAccompanied": "Was Person Accompanied",
     "reasonForLocation": "Reason for Being in Location",
-    "reasonForLocationPlaceholder": "Enter reason for being in the location",
-
-    "lastSeenTime": "Last Seen Time"
-  },
+    "reasonForLocationPlaceholder": "Enter reason for being in the location"  },
   "common": {
     "select": "Select Option",
     "yes": "Yes",
