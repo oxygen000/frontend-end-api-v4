@@ -54,6 +54,7 @@ export interface DisabledFormData {
   treating_physician?: string;
   physician_phone?: string;
   medication?: string;
+  medical_history?: string;
 
   // Missing person information (optional)
   area_of_disappearance?: string;
@@ -131,6 +132,7 @@ export const initialFormData: DisabledFormData = {
   treating_physician: '',
   physician_phone: '',
   medication: '',
+  medical_history:'',
 
   // Missing person information
   area_of_disappearance: '',

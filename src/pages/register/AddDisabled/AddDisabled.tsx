@@ -24,10 +24,11 @@ import ContactInformationSection from './components/ContactInformationSection';
 import ReporterInformationSection from './components/ReporterInformationSection';
 import MissingInformationSection from './components/MissingInformationSection';
 import PhotoCaptureSection from './components/ImageSection';
-
+import MedicalInformationSection from './components/MedicalInfoSection';
 // Import utility functions
 import { validateForm, buildSubmissionFormData } from './utils/formValidation';
 import type { RegistrationResult } from '../../../services/api/types';
+import PoliceReportSection from './components/PoliceReportSection';
 
 // Track submissions to prevent duplicates
 const pendingSubmissions = new Set<string>();
@@ -389,11 +390,13 @@ function AddDisabled() {
    * Each section has an ID and a name that is displayed in the UI
    */
   const sections = [
-    { id: 1, name: t('sections.1', 'Basic Information') },
-    { id: 2, name: t('sections.2', 'Contact Information') },
-    { id: 3, name: t('sections.3', 'Reporter Information') },
-    { id: 4, name: t('sections.4', 'Missing Information') },
-    { id: 5, name: t('sections.5', 'Photo Capture') },
+    { id: 1, name: t('forms.disabled.sections.basic', 'Basic') },
+    { id: 2, name: t('forms.disabled.sections.contact', 'Contact') },
+    { id: 3, name: t('forms.disabled.sections.guardian', 'Guardian') },
+    { id: 4, name: t('forms.disabled.sections.medical', 'Medical') },
+    { id: 5, name: t('forms.disabled.sections.disappearance', 'Disappearance') },
+    { id: 6, name: t('forms.disabled.sections.police', 'Police Report') },
+    { id: 7, name: t('forms.disabled.sections.photo', 'Photo') },
   ];
 
   /**
@@ -576,14 +579,33 @@ function AddDisabled() {
                   />
                 ) : /* Section 4: Missing Information */
                 currentSection === 4 ? (
+                  <MedicalInformationSection
+                    formData={formData}
+                    onChange={handleInputChange}
+                    t={t}
+                    onNext={nextSection}
+                    onPrev={prevSection}
+                  />
+                ) : /* Section 5: Missing Information */
+                currentSection === 5 ? (
                   <MissingInformationSection
                     formData={formData}
                     onChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
+                )
+                : /* Section 6: Missing Information */
+                currentSection === 6 ? (
+                  <PoliceReportSection
+                    formData={formData}
+                    t={t} 
+                    onChange={handleInputChange}
+                    onNext={nextSection}
+                    onPrev={prevSection}
+                  />
                 ) : (
-                  /* Section 5: Photo Capture */
+                  /* Section 7: Photo Capture */
                   <PhotoCaptureSection
                     formData={formData}
                     useCamera={useCamera}

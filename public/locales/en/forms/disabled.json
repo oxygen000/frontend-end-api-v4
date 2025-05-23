@@ -40,7 +40,9 @@
     "2": "Contact Information",
     "3": "Reporter Information",
     "4": "Missing Information",
-    "5": "Photo Capture"
+    "6": "Police Report",
+    "5": "Medical Information",
+    "7": "Photo Capture"
   },
   "photo": {
     "title": "Person's Photo",
