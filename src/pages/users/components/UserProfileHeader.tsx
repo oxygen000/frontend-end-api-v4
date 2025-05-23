@@ -90,9 +90,7 @@ const UserProfileHeader = ({
           <div className="flex items-center justify-center md:justify-start flex-wrap">
             <h1 className="text-xl sm:text-2xl font-bold text-white">
               {user.name}{' '}
-              {user.nickname && (
-                <span className="ml-2 text-gray-400">({user.nickname})</span>
-              )}
+              
             </h1>
           </div>
           <p className="text-white/70 mt-1 flex flex-wrap items-center justify-center md:justify-start gap-2">
