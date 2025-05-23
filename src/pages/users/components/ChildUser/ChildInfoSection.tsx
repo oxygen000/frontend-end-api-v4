@@ -164,6 +164,7 @@ const ChildInfoSection = ({
             )}
           </span>
         </div>
+        
         <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
           <span className="text-white/70 text-sm">
             {t('users.clothes', 'Clothes Description:')}

@@ -77,6 +77,10 @@ const ChildUserDisplay = ({
                 value={maskInfo(user.reporter_name)}
               />
               <InfoRow
+                label={t('users.reporterRelationship ', 'Reporter Relationship :')}
+                value={maskInfo(user.reporter_relationship )}
+              />
+              <InfoRow
                 label={t('users.reporterNationalId', 'Reporter National ID:')}
                 value={maskInfo(user.reporter_national_id)}
               />
@@ -161,6 +165,7 @@ const ChildUserDisplay = ({
                 label={t('users.fullName', 'Full Name:')}
                 value={maskInfo(user.full_name || user.name)}
               />
+              
               <InfoRow
                 label={t('users.nationalId', 'National ID:')}
                 value={maskInfo(user.national_id)}
