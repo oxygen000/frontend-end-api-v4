@@ -25,10 +25,10 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
           {refreshing ? (
             <>
               <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-              {t('search.retrying', 'Retrying...')}
+              {t('retrying', 'Retrying...')}
             </>
           ) : (
-            t('common.retry', 'Retry')
+            t('common:retry', 'Retry')
           )}
         </button>
       </div>

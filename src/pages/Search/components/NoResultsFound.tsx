@@ -23,10 +23,10 @@ const NoResultsFound: React.FC<NoResultsFoundProps> = ({ t }) => {
       </svg>
       <p className="mt-4 text-xl">No results found</p>
       <p className="text-white/70">
-        {t('search.tryDifferent', 'Try a different search term or adjust filters')}
+        {t('tryDifferent', 'Try a different search term or adjust filters')}
       </p>
     </div>
   );
 };
 
-export default NoResultsFound; 
+export default NoResultsFound;

@@ -28,7 +28,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
           value={searchTerm}
           onChange={handleSearch}
           placeholder={t(
-            'search.placeholder',
+            'placeholder',
             'Search any registered user by name, ID, phone, department, or address'
           )}
           className="w-full p-3 pl-10 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -53,7 +53,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
         <button
           onClick={toggleFilters}
           className={`p-3 rounded-lg transition-colors duration-200 ${showFilters ? 'bg-blue-600 text-white' : 'bg-white/20 text-white/70 hover:bg-white/30'}`}
-          aria-label={t('search.toggleFilters', 'Toggle filters')}
+          aria-label={t('toggleFilters', 'Toggle filters')}
         >
           <FaFilter />
         </button>
@@ -62,8 +62,8 @@ const SearchControls: React.FC<SearchControlsProps> = ({
           className="p-3 bg-white/20 text-white/70 rounded-lg hover:bg-white/30 transition-colors duration-200"
           aria-label={
             viewMode === 'grid'
-              ? t('search.switchToListView', 'Switch to list view')
-              : t('search.switchToGridView', 'Switch to grid view')
+              ? t('switchToListView', 'Switch to list view')
+              : t('switchToGridView', 'Switch to grid view')
           }
         >
           {viewMode === 'grid' ? <FaList /> : <FaThLarge />}
@@ -73,4 +73,4 @@ const SearchControls: React.FC<SearchControlsProps> = ({
   );
 };
 
-export default SearchControls; 
+export default SearchControls;

@@ -43,6 +43,10 @@
     "issuing_authorityPlaceholder": "أدخل جهة الإصدار",
     "issue_date": "تاريخ الإصدار",
     "issue_datePlaceholder": "أدخل تاريخ الإصدار",
+    "id": "رقم الهوية",
+    "Number": "رقم الهاتف",
+    "address":"العنوان",
+
     "validation": {
       "photoRequired": "يرجى تقديم صورة",
       "photoProcessingError": "خطأ في معالجة صورة الويب كام",
@@ -66,7 +70,7 @@
     "nickname": "الاسم المستعار",
     "dateOfBirth": "تاريخ الميلاد",
     "nationalId": "الرقم الوطني",
-    "address": "العنوان",
+    
     "education": "المؤهل العلمي",
     "maritalStatus": "الحالة الاجتماعية",
     "mothersName": "اسم الأم",
@@ -850,5 +854,12 @@
       "grandfather": "الجد",
       "grandmother": "الجدة"
     }
-  }
+  },
+    "card": {
+      "id": "رقم الهوية",
+      "Number": "رقم الهاتف",
+      "address": "العنوان",
+      "notAvailable": "غير متاح",
+      "viewDetails": "عرض التفاصيل"
+    }
 }

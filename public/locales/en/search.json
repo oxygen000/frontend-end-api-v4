@@ -28,6 +28,8 @@
   "userDetails": "User Details",
   "refreshing": "Refreshing data...",
   "refreshingText": "Refreshing...",
+  "refreshSuccess": "Data refreshed successfully",
+  "refreshError": "Failed to refresh data",
   "retrying": "Retrying...",
   "gridView": "Grid View",
   "listView": "List View",
@@ -43,7 +45,7 @@
     "governorate": "Governorate",
     "policeStation": "Police Station"
   },
-  "refresh": "Refresh Data",
+  "refresh": "Refresh ",
   "showing": "Showing",
   "of": "of",
   "peopleWithDisabilities": "people with disabilities",

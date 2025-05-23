@@ -12,6 +12,7 @@ interface ResultsListProps {
   ) => string;
   gridItemVariants: Variants;
   NoResultsFound: React.FC;
+  t: (key: string, defaultText?: string) => string;
 }
 
 const ResultsList: React.FC<ResultsListProps> = ({
@@ -19,6 +20,7 @@ const ResultsList: React.FC<ResultsListProps> = ({
   getImageUrl,
   gridItemVariants,
   NoResultsFound,
+  t,
 }) => {
   return (
     <>
@@ -80,7 +82,7 @@ const ResultsList: React.FC<ResultsListProps> = ({
                 to={`/users/${user.id}`}
                 className="ml-4 px-4 py-2 bg-blue-600/70 cursor-pointer hover:bg-blue-700 text-white rounded transition-colors duration-300 flex-shrink-0"
               >
-                View
+                {t('card.viewDetails', 'View Details')}
               </Link>
             </div>
           </motion.div>

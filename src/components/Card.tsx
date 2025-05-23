@@ -7,7 +7,7 @@ interface User {
   id: string;
   full_name: string;
   name: string;
-  nickname?: string; // Make nickname optional
+  nickname?: string; 
   department?: string;
   role?: string;
   image_path?: string;
@@ -18,18 +18,8 @@ interface User {
   phone_number?: string;
   national_id?: string;
   address?: string;
-  dob?: string;
-  // Additional fields that might be in ApiUser
-  vehicle_info?: {
-    vehicle_model?: string;
-    vehicle_color?: string;
-    license_plate?: string;
-    license_expiration?: string;
-    manufacture_year?: string;
-    chassis_number?: string;
-    vehicle_number?: string;
-    traffic_department?: string;
-  };
+
+
 }
 
 interface CardProps {
@@ -87,22 +77,22 @@ const Card: React.FC<CardProps> = ({ user }) => {
 
       <div className="w-full space-y-2">
         <div className="flex justify-between items-center">
-          <p className="text-white/70">{t('common:Number', 'Number:')}</p>
+          <p className="text-white/70">{t('card.Number', 'Number:')}</p>
           <p className="font-bold text-white">
-            {user.phone_number || t('common:notAvailable', 'N/A')}
+              {user.phone_number || t('card.notAvailable', 'N/A')}
           </p>
         </div>
 
         <div className="flex justify-between items-center">
-          <p className="text-white/70">{t('common:id', 'ID:')}</p>
+          <p className="text-white/70">{t('card.id', 'ID:')}</p>
           <p className="font-bold text-white">
-            {user.national_id || t('common:notAvailable', 'N/A')}
+            {user.national_id || t('card.notAvailable', 'N/A')}
           </p>
         </div>
 
         {user.address && (
           <div className="flex justify-between items-center">
-            <p className="text-white/70">{t('common:address', 'Address:')}</p>
+            <p className="text-white/70">{t('card.address', 'Address:')}</p>
             <p className="font-bold text-white text-right">{user.address}</p>
           </div>
         )}
@@ -112,7 +102,7 @@ const Card: React.FC<CardProps> = ({ user }) => {
         to={`/users/${user.id}`}
         className="w-full mt-4 py-2 text-center bg-blue-600/70 hover:bg-blue-700 text-white rounded-lg transition-colors duration-300"
       >
-        {t('common:viewDetails', 'View Details')}
+        {t('card.viewDetails', 'View Details')}
       </Link>
     </div>
   );

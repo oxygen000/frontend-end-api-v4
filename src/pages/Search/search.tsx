@@ -16,7 +16,6 @@ import useGetAnimationVariants from './hooks/useGetAnimationVariants';
 import SearchHeader from './components/SearchHeader';
 import SearchControls from './components/SearchControls';
 import FilterPanel from './components/FilterPanel';
-import ResultsCount from './components/ResultsCount';
 import ResultsGrid from './components/ResultsGrid';
 import ResultsList from './components/ResultsList';
 import UserModal from './components/UserModal';
@@ -32,18 +31,14 @@ const PAGE_SIZE = 20;
 
 // Form types for the dropdown
 const FORM_TYPES = [
-  { value: '', label: 'All Form Types' },
   { value: 'child', label: 'Child' },
   { value: 'disabled', label: 'Disabled' },
-  { value: 'employee', label: 'Employee' },
-  { value: 'student', label: 'Student' },
-  { value: 'visitor', label: 'Visitor' },
   { value: 'male', label: 'Male' },
   { value: 'female', label: 'Female' },
 ];
 
 const Search: React.FC = () => {
-  const { t } = useTranslationWithFallback();
+  const { t } = useTranslationWithFallback('search');
   const [data, setData] = useState<ApiUser[]>([]);
   const [filteredData, setFilteredData] = useState<ApiUser[]>([]);
   const [displayedData, setDisplayedData] = useState<ApiUser[]>([]);
@@ -53,7 +48,7 @@ const Search: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'row'>('grid');
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [sortField, setSortField] = useState<SortField>('none');
+  const [sortField, setSortField] = useState<SortField>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [filters, setFilters] = useState<FilterState>({
     hasPhone: false,
@@ -89,13 +84,13 @@ const Search: React.FC = () => {
         console.error('Error fetching fresh data:', error);
 
         // Fall back to cached data if API fails
-      const cachedData = sessionStorage.getItem('searchData');
-      if (cachedData) {
+        const cachedData = sessionStorage.getItem('searchData');
+        if (cachedData) {
           console.log('Using cached data as fallback');
-        const parsedData = JSON.parse(cachedData);
-        setData(parsedData);
-        setFilteredData(parsedData);
-        setLoading(false);
+          const parsedData = JSON.parse(cachedData);
+          setData(parsedData);
+          setFilteredData(parsedData);
+          setLoading(false);
         } else {
           // No cache, propagate the error
           throw error;
@@ -108,7 +103,7 @@ const Search: React.FC = () => {
       setFilteredData([]);
       setLoading(false);
     }
-  }, [ ]);
+  }, []);
 
   // Separate function to fetch from API
   const fetchFromAPI = async (retryCount = 0, maxRetries = 3) => {
@@ -178,17 +173,17 @@ const Search: React.FC = () => {
 
       // Show a loading toast without being intrusive
       const refreshToast = toast.loading(
-        t('search.refreshing', 'Refreshing data...'),
+        t('refreshing', 'Refreshing data...'),
         { duration: 2000 } // Short toast that auto-dismisses
       );
 
       // Fetch fresh data with minimal retries to be fast
       fetchData(0, 1)
         .then(() => {
-          toast.success(
-            t('search.refreshSuccess', 'Data refreshed successfully'),
-            { id: refreshToast, duration: 1000 }
-          );
+          toast.success(t('refreshSuccess', 'Data refreshed successfully'), {
+            id: refreshToast,
+            duration: 1000,
+          });
         })
         .catch((error) => {
           console.error('Auto-refresh failed:', error);
@@ -269,7 +264,13 @@ const Search: React.FC = () => {
 
         switch (sortField) {
           case 'name': {
-            comparison = a.name.localeCompare(b.name);
+            const nameA = (a.name || '').trim();
+            const nameB = (b.name || '').trim();
+            // Use localeCompare with Arabic locale support for better sorting
+            comparison = nameA.localeCompare(nameB, ['ar', 'en'], {
+              numeric: true,
+              sensitivity: 'base',
+            });
             break;
           }
           case 'created_at': {
@@ -396,24 +397,19 @@ const Search: React.FC = () => {
     setHasMore(true);
 
     // Show a loading toast
-    const refreshToast = toast.loading(
-      t('search.refreshing', 'Refreshing data...')
-    );
+    const refreshToast = toast.loading(t('refreshing', 'Refreshing data...'));
 
     // Fetch fresh data
     fetchData(0, 2)
       .then(() => {
         // Clear refreshing status when done successfully
-        toast.success(
-          t('search.refreshSuccess', 'Data refreshed successfully'),
-          {
-            id: refreshToast,
-          }
-        );
+        toast.success(t('refreshSuccess', 'Data refreshed successfully'), {
+          id: refreshToast,
+        });
       })
       .catch((error) => {
         // Show error toast
-        toast.error(t('search.refreshError', 'Failed to refresh data'), {
+        toast.error(t('refreshError', 'Failed to refresh data'), {
           id: refreshToast,
         });
         console.error('Refresh failed:', error);
@@ -421,7 +417,7 @@ const Search: React.FC = () => {
       .finally(() => {
         // Clear refreshing status when done
         setRefreshing(false);
-    });
+      });
   };
 
   const closeModal = () => {
@@ -453,10 +449,10 @@ const Search: React.FC = () => {
     <div className="min-h-screen p-4 sm:p-6">
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-          {t('search.title', 'Search')}
+          {t('title', 'Search')}
         </h1>
         <p className="text-white/70">
-          {t('search.subtitle', 'Search and filter registered users')}
+          {t('subtitle', 'Search and filter registered users')}
         </p>
       </div>
 
@@ -488,11 +484,6 @@ const Search: React.FC = () => {
           handleSort={handleSort}
           FORM_TYPES={FORM_TYPES}
         />
-
-        {/* Results count */}
-        <div className="mb-4 text-white/70 flex justify-between items-center">
-          <ResultsCount count={filteredData.length} t={t} />
-        </div>
 
         {/* Display filtered data with improved animations */}
         <AnimatePresence mode="wait">
@@ -527,6 +518,7 @@ const Search: React.FC = () => {
                 getImageUrl={getImageUrl}
                 gridItemVariants={gridItemVariants}
                 NoResultsFound={NoResultsFoundComponent}
+                t={t}
               />
 
               <LoadMoreTrigger hasMore={hasMore} loading={loading} />

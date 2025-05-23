@@ -698,5 +698,12 @@
   "reporterSecondaryPhone": "Reporter Secondary Phone",
   "reporterAdditionalInfo": "Additional Information",
   "reporterOccupation": "Reporter Occupation",
-  "reporterEducation": "Reporter Education"
+  "reporterEducation": "Reporter Education",
+  "card": {
+    "id": "ID",
+    "Number": "Number",
+    "address": "Address",
+    "notAvailable": "Not Available",
+    "viewDetails": "View Details"
+  }
 }

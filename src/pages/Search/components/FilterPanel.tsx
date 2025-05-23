@@ -49,14 +49,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       className="mb-6 p-6 bg-white/10 backdrop-blur-md rounded-lg border border-white/20"
     >
       <h3 className="text-white font-semibold text-lg mb-5">
-        {t('search.filterOptions', 'Filter Options')}
+        {t('filterOptions', 'Filter Options')}
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Form Type Dropdown */}
         <div>
           <label htmlFor="formType" className="text-white block mb-1">
-            {t('search.formType', 'Form Type')}
+            {t('formType', 'Form Type')}
           </label>
           <select
             id="formType"
@@ -65,10 +65,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             onChange={handleFilterChange}
             className="w-full p-2 bg-white/20 border border-white/30 rounded"
           >
-            <option value="">{t('search.all', 'All')}</option>
+            <option value="">{t('all', 'All')}</option>
             {FORM_TYPES.map(({ value, label }) => (
               <option key={value} value={value}>
-                {t(`search.formTypes.${value}`, label)}
+                {t(`formTypes.${value}`, label)}
               </option>
             ))}
           </select>
@@ -77,16 +77,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         {/* Sort Buttons */}
         <div className="md:col-span-2 lg:col-span-3">
           <label className="text-white block mb-2">
-            {t('search.sortBy', 'Sort By')}
+            {t('sortBy', 'Sort By')}
           </label>
           <div className="flex flex-wrap gap-2">
             {[
               {
-                label: t('search.sortFields.name', 'Name'),
+                label: t('sortFields.name', 'Name'),
                 field: 'name',
               },
               {
-                label: t('search.sortFields.date', 'Date'),
+                label: t('sortFields.date', 'Date'),
                 field: 'created_at',
               },
             ].map(({ label, field }) => (

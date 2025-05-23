@@ -15,11 +15,11 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
     <div className="flex justify-between items-center mb-6">
       <div>
         <h2 className="text-2xl font-semibold text-white">
-          {t('search.title', 'All Registered Users')}
+          {t('title', 'All Registered Users')}
         </h2>
         <p className="text-white/70 mt-1">
           {t(
-            'search.subtitle',
+            'subtitle',
             'View and search through all registered profiles in the system'
           )}
         </p>
@@ -32,10 +32,10 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
         {refreshing ? (
           <>
             <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-            {t('search.refreshingText', 'Refreshing...')}
+            {t('refreshingText', 'Refreshing...')}
           </>
         ) : (
-          t('common.refresh', 'Refresh')
+          t('refresh', 'Refresh')
         )}
       </button>
     </div>
