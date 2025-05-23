@@ -31,25 +31,7 @@ export const validateForm = (
       errors.push("Gender is required. Please select male or female to proceed.");
   }
 
-  // Section 2: Contact Information
-  else if (currentSection === 2) {
-    if (!personDetails.phone_number?.trim())
-      errors.push("Primary phone number is required for contact. Please enter it.");
 
-    if (
-      personDetails.phone_number &&
-      !/^[0-9]{10,11}$/.test(personDetails.phone_number.replace(/\D/g, ''))
-    ) {
-      errors.push("Primary phone number is invalid. It must contain  11 digits.");
-    }
-
-    if (
-      personDetails.second_phone_number &&
-      !/^[0-9]{10,11}$/.test(personDetails.second_phone_number.replace(/\D/g, ''))
-    ) {
-      errors.push("Secondary phone number is invalid. It must contain 11 digits.");
-    }
-  }
 
   // Section 3: Reporter Info
   else if (currentSection === 3) {

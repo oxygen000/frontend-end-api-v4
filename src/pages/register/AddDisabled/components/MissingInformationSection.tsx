@@ -48,10 +48,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           type="date"
           value={formData.disappearance_date || ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.disappearanceDatePlaceholder',
-            'Select date of disappearance'
-          )}
+          
         />
 
         <Input
@@ -60,10 +57,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           type="time"
           value={formData.disappearance_time || ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.disappearanceTimePlaceholder',
-            'Select time of disappearance'
-          )}
+        
         />
 
         <Input
@@ -71,10 +65,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           name="area_of_disappearance"
           value={formData.area_of_disappearance || ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.areaOfDisappearancePlaceholder',
-            'Enter area where person disappeared'
-          )}
+         
         />
 
         <Input
@@ -82,10 +73,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           name="last_sighting"
           value={formData.last_sighting || ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.lastSightingPlaceholder',
-            'Enter last known location'
-          )}
+          
         />
 
         <Input
@@ -93,10 +81,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           name="clothes_description"
           value={formData.clothes_description || ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.clothesDescriptionPlaceholder',
-            'Describe clothes worn at time of disappearance'
-          )}
+
         />
 
         <Input
@@ -104,10 +89,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           name="reason_for_location"
           value={formData.reason_for_location || ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.reasonForLocationPlaceholder',
-            'Enter reason for being in the location'
-          )}
+          
         />
         
         <Input
@@ -115,30 +97,21 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
           name="last_seen_time"
           value={formData.last_seen_time|| ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.reasonForLocationPlaceholder',
-            'Enter reason for being in the location'
-          )}
+          
         />
         <Input
           label={t('missing.wasAccompanied', 'was accompanied')}
           name="was_accompanied"
           value={formData.was_accompanied|| ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.reasonForLocationPlaceholder',
-            'Enter reason for being in the location'
-          )}
+          
         />
  <Input
           label={t('missing.previousDisputes', 'previous disputes')}
           name="previous_disputes"
           value={formData.previous_disputes|| ''}
           onChange={onChange}
-          placeholder={t(
-            'missing.reasonForLocationPlaceholder',
-            'Enter reason for being in the location'
-          )}
+          
         />
         
 <div>

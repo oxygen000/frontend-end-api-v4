@@ -117,7 +117,7 @@ function AddDisabled() {
    */
   const nextSection = () => {
     // Validate the current section
-    const errors = validateForm(formData, currentSection, capturedImage,);
+    const errors = validateForm(formData, currentSection, capturedImage);
     setFormErrors(errors);
 
     if (errors.length === 0) {
@@ -174,8 +174,7 @@ function AddDisabled() {
         const sectionErrors = validateForm(
           formData,
           section as DisabledFormSection,
-          capturedImage,
-          
+          capturedImage
         );
         if (sectionErrors.length > 0) {
           allSectionErrors.push(...sectionErrors);
@@ -274,7 +273,7 @@ function AddDisabled() {
         }
 
         // Show success toast
-        toast.success(t('form.success', 'Registration successful!'), {
+        toast.success(t('form.success.message', 'Registration successful!'), {
           id: 'disabled-registration',
         });
 
@@ -288,7 +287,12 @@ function AddDisabled() {
           setCapturedImage(null);
           setUseCamera(false);
           setCurrentSection(1);
-        }, 3500);
+          setSubmitSuccess(false);
+          setRegisteredUserId(null);
+          setFormErrors([]);
+          setLoading(false);
+          toast.dismiss();
+        }, 2000);
       } catch (error) {
         // Clear timeout
         clearTimeout(submissionTimeout);
@@ -472,109 +476,129 @@ function AddDisabled() {
           </div>
         )}
 
-          <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait">
+          {/* Show success animation or form sections */}
+          {submitSuccess ? (
+            <div className="text-center">
+              <SuccessAnimation
+                title={t('registration.success', 'Registration Successful!')}
+                message={t(
+                  'registration.successDescription',
+                  'User has been registered successfully.'
+                )}
+                id={registeredUserId}
+                idLabel={t('registration.caseReferenceId', 'Registration ID:')}
+              />
 
-          
-        {/* Show success animation or form sections */}
-        {submitSuccess ? (
-            <SuccessAnimation
-              title={t('registration.success', 'Registration Successful!')}
-              message={t(
-                'registration.successDescription',
-                'User has been registered successfully.'
-              )}
-              id={registeredUserId}
-              idLabel={t('registration.caseReferenceId', 'Registration ID:')}
-            />
+              {/* زر العودة للتسجيل الجديد */}
+              <motion.button
+                onClick={() => {
+                  setFormData(initialFormData);
+                  setCapturedImage(null);
+                  setUseCamera(false);
+                  setCurrentSection(1);
+                  setSubmitSuccess(false);
+                  setRegisteredUserId(null);
+                  setFormErrors([]);
+                  setLoading(false);
+                  toast.dismiss();
+                }}
+                className="mt-6 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors duration-300 shadow-lg hover:shadow-purple-500/30"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5 }}
+              >
+                {t('form.success.newRegistration', 'Register Another Person')}
+              </motion.button>
+            </div>
           ) : (
-          <motion.form
-            onSubmit={handleFormSubmit}
-            variants={formVariants}
-            initial="hidden"
-            animate="visible"
-            className="bg-gray-800/50 backdrop-blur-sm p-5 sm:p-6 lg:p-8 rounded-xl border border-gray-700/50 mb-10"
-          >
-            {/* Display validation errors if any */}
-            <AnimatePresence>
-              {formErrors.length > 0 && (
-                <motion.div
-                  variants={errorVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6"
-                  role="alert"
-                  aria-live="assertive"
-                >
-                  <h4 className="text-red-400 font-semibold mb-2">
-                    {t(
-                      'common.errorsFound',
-                      'Please fix the following errors:'
-                    )}
-                  </h4>
-                  <ul className="list-disc list-inside text-white/80 space-y-1">
-                    {formErrors.map((error, index) => (
-                      <li key={index}>{error}</li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <motion.form
+              onSubmit={handleFormSubmit}
+              variants={formVariants}
+              initial="hidden"
+              animate="visible"
+              className="bg-gray-800/50 backdrop-blur-sm p-5 sm:p-6 lg:p-8 rounded-xl border border-gray-700/50 mb-10"
+            >
+              {/* Display validation errors if any */}
+              <AnimatePresence>
+                {formErrors.length > 0 && (
+                  <motion.div
+                    variants={errorVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6"
+                    role="alert"
+                    aria-live="assertive"
+                  >
+                    <h4 className="text-red-400 font-semibold mb-2">
+                      {t(
+                        'common.errorsFound',
+                        'Please fix the following errors:'
+                      )}
+                    </h4>
+                    <ul className="list-disc list-inside text-white/80 space-y-1">
+                      {formErrors.map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            {/* Form sections - Only one is shown at a time */}
-            <AnimatePresence mode="wait">
-              {/* Section 1: Basic Information */}
-              {currentSection === 1 ? (
-                <BasicInformationSection
-                  formData={formData}
-                  onChange={handleInputChange}
-                  onNext={nextSection}
-                  onPrev={prevSection}
-                />
-              ) : /* Section 2: Contact Information */
-              currentSection === 2 ? (
-                <ContactInformationSection
-                  formData={formData}
-                  onChange={handleInputChange}
-                  onNext={nextSection}
-                  onPrev={prevSection}
-                />
-              ) : /* Section 3: Reporter Information */
-              currentSection === 3 ? (
-                <ReporterInformationSection
-                  formData={formData}
-                  onChange={handleInputChange}
-                  onNext={nextSection}
-                  onPrev={prevSection}
-                />
-              ) : /* Section 4: Missing Information */
-              currentSection === 4 ? (
-                <MissingInformationSection
-                  formData={formData}
-                  onChange={handleInputChange}
-                  onNext={nextSection}
-                  onPrev={prevSection}
-                />
-              ) : (
-                /* Section 5: Photo Capture */
-                <PhotoCaptureSection
-                  formData={formData}
-                  useCamera={useCamera}
-                  toggleCamera={handleToggleCamera}
-                  capturedImage={capturedImage}
-                  onImageCapture={handleImageCapture}
-                  onFileSelect={handleFileSelect}
-                  onSubmit={handleFormSubmit}
-                  onPrev={prevSection}
-                  loading={loading}
-                />
-              )}
-
-            </AnimatePresence>
-          
-
-          </motion.form>
-        )}
+              {/* Form sections - Only one is shown at a time */}
+              <AnimatePresence mode="wait">
+                {/* Section 1: Basic Information */}
+                {currentSection === 1 ? (
+                  <BasicInformationSection
+                    formData={formData}
+                    onChange={handleInputChange}
+                    onNext={nextSection}
+                    onPrev={prevSection}
+                  />
+                ) : /* Section 2: Contact Information */
+                currentSection === 2 ? (
+                  <ContactInformationSection
+                    formData={formData}
+                    onChange={handleInputChange}
+                    onNext={nextSection}
+                    onPrev={prevSection}
+                  />
+                ) : /* Section 3: Reporter Information */
+                currentSection === 3 ? (
+                  <ReporterInformationSection
+                    formData={formData}
+                    onChange={handleInputChange}
+                    onNext={nextSection}
+                    onPrev={prevSection}
+                  />
+                ) : /* Section 4: Missing Information */
+                currentSection === 4 ? (
+                  <MissingInformationSection
+                    formData={formData}
+                    onChange={handleInputChange}
+                    onNext={nextSection}
+                    onPrev={prevSection}
+                  />
+                ) : (
+                  /* Section 5: Photo Capture */
+                  <PhotoCaptureSection
+                    formData={formData}
+                    useCamera={useCamera}
+                    toggleCamera={handleToggleCamera}
+                    capturedImage={capturedImage}
+                    onImageCapture={handleImageCapture}
+                    onFileSelect={handleFileSelect}
+                    onSubmit={handleFormSubmit}
+                    onPrev={prevSection}
+                    loading={loading}
+                  />
+                )}
+              </AnimatePresence>
+            </motion.form>
+          )}
         </AnimatePresence>
       </div>
     </div>

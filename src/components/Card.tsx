@@ -87,7 +87,7 @@ const Card: React.FC<CardProps> = ({ user }) => {
 
       <div className="w-full space-y-2">
         <div className="flex justify-between items-center">
-          <p className="text-white/70">{t('common:phoneNumber', 'Phone:')}</p>
+          <p className="text-white/70">{t('common:Number', 'Number:')}</p>
           <p className="font-bold text-white">
             {user.phone_number || t('common:notAvailable', 'N/A')}
           </p>

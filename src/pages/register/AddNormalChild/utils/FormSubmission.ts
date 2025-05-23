@@ -3,7 +3,6 @@ import { registrationApi } from '../../../../services/api';
 import type { FormData } from '../types/types';
 import axios, { AxiosError } from 'axios';
 
-
 // Track registration requests to prevent duplicates
 const pendingRegistrations = new Set<string>();
 
@@ -184,21 +183,25 @@ export const submitForm = async (
     console.log('reporter_national_id:', formData.guardian_id || '');
     console.log('reporter_relationship:', formData.relationship || '');
     console.log('reporter_address:', formData.reporter_address || '');
+
     console.log('reporter_occupation:', formData.reporter_occupation || '');
     console.log('reporter_education:', formData.reporter_education || '');
 
     // Add missing fields that are in types.ts but not included in submission
     formDataToSend.append('age', formData.age || '');
     formDataToSend.append('reporter_name', formData.reporter_name || '');
-    formDataToSend.append('reporter_national_id', formData.reporter_national_id  || '');
+    formDataToSend.append(
+      'reporter_national_id',
+      formData.reporter_national_id || ''
+    );
     formDataToSend.append('reporter_relationship', formData.relationship || '');
     formDataToSend.append(
       'reporter_secondary_phone',
       formData.reporter_secondary_phone || ''
     );
-    formDataToSend.append('service_provider', formData.phone_company || '');
     formDataToSend.append('date_of_birth', formData.dob || '');
     formDataToSend.append('last_sighting', formData.last_sighting || '');
+    formDataToSend.append('phone_company', formData.phone_company || '');
     formDataToSend.append(
       'distinctive_mark',
       formData.physical_description || ''
@@ -285,8 +288,14 @@ export const submitForm = async (
       formData.previous_disputes || ''
     );
 
-    formDataToSend.append('clothes_description', formData.last_seen_clothes || '');
-    formDataToSend.append('distinctive_mark', formData.physical_description || '');
+    formDataToSend.append(
+      'clothes_description',
+      formData.last_seen_clothes || ''
+    );
+    formDataToSend.append(
+      'distinctive_mark',
+      formData.physical_description || ''
+    );
     formDataToSend.append('disappearance_time', formData.last_seen_time || '');
     formDataToSend.append('disappearance_date', formData.last_seen_time || '');
 
@@ -372,11 +381,6 @@ export const submitForm = async (
       governorate: formData.governorate || '',
       absence_report_number: formData.absence_report_number || '',
       absence_report_date: formData.absence_report_date || '',
-
-    
-     
-
-
     };
 
     // Debug logging

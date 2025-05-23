@@ -46,10 +46,7 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
           value={formData.phone_number}
           onChange={onChange}
           required
-          placeholder={t(
-            'contact.phoneNumberPlaceholder',
-            'Enter primary phone number'
-          )}
+         
         />
 
         <div>
@@ -62,7 +59,6 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
             value={formData.phone_company}
             onChange={onChange}
             className="w-full px-3 sm:px-4 py-2 bg-white/10 text-white border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
-            style={{ colorScheme: 'dark' }}
             required
           >
             <option value="" className="text-black bg-white">
@@ -88,20 +84,7 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
           name="second_phone_number"
           value={formData.second_phone_number}
           onChange={onChange}
-          placeholder={t(
-            'contact.secondPhoneNumberPlaceholder',
-            'Enter secondary phone number (optional)'
-          )}
-
-        />
-
-<Input
-          label={t('basic.distinctive_mark', 'distinctive_mark')}
-          name="distinctive_mark"
-          value={formData.distinctive_mark || ''}
-          onChange={onChange}
-          required
-          placeholder={t('basic.distinctive_mark', 'Enter distinctive_mark')}
+         
         />
 
         <Input

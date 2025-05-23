@@ -9,6 +9,7 @@
   "reporterInfo": "Reporter's Information",
   "reporterName": "Reporter's Name",
   "reporterNationalId": "Reporter's National ID",
+  
   "reporterAddress": "Reporter's Address",
   "reporterPhone": "Reporter's Phone Number",
   "reporterAltPhone": "Additional Phone Number",
@@ -40,6 +41,49 @@
     "3": "Reporter Information",
     "4": "Missing Information",
     "5": "Photo Capture"
+  },
+  "photo": {
+    "title": "Person's Photo",
+    "instructions": "Please upload a clear photo of the person's face. This will be used for identification purposes.",
+    "switchToUpload": "Switch to Upload",
+    "switchToCamera": "Switch to Camera",
+    "uploadImage": "Upload Image",
+    "clickToUpload": "Click to Upload",
+    "selectedImage": "Selected Image:",
+    "removeImage": "Remove Image",
+    "capturePhoto": "Capture Photo",
+    "retakePhoto": "Retake Photo",
+    "switchToBackCamera": "Back Camera",
+    "switchToFrontCamera": "Front Camera",
+    "submit": "Submit Registration",
+    "upload": {
+      "title": "Upload Photo",
+      "dropHere": "Drop image here",
+      "orClick": "or click to browse",
+      "supportedFormats": "Supported formats: JPG, PNG, JPEG",
+      "maxSize": "Max file size: 5MB",
+      "selectPhoto": "Select Photo",
+      "removePhoto": "Remove Photo",
+      "capturedPhoto": "Uploaded Photo",
+      "noPhoto": "No photo uploaded yet",
+      "readyForUpload": "Ready for photo upload"
+    },
+    "camera": {
+      "title": "Take Photo",
+      "startCamera": "Start Camera",
+      "stopCamera": "Stop Camera",
+      "capture": "Capture Photo",
+      "retake": "Retake",
+      "noCamera": "No camera available",
+      "permissionDenied": "Camera permission denied",
+      "error": "Error accessing camera",
+      "switchToFrontCamera": "Switch to Front Camera",
+      "switchToBackCamera": "Switch to Back Camera",
+      "useCamera": "Use camera for photo capture",
+      "noPhoto": "No photo captured yet",
+      "startCapture": "Start Camera",
+      "capturedPhoto": "Captured Photo"
+    }
   },
   "medicalInfo": "Medical Information",
   "medicalContacts": "Medical Contacts",
@@ -82,36 +126,6 @@
       "loading": "Processing..."
     },
     "submitting": "Registering information...",
-    "photo": {
-      "upload": {
-        "title": "Upload Photo",
-        "dropHere": "Drop image here",
-        "orClick": "or click to browse",
-        "supportedFormats": "Supported formats: JPG, PNG, JPEG",
-        "maxSize": "Max file size: 5MB",
-        "selectPhoto": "Select Photo",
-        "removePhoto": "Remove Photo",
-        "capturedPhoto": "Uploaded Photo",
-        "noPhoto": "No photo uploaded yet",
-        "readyForUpload": "Ready for photo upload"
-      },
-      "camera": {
-        "title": "Take Photo",
-        "startCamera": "Start Camera",
-        "stopCamera": "Stop Camera",
-        "capture": "Capture Photo",
-        "retake": "Retake",
-        "noCamera": "No camera available",
-        "permissionDenied": "Camera permission denied",
-        "error": "Error accessing camera",
-        "switchToFrontCamera": "Switch to Front Camera",
-        "switchToBackCamera": "Switch to Back Camera",
-        "useCamera": "Use camera for photo capture",
-        "noPhoto": "No photo captured yet",
-        "startCapture": "Start Camera",
-        "capturedPhoto": "Captured Photo"
-      }
-    },
     "validation": {
       "required": "This field is required",
       "invalidPhone": "Please enter a valid phone number",
@@ -148,8 +162,8 @@
     "addressPlaceholder": "Enter current address",
     "governorate": "Governorate",
     "age": "Age",
-    "reporter_occupation": "Occupation",
-    "reporter_education": "Education Level",
+    "reporterOccupation": "Occupation",
+    "reporterEducation": "Education Level",
     "nickname": "Nickname",
     "nicknamePlaceholder": "Enter nickname"
   },
@@ -281,11 +295,7 @@
     "wasAccompanied": "Was Person Accompanied",
     "reasonForLocation": "Reason for Being in Location",
     "reasonForLocationPlaceholder": "Enter reason for being in the location",
-    "previousDisputes": "Previous Disputes?",
-    "goneMissingBefore": "Gone Missing Before?",
-    "historyInfo": "History Information",
-    "previousDisputes": "Previous Disputes",
-    "goneMissingBefore": "Gone Missing Before",
+
     "lastSeenTime": "Last Seen Time"
   },
   "common": {
@@ -319,8 +329,10 @@
     "required": "This field is required"
   },
   "users": {
+    
     "disabilityInfo": "Disability Information",
     "disabilityType": "Disability Type",
+    "reporterRelationship": "Reporter Relationship",
     "disabilityDescription": "Disability Description",
     "medicalInformation": "Medical Information",
     "medicalCondition": "Medical Condition",

@@ -14,6 +14,48 @@
     "5": "معلومات الشخص المفقود",
     "6": "التقاط الصورة"
   },
+  "photo": {
+    "title": "صورة الشخص",
+    "instructions": "يرجى رفع صورة واضحة لوجه الشخص. سيتم استخدامها لأغراض التعرف.",
+    "switchToUpload": "التبديل إلى الرفع",
+    "switchToCamera": "التبديل إلى الكاميرا",
+    "uploadImage": "رفع صورة",
+    "clickToUpload": "انقر للرفع",
+    "selectedImage": "الصورة المختارة:",
+    "removeImage": "إزالة الصورة",
+    "capturePhoto": "التقاط صورة",
+    "retakePhoto": "إعادة التقاط",
+    "switchToBackCamera": "الكاميرا الخلفية",
+    "switchToFrontCamera": "الكاميرا الأمامية",
+    "submit": "إرسال التسجيل",
+    "upload": {
+      "title": "رفع صورة",
+      "dropHere": "اسحب الصورة هنا",
+      "orClick": "أو انقر للتصفح",
+      "supportedFormats": "الصيغ المدعومة: JPG، PNG، JPEG",
+      "maxSize": "الحد الأقصى لحجم الملف: 5 ميجابايت",
+      "selectPhoto": "اختر صورة",
+      "removePhoto": "إزالة الصورة",
+      "capturedPhoto": "الصورة المرفوعة",
+      "noPhoto": "لم يتم رفع صورة بعد",
+      "readyForUpload": "جاهز لرفع الصورة"
+    },
+    "camera": {
+      "title": "التقاط صورة",
+      "startCamera": "تشغيل الكاميرا",
+      "stopCamera": "إيقاف الكاميرا",
+      "capture": "التقاط صورة",
+      "retake": "إعادة التقاط",
+      "noCamera": "لا توجد كاميرا متاحة",
+      "permissionDenied": "تم رفض إذن الكاميرا",
+      "error": "خطأ في الوصول إلى الكاميرا",
+      "switchToFrontCamera": "التبديل إلى الكاميرا الأمامية",
+      "switchToBackCamera": "التبديل إلى الكاميرا الخلفية",
+      "useCamera": "استخدام الكاميرا لالتقاط الصورة",
+      "startCapture": "تشغيل الكاميرا",
+      "capturedPhoto": "الصورة الملتقطة"
+    }
+  },
   "form": {
     "errors": {
       "title": "يرجى تصحيح الأخطاء التالية:",
@@ -39,40 +81,6 @@
       "submit": "إرسال",
       "loading": "جاري المعالجة..."
     },
-    "photo": {
-      "title": "صورة الشخص",
-      "instructions": "يرجى رفع صورة واضحة لوجه الشخص. سيتم استخدامها لأغراض التعرف.",
-      "switchToUpload": "التبديل إلى الرفع",
-      "switchToCamera": "التبديل إلى الكاميرا",
-      "submit": "إرسال التسجيل",
-      "upload": {
-        "title": "رفع صورة",
-        "dropHere": "اسحب الصورة هنا",
-        "orClick": "أو انقر للتصفح",
-        "supportedFormats": "الصيغ المدعومة: JPG، PNG، JPEG",
-        "maxSize": "الحد الأقصى لحجم الملف: 5 ميجابايت",
-        "selectPhoto": "اختر صورة",
-        "removePhoto": "إزالة الصورة",
-        "capturedPhoto": "الصورة المرفوعة",
-        "noPhoto": "لم يتم رفع صورة بعد",
-        "readyForUpload": "جاهز لرفع الصورة"
-      },
-      "camera": {
-        "title": "التقاط صورة",
-        "startCamera": "تشغيل الكاميرا",
-        "stopCamera": "إيقاف الكاميرا",
-        "capture": "التقاط صورة",
-        "retake": "إعادة التقاط",
-        "noCamera": "لا توجد كاميرا متاحة",
-        "permissionDenied": "تم رفض إذن الكاميرا",
-        "error": "خطأ في الوصول إلى الكاميرا",
-        "switchToFrontCamera": "التبديل إلى الكاميرا الأمامية",
-        "switchToBackCamera": "التبديل إلى الكاميرا الخلفية",
-        "useCamera": "استخدام الكاميرا لالتقاط الصورة",
-        "startCapture": "تشغيل الكاميرا",
-        "capturedPhoto": "الصورة الملتقطة"
-      }
-    },
     "validation": {
       "required": "هذا الحقل مطلوب",
       "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
@@ -95,7 +103,7 @@
     "nationalId": "رقم الهوية الوطنية",
     "nationalIdPlaceholder": "أدخل رقم الهوية الوطنية إذا كان متوفراً",
     "physicalDescription": "الوصف البدني",
-    "distinctiveMark": "السمات البدنية المميزة",
+    "distinctiveMark": "علامة مميزة ",
     "distinctiveMarkPlaceholder": "الندوب، الشامات، أو السمات المميزة الأخرى",
     "height": "الطول (سم)",
     "heightPlaceholder": "أدخل الطول بالسنتيمترات",
@@ -107,7 +115,9 @@
     "address": "العنوان الحالي",
     "addressPlaceholder": "أدخل العنوان الحالي",
     "governorate": "المحافظة",
-    "age": "العمر"
+    "age": "العمر",
+    "reporterOccupation": "المهنة",
+    "reporterEducation": "المستوى التعليمي"
   },
   "contact": {
     "phoneNumber": "رقم الهاتف",
@@ -227,7 +237,8 @@
     "back": "رجوع",
     "next": "التالي",
     "backToHome": "العودة للرئيسية",
-    "errorsFound": "يرجى تصحيح الأخطاء التالية:"
+    "errorsFound": "يرجى تصحيح الأخطاء التالية:",
+    "loading": "جاري المعالجة..."
   },
   "validation": {
     "required": "هذا الحقل مطلوب"

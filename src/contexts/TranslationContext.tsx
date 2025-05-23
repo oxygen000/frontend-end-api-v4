@@ -30,9 +30,7 @@ export const TranslationProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { t, i18n, language, isRTL } = useTranslationWithFallback();
-  const [, setCurrentDirection] = useState(
-    isRTL ? 'rtl' : 'ltr'
-  );
+  const [, setCurrentDirection] = useState(isRTL ? 'rtl' : 'ltr');
 
   // Update document direction when language changes
   useEffect(() => {
@@ -72,7 +70,9 @@ export const TranslationProvider: React.FC<{ children: ReactNode }> = ({
 export const useTranslationContext = () => {
   const context = useContext(TranslationContext);
   if (context === undefined) {
-    throw new Error('useTranslationContext must be used within a TranslationProvider');
+    throw new Error(
+      'useTranslationContext must be used within a TranslationProvider'
+    );
   }
   return context;
 };

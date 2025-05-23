@@ -36,10 +36,16 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const webcamRef = useRef<Webcam | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // Cleanup function for object URLs when component unmounts
   useEffect(() => {
     return () => {
+      // Cleanup preview URL
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      // Cleanup form data image URL
       if (formData.image) {
         try {
           const url = URL.createObjectURL(formData.image);
@@ -49,7 +55,7 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
         }
       }
     };
-  }, [formData.image]);
+  }, [formData.image, previewUrl]);
 
   const handleToggleCamera = () => {
     setIsProcessingImage(true);
@@ -85,6 +91,20 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsProcessingImage(true);
     const file = e.target.files?.[0] || null;
+
+    // Clean up previous preview URL
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    if (file) {
+      // Create preview URL immediately for instant display
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+
     onFileSelect(file);
     setTimeout(() => setIsProcessingImage(false), 500);
   };
@@ -98,7 +118,7 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
       transition={transition}
       className="space-y-3 sm:space-y-4"
     >
-      <h3 className="text-base sm:text-lg font-semibold">
+      <h3 className="text-base sm:text-lg font-semibold text-white">
         {t('photo.title', "Person's Photo")}
       </h3>
       <p className="text-white/80 text-sm sm:text-base">
@@ -133,36 +153,52 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
         </div>
 
         {!useCamera ? (
-          <div className="flex flex-col items-center">
-            <label className="block text-white font-semibold mb-2 text-sm sm:text-base">
-              {t('photo.uploadImage', 'Upload Image')}
-            </label>
-            <div
-              className="cursor-pointer"
-              onClick={() => document.getElementById('fileInput')?.click()}
-            >
-              <AnimatedFaceIcon
-                size="md"
-                text={t('photo.clickToUpload', 'Click to Upload')}
-              />
-              <input
-                id="fileInput"
-                type="file"
-                accept="image/jpeg,image/png"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-            </div>
+          <div className="flex flex-col items-center w-full">
+            {/* Upload section */}
+            <div className="flex flex-col items-center space-y-4 w-full">
+              <label className="block text-white font-semibold text-sm sm:text-base">
+                {t('photo.uploadImage', 'Upload Image')}
+              </label>
 
-            {formData.image && (
-              <div className="mt-3 sm:mt-4 flex justify-center">
-                <img
-                  src={URL.createObjectURL(formData.image)}
-                  alt="Preview"
-                  className="max-w-full max-h-48 sm:max-h-64 rounded shadow-md"
+              {/* Upload area */}
+              <div
+                className="cursor-pointer"
+                onClick={() => document.getElementById('fileInput')?.click()}
+              >
+                <AnimatedFaceIcon
+                  size="md"
+                  text={t('photo.clickToUpload', 'Click to Upload')}
+                
+                />
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  onChange={handleFileSelect}
+                  className="hidden"
                 />
               </div>
-            )}
+
+              {/* Selected image preview - always shown below upload area */}
+              {(previewUrl || formData.image) && (
+                <div className="flex flex-col items-center space-y-2 w-full">
+                  
+                  <div className="flex justify-center w-full">
+                    <img
+                      src={
+                        previewUrl ||
+                        (formData.image
+                          ? URL.createObjectURL(formData.image)
+                          : '')
+                      }
+                      alt="Preview"
+                      className="max-w-full max-h-48 sm:max-h-64 rounded-lg shadow-md border-2 border-purple-400"
+                    />
+                  </div>
+                 
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           // Camera capture section

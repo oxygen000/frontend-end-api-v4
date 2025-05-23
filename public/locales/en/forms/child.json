@@ -6,6 +6,7 @@
   "locationInfo": "Location Information",
   "physicalDescription": "Physical Description",
   "reporterInfo": "Reporter Information / First Degree",
+  "reporterRelationship": "Reporter Relationship",
   "missingPersonInfo": "Missing Person's Information",
   "age": "Age",
   "yearsOld": "years old",

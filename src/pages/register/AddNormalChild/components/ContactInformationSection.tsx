@@ -53,20 +53,20 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
             onChange={handleInputChange}
             className="w-full px-3  sm:px-4 py-2 text-white bg-white/10 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
           >
-            <option value="" className="text-black">
-              {t('common.select', 'Select Company')}
+            <option value="" className="text-black bg-white">
+              {t('contact.selectCompany', 'Select Phone Company')}
             </option>
-            <option value="Orange" className="text-black">
-              Orange
+            <option value="Vodafone" className="text-black bg-white">
+              {t('contact.vodafone', 'Vodafone')}
             </option>
-            <option value="Etisalat" className="text-black">
-              Etisalat
+            <option value="Orange" className="text-black bg-white">
+              {t('contact.orange', 'Orange')}
             </option>
-            <option value="Vodafone" className="text-black">
-              Vodafone
+            <option value="Etisalat " className="text-black bg-white">
+              {t('contact.Etisalat', 'Etisalat')}
             </option>
-            <option value="WE" className="text-black">
-              WE
+            <option value="WE" className="text-black bg-white">
+              {t('contact.WE', 'WE')}
             </option>
           </select>
         </div>

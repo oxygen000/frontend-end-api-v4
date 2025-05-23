@@ -268,14 +268,7 @@
   "camera": {
     "permissionDenied": "تم رفض إذن الكاميرا. يرجى تمكينه في إعدادات المتصفح الخاص بك."
   },
-  "relationships": {
-    "parent": "الوالد/الوالدة",
-    "grandparent": "الجد/الجدة",
-    "sibling": "الأخ/الأخت",
-    "auntUncle": "العم/العمة/الخال/الخالة",
-    "legalGuardian": "الوصي القانوني",
-    "select": "اختر صلة القرابة"
-  },
+
   "disabilities": {
     "physical": "إعاقة جسدية",
     "visual": "إعاقة بصرية",
@@ -544,7 +537,9 @@
     "secondaryPhone": "الهاتف الثانوي",
     "phoneProvider": "مزود الخدمة",
     "phoneCompany": "شركة الاتصالات",
+    "reporterRelationship": "علاقة المبلغ بالشخص المفقود",
     "registrationDate": "تاريخ التسجيل",
+    
     "actions": "الإجراءات",
     "editInformation": "تعديل المعلومات",
     "identityVerification": "التحقق من الهوية",
@@ -555,23 +550,6 @@
     "addressVerified": "تم التحقق من العنوان",
     "biometricVerification": "التحقق البيومتري",
     "faceRecognition": "التعرف على الوجه",
-    "fingerprint": "بصمة الإصبع",
-    "lastVerification": "آخر تحقق",
-    "documentVerification": "التحقق من الوثائق",
-    "idCard": "بطاقة الهوية",
-    "commonInfo": "معلومات عامة",
-    "category": "الفئة",
-    "phoneNumbers": "أرقام الهواتف",
-    "emergencyPhone": "هاتف الطوارئ",
-    "notAvailable": "غير متوفر",
-    "registeredOn": "تاريخ التسجيل",
-    "personalInfo": "المعلومات الشخصية",
-    "id": "المعرف",
-    "faceId": "بصمة الوجه",
-    "employeeId": "رقم الموظف",
-    "formType": "نوع النموذج",
-    "occupation": "المهنة",
-    "lastUpdated": "آخر تحديث",
     "reporterOccupation": "مهنة المبلغ",
     "reporterEducation": "تعليم المبلغ",
     "medicalHistory": "التاريخ الطبي",
@@ -628,6 +606,7 @@
     "absenceReportNumber": "رقم محضر الغياب",
     "absenceReportDate": "تاريخ محضر الغياب",
     "reporterNationalId": "الرقم القومي للمبلغ",
+    "relationshipToMissing":"صلة القرابة بالطفل المفقود",
     "reporterAddress": "عنوان المبلغ",
     "reporterSecondaryPhone": "هاتف إضافي للمبلغ",
     "governorate": "المحافظة",
@@ -640,7 +619,8 @@
     "last_number": "آخر رقم",
     "guardian_phone": "هاتف الوصي",
     "area_of_disappearance": "منطقة الاختفاء",
-    "last_sighting": "آخر مشاهدة"
+    "last_sighting": "آخر مشاهدة",
+    "userAvatar": "صورة المستخدم"
   },
     
   "forms": {
@@ -800,25 +780,7 @@
     "contact": "معلومات الاتصال",
     "reporter": "معلومات المبلغ"
   },
-  "missing": {
-    "disappearanceDate": "تاريخ الاختفاء",
-    "disappearanceTime": "وقت الاختفاء",
-    "areaOfDisappearance": "منطقة الاختفاء",
-    "lastSighting": "آخر مكان تم رؤيته فيه",
-    "lastSightingPlaceholder": "أدخل آخر مكان تم رؤيته فيه",
-    "clothesDescription": "وصف الملابس",
-    "clothesDescriptionPlaceholder": "وصف الملابس التي كان يرتديها وقت الاختفاء",
-    "reasonForLocation": "سبب التواجد في المكان",
-    "reasonForLocationPlaceholder": "أدخل سبب التواجد في المكان",
-    "lastSeenTime": "آخر وقت تم رؤيته",
-    "lastSeenTimePlaceholder": "أدخل آخر وقت تم رؤية الشخص فيه",
-    "wasAccompanied": "كان برفقة شخص",
-    "wasAccompaniedPlaceholder": "أدخل من كان برفقة الشخص",
-    "previousDisputes": "خلافات سابقة",
-    "previousDisputesPlaceholder": "أدخل أي خلافات أو نزاعات سابقة",
-    "goneMissingBefore": "سبق أن فقد من قبل",
-    "goneMissingBeforePlaceholder": "هل سبق أن فُقد الشخص من قبل؟"
-  },
+
   "basic": {
     "reporter_occupation": "مهنة المبلغ",
     "reporter_education": "تعليم المبلغ",
@@ -852,11 +814,7 @@
     "absenceReportDate": "تاريخ محضر الغياب",
     "policeStation": "قسم الشرطة",
     "securityDirectorate": "مديرية الأمن",
-    "medicalHistory": "التاريخ الطبي"
-   
-  
-  },
-    
+    "medicalHistory": "التاريخ الطبي",
     "info": "معلومات المبلغ",
     "contactInfo": "معلومات الاتصال بالمبلغ",
     "phone": "هاتف المبلغ",
@@ -875,3 +833,4 @@
       "grandmother": "الجدة"
     }
   }
+}

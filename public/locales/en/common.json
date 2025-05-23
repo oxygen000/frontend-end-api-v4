@@ -327,6 +327,8 @@
     "primaryPhone": "Primary Phone",
     "secondaryPhone": "Secondary Phone",
     "phoneProvider": "Phone Provider",
+    "reporterRelationship": "Reporter Relationship",
+    "reporterNationalId": "Reporter National ID",
     "registrationDate": "Registration Date",
     "actions": "Actions",
     "editInformation": "Edit Information",
@@ -449,7 +451,7 @@
     "previousDisputes": "Previous Disputes",
     "absenceReportNumber": "Absence Report Number",
     "absenceReportDate": "Absence Report Date",
-    "reporterNationalId": "Reporter National ID",
+    "relationshipToMissing": "Relationship to Missing Person",
     "reporterAddress": "Reporter Address",
     "reporterSecondaryPhone": "Reporter Secondary Phone",
     "governorate": "Governorate",
@@ -477,7 +479,8 @@
     "man": "Male",
     "confirmDeletion": "Confirm Deletion",
     "deleteWarning": "Are you sure you want to delete this record? This action cannot be undone.",
-    "phoneCompany": "Phone Company"
+    "phoneCompany": "Phone Company",
+    "userAvatar": "User Avatar"
   },
   "forms": {
     "man": {
@@ -513,6 +516,7 @@
       "reporterInfo": "Reporter Information",
       "reporterName": "Reporter Name",
       "reporterNationalId": "Reporter National ID",
+      
       "reporterAddress": "Reporter Address",
       "reporterPhone": "Reporter Phone",
       "reporterAltPhone": "Reporter Alternate Phone",
@@ -662,6 +666,8 @@
     "occupation": "Reporter Occupation",
     "education": "Reporter Education",
     "reporterNationalId": "Reporter National ID",
+          "relationshipToMissing": "Relationship to Missing Person",
+
     "phoneNumber": "Reporter Phone Number",
     "reporterSecondaryPhone": "Reporter Secondary Phone",
     "address": "Reporter Address",

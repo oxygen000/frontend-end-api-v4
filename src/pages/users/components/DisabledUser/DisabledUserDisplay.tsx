@@ -61,6 +61,79 @@ const DisabledUserDisplay = ({
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+
+           {/* Reporter Information Section */}
+           <div
+            className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
+          >
+            <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
+              <span
+                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.disabled.icon}`}
+              ></span>
+              {t('sections.reporter', 'Reporter Information')}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              <InfoRow
+                label={t('reporter.name', 'Reporter Name:')}
+                value={maskInfo(user.guardian_name || user.reporter_name)}
+              />
+              <InfoRow
+                label={t('reporter.relationship', 'Relationship:')}
+                value={maskInfo(user.reporter_relationship)}
+              />
+              <InfoRow
+                label={t('reporter.occupation', 'Reporter Occupation:')}
+                value={maskInfo(user.reporter_occupation)}
+              />
+              <InfoRow
+                label={t('reporter.education', 'Reporter Education:')}
+                value={maskInfo(user.reporter_education)}
+              />
+              <InfoRow
+                label={t(
+                  'reporter.reporterNationalId',
+                  'Reporter National ID:'
+                )}
+                value={maskInfo(user.reporter_national_id)}
+              />
+              <InfoRow
+                label={t('reporter.phoneNumber', 'Reporter Phone:')}
+                value={maskInfo(user.guardian_phone || user.reporter_phone)}
+              />
+              <InfoRow
+                label={t('reporter.reporterSecondaryPhone', 'Secondary Phone:')}
+                value={maskInfo(user.reporter_secondary_phone)}
+              />
+              <InfoRow
+                label={t('reporter.address', 'Reporter Address:')}
+                value={maskInfo(user.reporter_address)}
+              />
+              <InfoRow
+                label={t(
+                  'reporter.absenceReportNumber',
+                  'Absence Report Number:'
+                )}
+                value={maskInfo(user.absence_report_number)}
+              />
+              <InfoRow
+                label={t('reporter.absenceReportDate', 'Report Date:')}
+                value={formatDate(user.absence_report_date)}
+              />
+              <InfoRow
+                label={t('reporter.policeStation', 'Police Station:')}
+                value={maskInfo(user.police_station)}
+              />
+              <InfoRow
+                label={t(
+                  'reporter.securityDirectorate',
+                  'Security Directorate:'
+                )}
+                value={maskInfo(user.security_directorate)}
+              />
+            </div>
+          </div>
+
+          
           {/* Basic Information Section */}
           <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
@@ -163,76 +236,7 @@ const DisabledUserDisplay = ({
             </div>
           </div>
 
-          {/* Reporter Information Section */}
-          <div
-            className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
-          >
-            <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
-              <span
-                className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.disabled.icon}`}
-              ></span>
-              {t('sections.reporter', 'Reporter Information')}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-              <InfoRow
-                label={t('reporter.name', 'Reporter Name:')}
-                value={maskInfo(user.guardian_name || user.reporter_name)}
-              />
-              <InfoRow
-                label={t('reporter.relationship', 'Relationship:')}
-                value={maskInfo(user.reporter_relationship)}
-              />
-              <InfoRow
-                label={t('reporter.occupation', 'Reporter Occupation:')}
-                value={maskInfo(user.reporter_occupation)}
-              />
-              <InfoRow
-                label={t('reporter.education', 'Reporter Education:')}
-                value={maskInfo(user.reporter_education)}
-              />
-              <InfoRow
-                label={t(
-                  'reporter.reporterNationalId',
-                  'Reporter National ID:'
-                )}
-                value={maskInfo(user.reporter_national_id)}
-              />
-              <InfoRow
-                label={t('reporter.phoneNumber', 'Reporter Phone:')}
-                value={maskInfo(user.guardian_phone || user.reporter_phone)}
-              />
-              <InfoRow
-                label={t('reporter.reporterSecondaryPhone', 'Secondary Phone:')}
-                value={maskInfo(user.reporter_secondary_phone)}
-              />
-              <InfoRow
-                label={t('reporter.address', 'Reporter Address:')}
-                value={maskInfo(user.reporter_address)}
-              />
-              <InfoRow
-                label={t(
-                  'reporter.absenceReportNumber',
-                  'Absence Report Number:'
-                )}
-                value={maskInfo(user.absence_report_number)}
-              />
-              <InfoRow
-                label={t('reporter.absenceReportDate', 'Report Date:')}
-                value={formatDate(user.absence_report_date)}
-              />
-              <InfoRow
-                label={t('reporter.policeStation', 'Police Station:')}
-                value={maskInfo(user.police_station)}
-              />
-              <InfoRow
-                label={t(
-                  'reporter.securityDirectorate',
-                  'Security Directorate:'
-                )}
-                value={maskInfo(user.security_directorate)}
-              />
-            </div>
-          </div>
+         
 
           {/* Missing Information Section */}
           <div

@@ -44,17 +44,20 @@ const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
           value={formData.name}
           onChange={onChange}
           required
-          placeholder={t('basic.fullNamePlaceholder', 'Enter full name')}
+        />
+        <Input
+          label={t('basic.nickname', 'Nickname')}
+          name="nickname"
+          value={formData.nickname}
+          onChange={onChange}
+          required
         />
         <Input
           label={t('basic.nationalId', 'National ID')}
           name="national_id"
           value={formData.national_id}
           onChange={onChange}
-          placeholder={t(
-            'basic.nationalIdPlaceholder',
-            'Enter national ID if available'
-          )}
+          
         />
 
         <Input
@@ -67,11 +70,10 @@ const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
         />
         <Input 
         label={t('basic.address', 'address')}
-        name="age"
+        name="address"
         value={formData.address}
         onChange={onChange}
         required
-        placeholder={t('basic.addressPlaceholder', 'Enter address')}
         />
 
         <div>
@@ -99,22 +101,26 @@ const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
           </select>
         </div>
 
-        
         <Input
-          label={t('basic.reporter_occupation', 'Missing Person Occupation')}
+          label={t('basic.distinctiveMark', 'distinctive_mark')}
+          name="distinctive_mark"
+          value={formData.distinctive_mark || ''}
+          onChange={onChange}
+          required
+        />
+        <Input
+          label={t('basic.reporterOccupation', 'Missing Person Occupation')}
           name="missing_person_occupation"
           value={formData.missing_person_occupation || ''}
           onChange={onChange}
           required
-          placeholder={t('basic.reporter_occupation', 'Enter occupation')}
         />
         <Input
-          label={t('basic.reporter_education', 'Missing Person Education')}
+          label={t('basic.reporterEducation', 'Missing Person Education')}
           name="missing_person_education"
           value={formData.missing_person_education || ''}
           onChange={onChange}
           required
-          placeholder={t('basic.reporter_education', 'Enter education level')}
         />
       </div>
 

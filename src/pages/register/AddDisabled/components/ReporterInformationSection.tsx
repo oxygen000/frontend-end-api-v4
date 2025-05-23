@@ -45,7 +45,7 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
           name="guardian_name"
           value={formData.guardian_name || ''}
           onChange={onChange}
-          placeholder={t('reporter.namePlaceholder', 'Enter reporter name')}
+          
         />
 
         <div>
@@ -100,10 +100,7 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
           name="reporter_occupation"
           value={formData.reporter_occupation || ''}
           onChange={onChange}
-          placeholder={t(
-            'reporter.occupationPlaceholder',
-            'Enter reporter occupation '
-          )}
+
         />
 
         <Input
@@ -111,10 +108,6 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
           name="reporter_education"
           value={formData.reporter_education || ''}
           onChange={onChange}
-          placeholder={t(
-            'reporter.educationPlaceholder',
-            'Enter reporter education level (optional)'
-          )}
         />
 
         <Input
@@ -122,28 +115,18 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
           name="reporter_national_id"
           value={formData.reporter_national_id || ''}
           onChange={onChange}
-          placeholder={t(
-            'reporter.reporterNationalIdPlaceholder',
-            'Enter reporter national ID (optional)'
-          )}
+          
         />
       </div>
 
-      {/* Reporter contact information */}
-      <h4 className="text-base font-medium mt-5 mb-3 text-purple-200 border-b border-purple-400/30 pb-2">
-        {t('reporter.reporterContactInfo', 'Reporter Contact Information')}
-      </h4>
-
+     
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
         <Input
           label={t('reporter.phoneNumber', 'Primary Phone Number')}
           name="guardian_phone"
           value={formData.guardian_phone || ''}
           onChange={onChange}
-          placeholder={t(
-            'reporter.phoneNumberPlaceholder',
-            'Enter phone number'
-          )}
+          
         />
 
         <Input
@@ -158,18 +141,11 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
           name="reporter_address"
           value={formData.reporter_address || ''}
           onChange={onChange}
-          placeholder={t(
-            'reporter.addressPlaceholder',
-            'Enter address (optional)'
-          )}
+          
         />
       </div>
 
-      {/* Police report information */}
-      <h4 className="text-base font-medium mt-5 mb-3 text-purple-200 border-b border-purple-400/30 pb-2">
-        {t('reporter.policeReport', 'Police Report Information')}
-      </h4>
-
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
         <Input
           label={t('reporter.absenceReportNumber', 'Absence Report Number')}

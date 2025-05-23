@@ -2,7 +2,7 @@
   "title": "نموذج تسجيل الطفل",
   "childFullName": "الاسم الكامل للطفل",
   "dateOfBirth": "تاريخ الميلاد",
-  "childId": "الرقم القومي للطفل (اختياري)",
+  "childId": "الرقم القومي للطفل ",
   "locationInfo": "معلومات الموقع",
   "physicalDescription": "الوصف الجسدي",
   "reporterInfo": "بيانات المبلغ / الدرجة الأولى",
@@ -62,6 +62,6 @@
   },
 
   "medicalSection":"المعلومات الطبية",
-  "medicalHistory":"التاريخ الطبي"
-  
+  "medicalHistory":"التاريخ الطبي",
+  "reporterRelationship":"صلة القرابة بالطفل المفقود"
 }

@@ -59,11 +59,21 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
             className="w-full px-3 sm:px-4 text-white py-2 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
             required
           >
-            <option value="" className="text-black">{t('common.select', 'Select Company')}</option>
-            <option value="vodafone" className="text-black">Vodafone</option>
-            <option value="etisalat" className="text-black">Etisalat</option>
-            <option value="orange" className="text-black">Orange</option>
-            <option value="we" className="text-black">WE</option>
+            <option value="" className="text-black bg-white">
+              {t('contact.selectCompany', 'Select Phone Company')}
+            </option>
+            <option value="Vodafone" className="text-black bg-white">
+              {t('contact.vodafone', 'Vodafone')}
+            </option>
+            <option value="Orange" className="text-black bg-white">
+              {t('contact.orange', 'Orange')}
+            </option>
+            <option value="Etisalat " className="text-black bg-white">
+              {t('contact.Etisalat', 'Etisalat')}
+            </option>
+            <option value="WE" className="text-black bg-white">
+              {t('contact.WE', 'WE')}
+            </option>
           </select>
         </div>
 
