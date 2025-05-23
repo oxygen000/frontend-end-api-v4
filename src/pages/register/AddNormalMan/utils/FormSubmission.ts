@@ -144,6 +144,7 @@ export const submitForm = async (
     formDataToSend.append('address', formData.address || '');
     formDataToSend.append('phone_number', formData.phone_number);
     formDataToSend.append('phone_company', formData.phone_company);
+    formDataToSend.append('landline_number', formData.landline_number || '');
     formDataToSend.append('service_provider', formData.service_provider || '');
     formDataToSend.append('occupation', formData.occupation || '');
 

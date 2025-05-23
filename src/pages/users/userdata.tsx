@@ -12,7 +12,6 @@ import DataAdultUser from './components/AdultUser/DataAdultUser';
 import TravelInfoSection from './components/AdultUser/TravelInfoSection';
 import CaseInfoSection from './components/AdultUser/CaseInfoSection';
 import IdentityVerificationSection from './components/IdentityVerificationSection';
-import ChildInfoSection from './components/ChildUser/ChildInfoSection';
 import PhoneNumbersSection from './components/PhoneNumbersSection';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import ActionsSection from './components/ActionsSection';
@@ -23,7 +22,7 @@ import DisabledUserDisplay from './components/DisabledUser/DisabledUserDisplay';
 
 // Types and utilities
 import type { User } from './types/types';
-import { formatDate, calculateAge, maskSensitiveInfo } from './utils/utils';
+import { formatDate, maskSensitiveInfo } from './utils/utils';
 
 function Userdata() {
   const { id } = useParams<{ id: string }>();
@@ -267,65 +266,45 @@ function Userdata() {
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Personal Information */}
 
-          {/* Child Information Section */}
-          {isChildRecord && (
-            <ChildInfoSection
-              user={user}
-              isRTL={isRTL}
-              t={t}
-              maskSensitiveInfo={maskInfo}
-              formatDate={formatDate}
-              calculateAge={calculateAge}
-              showEmptyFields={showEmptyFields}
-            />
-          )}
-
-          
-
           {/* Adult Information Section (both man and woman) */}
           {isAdult && (
             <>
               <DataAdultUser
                 user={user}
-                isRTL={isRTL}
+               
                 t={t}
                 showEmptyFields={showEmptyFields}
                 maskSensitiveInfo={maskInfo}
                 formatDate={formatDate}
               />
 
-                {/* Case Information */}
-                <CaseInfoSection
+              {/* Case Information */}
+              <CaseInfoSection
                 user={user}
-                isRTL={isRTL}
+               
                 t={t}
                 maskSensitiveInfo={maskInfo}
               />
               {/* Vehicle Information - only show when vehicle data exists */}
               {hasVehicleInfo && (
-                <VehicleInfoSection user={user} isRTL={isRTL} t={t} />
+                <VehicleInfoSection user={user}  t={t} />
               )}
 
               {/* Travel Information - only show when travel data exists */}
               {hasTravelInfo && (
                 <TravelInfoSection
                   user={user}
-                  isRTL={isRTL}
+                 
                   t={t}
                   formatDate={formatDate}
                 />
               )}
-
-            
             </>
           )}
-
-        
 
           {/* Phone Numbers Section */}
           <PhoneNumbersSection
             user={user}
-            isRTL={isRTL}
             t={t}
             maskSensitiveInfo={maskInfo}
             formatDate={formatDate}

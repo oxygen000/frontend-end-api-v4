@@ -81,13 +81,13 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
               name="vehicle_type"
               value={formData.vehicle_type || ''}
               onChange={handleInputChange}
-              className="w-full rounded border border-gray-600 bg-gray-900 px-3 py-2 text-white focus:border-blue-500 focus:outline-none"
-            >
-              <option value="">
+              className="w-full px-3 sm:px-4 text-white py-2 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+              >
+              <option value="" className='text-black'>
                 {t('registration.selectVehicleType', 'Select vehicle type')}
               </option>
-              <option value="car">{t('registration.car', 'Car')}</option>
-              <option value="motorcycle">
+              <option value="car" className='text-black'>{t('registration.car', 'Car')}</option>
+              <option value="motorcycle" className='text-black'>
                 {t('registration.motorcycle', 'Motorcycle')}
               </option>
             </select>
@@ -96,7 +96,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
           {/* Basic Vehicle Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label={t('registration.license_plate', 'License Plate')}
+              label={t('registration.licensePlate', 'License Plate')}
               name="license_plate"
               type="text"
               value={formData.license_plate || ''}
@@ -104,7 +104,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
                 
             />
             <Input
-              label={t('registration.traffic_unit', 'Traffic Unit')}
+              label={t('registration.trafficUnit', 'Traffic Unit')}
               name="traffic_unit"
               type="text"
               value={formData.traffic_unit || ''}
@@ -113,7 +113,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
             />
 
             <Input
-              label={t('registration.license_expiration', 'License Expiration')}
+              label={t('registration.licenseExpiration', 'License Expiration')}
               name="license_expiration"
               type="date"
               value={formData.license_expiration || ''}
@@ -121,7 +121,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
             />
 
             <Input
-              label={t('registration.chassis_number', 'Chassis Number (VIN)')}
+              label={t('registration.chassisNumber', 'Chassis Number (VIN)')}
               name="chassis_number"
               type="number"
               value={formData.chassis_number || ''}
@@ -130,7 +130,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
             />
 
             <Input
-              label={t('registration.trafficDpartment', 'Traffic Department')}
+              label={t('registration.trafficDepartment', 'Traffic Department')}
               name="traffic_department"
               type="text"
               value={formData.traffic_department || ''}

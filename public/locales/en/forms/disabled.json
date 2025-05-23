@@ -289,7 +289,6 @@
     "disappearanceTime": "Time of Disappearance",
     "disappearanceTimePlaceholder": "Select time of disappearance",
     "areaOfDisappearance": "Area of Disappearance",
-    "areaOfDisappearancePlaceholder": "Enter area where person disappeared",
     "lastSighting": "Last Known Location",
     "lastSightingPlaceholder": "Enter last known location",
     "clothesDescription": "Clothes Description",

@@ -133,10 +133,10 @@
       "numbersOnly": "This field must contain only numbers",
       "dateFormat": "Please enter a valid date in the format YYYY-MM-DD"
     },
-    "personalInfo": "Personal Information",
+    
     "fullName": "Full Name",
     "nickname": "Nickname",
-    "dateOfBirth": "Date of Birth",
+    "dateOfBirth": "Date' of Birth'",
     "nationalId": "National ID",
     "address": "Address",
     "education": "Education",
@@ -215,7 +215,8 @@
     "sentencePlaceholder": "Enter sentence details",
     "court_governorate": "Court Governorate",
     "courtGovernoratePlaceholder": "Enter court governorate",
-    "travelInfo": "Travel Information",
+    "travelInfo": "Certificate of Movements (General Directorate of Passports, Immigration and Nationality)",
+  
     "hasTravelInfo": "Has International Travel Plans",
     "travelDetails": "Travel Details",
     "travelDate": "Departure Date",
@@ -279,6 +280,7 @@
     "vehicleRegistration": "Registration Information",
     "registrationNumber": "Registration Number",
     "registrationNumberPlaceholder": "Vehicle registration number",
+    
     "technicalInfo": "Technical Information",
     "engineNumber": "Engine Number",
     "engineNumberPlaceholder": "Enter engine number",
@@ -327,7 +329,6 @@
     "primaryPhone": "Primary Phone",
     "secondaryPhone": "Secondary Phone",
     "phoneProvider": "Phone Provider",
-    "reporterRelationship": "Reporter Relationship",
     "reporterNationalId": "Reporter National ID",
     "registrationDate": "Registration Date",
     "actions": "Actions",
@@ -346,17 +347,20 @@
     "idCard": "ID Card",
     "commonInfo": "Common Information",
     "category": "Category",
-    "phoneNumbers": "Phone Numbers",
+    "phoneNumbers": " phone numbers (NTRA)",
     "emergencyPhone": "Emergency Phone",
     "notAvailable": "Not Available",
     "registeredOn": "Registered On",
-    "personalInfo": "Personal Information",
+    "personalInfo": "Detailed data card",
+    "personalInfo2": "(Civil Status Sector)",
     "id": "ID",
     "faceId": "Face ID",
     "employeeId": "Employee ID",
     "formType": "Form Type",
     "occupation": "Occupation",
     "lastUpdated": "Last Updated",
+    "travelInfo2": "Departure Information",
+    "arrivalInfo": " Arrival Information",
     "reporterOccupation": "Reporter Occupation",
     "reporterEducation": "Reporter Education",
     "medicalHistory": "Medical History",
@@ -392,8 +396,9 @@
     "employee_id": "Employee ID",
     "department": "Department",
     "role": "Role",
-    "travelInfo": "Travel Information",
-    "caseInfo": "Case Information",
+    "travelInfo": "Certificate of Movements (General Directorate of Passports, Immigration and Nationality) ",
+    "caseInfo": "Criminal status newspaper ",
+    "caseInfo2": "(Civil Status Sector) ",
     "hasCriminalRecord": "Has Criminal Record",
     "policeStation": "Police Station",
     "caseNumber": "Case Number",
@@ -467,6 +472,8 @@
     "disabledPerson": "Disabled Person",
     "securityDirectorate": "Security Directorate",
     "reporterName": "Reporter Name",
+    "reporterRelationship": "Reporter Relationship",
+    "reporterThis": "Reporter Relationship",
     "nationalId": "National ID",
     "dateOfBirth": "Date of Birth",
     "distinctiveMark": "Distinctive Mark",
@@ -474,13 +481,21 @@
     "medicalCondition": "Medical Condition",
     "disappearanceDate": "Disappearance Date",
     "disappearanceTime": "Disappearance Time",
+    "mothersName": "Mother's Name",
+    "education": "Education",
+    "issuingAuthority": "Issuing Authority",
+    "landlineNumber": "Landline Number",
+    "issueDate": "Issue Date",
+    "maritalStatus": "Marital Status",
+    "educational_qualification": "Educational Qualification",
     "notes": "Notes",
     "woman": "Female",
     "man": "Male",
     "confirmDeletion": "Confirm Deletion",
     "deleteWarning": "Are you sure you want to delete this record? This action cannot be undone.",
     "phoneCompany": "Phone Company",
-    "userAvatar": "User Avatar"
+    "userAvatar": "User Avatar",
+    "friends":"Friends"
   },
   "forms": {
     "man": {
@@ -654,7 +669,12 @@
     "first_friend": "First Friend",
     "second_friend": "Second Friend",
     "first_friend_phone": "First Friend Phone",
-    "second_friend_phone": "Second Friend Phone"
+    "second_friend_phone": "Second Friend Phone",
+    "selectCompany": "Select Phone Company",
+    "vodafone": "Vodafone",
+    "orange": "Orange",
+    "Etisalat": "Etisalat",
+    "WE": "WE"
   },
   "reporter": {
     "name": "Reporter Name",
@@ -662,7 +682,7 @@
     "occupation": "Reporter Occupation",
     "education": "Reporter Education",
     "reporterNationalId": "Reporter National ID",
-          "relationshipToMissing": "Relationship to Missing Person",
+      "relationshipToMissing": "Relationship to Missing Person",
 
     "phoneNumber": "Reporter Phone Number",
     "reporterSecondaryPhone": "Reporter Secondary Phone",
@@ -705,5 +725,8 @@
     "address": "Address",
     "notAvailable": "Not Available",
     "viewDetails": "View Details"
-  }
+  },
+  "reporterNationalId": "Reporter National ID"
+
+ 
 }

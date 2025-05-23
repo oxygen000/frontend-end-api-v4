@@ -45,7 +45,6 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
           value={formData.phone_number}
           onChange={handleInputChange}
           required
-          
         />
 
         <div>
@@ -77,23 +76,19 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
           </select>
         </div>
 
-       
-
         <Input
           label={t('registration.landlineNumber', 'Landline Number')}
           name="landline_number"
           type="tel"
           value={formData.landline_number || ''}
           onChange={handleInputChange}
-          
         />
-         <Input
+        <Input
           label={t('registration.serviceProvider', 'Service Provider')}
           name="service_provider"
           type="text"
           value={formData.service_provider || ''}
           onChange={handleInputChange}
-          
         />
 
         <Input
@@ -105,25 +100,13 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
         />
 
         <Input
-          label={t('registration.lastNumber', 'Last Number')}
-          name="last_number"
-          type="text"
-          value={formData.last_number || ''}
-          onChange={handleInputChange}
-          
-        />
-
- <Input
           label={t('registration.secondPhoneNumber', 'second Phone Number')}
           name="second_phone_number"
-          type="text"
+          type="tel"
           value={formData.second_phone_number || ''}
           onChange={handleInputChange}
-          
         />
-        
       </div>
-
 
       <SectionButtons onPrev={prevSection} onNext={nextSection} />
     </motion.div>

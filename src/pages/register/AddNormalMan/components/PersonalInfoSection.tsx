@@ -33,7 +33,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
       className="space-y-4"
     >
       <h3 className="text-base sm:text-lg font-semibold mb-2">
-        {t('registration.personalInfo', 'Personal Information')}
+        {t('users.personalInfo', 'Personal Information')}
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -84,9 +84,10 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
      
         <Input
-          label={t('registration.nationalId', 'National ID')}
+          label={t('users.nationalId', 'National ID')}
           name="national_id"
           value={formData.national_id}
+        
           onChange={handleInputChange}
           required
           error={errors.national_id}
@@ -94,7 +95,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         />
         <Input
           label={t(
-            'registration.educational_qualification',
+            'users.educational_qualification',
             'Educational Qualification'
           )}
           name="educational_qualification"
@@ -105,7 +106,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           
         />
         <Input
-          label={t('registration.occupation', 'Occupation')}
+          label={t('users.occupation', 'Occupation')}
           name="occupation"
           value={formData.occupation || ''}
           onChange={handleInputChange}
@@ -114,7 +115,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         />
  
         <Input
-          label={t('registration.governorate', 'governorate')}
+          label={t('users.governorate', 'governorate')}
           name="governorate"
           value={formData.governorate || ''}
           onChange={handleInputChange}
@@ -122,7 +123,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         />
 
         <Input
-          label={t('registration.address', 'Address')}
+          label={t('users.address', 'Address')}
           name="address"
           value={formData.address || ''}
           onChange={handleInputChange}
@@ -139,6 +140,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         <Input
           label={t('registration.issue_date', 'Issue Date')}
           name="issue_date"
+           type="date"
           value={formData.issue_date || ''}
           onChange={handleInputChange}
           
