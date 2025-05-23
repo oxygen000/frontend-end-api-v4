@@ -42,7 +42,6 @@ const ChildUserDisplay = ({
           onClick={() => navigate(-1)}
           className="px-4 sm:px-6 py-2 bg-blue-600/30 text-white rounded-md hover:bg-blue-700/50 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 backdrop-blur-lg backdrop-opacity-60 transition-all duration-300 text-sm sm:text-base"
         >
-          {/* You can use an icon here if desired */}
           {t('common.back', 'Back to Search')}
         </button>
       </div>

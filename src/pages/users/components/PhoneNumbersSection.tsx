@@ -62,14 +62,7 @@ const PhoneNumbersSection = ({
           icon={<></>}
         />
 
-        {/* Last Number */}
-        {user.last_number && (
-          <InfoRow
-            label={t('users.lastNumber', 'Last Number:')}
-            value={maskSensitiveInfo(user.last_number)}
-            icon={<></>}
-          />
-        )}
+        
         {user.phone_company && (
           <InfoRow
             label={t('users.phoneCompany', 'Phone Company:')}

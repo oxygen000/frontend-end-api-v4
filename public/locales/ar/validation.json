@@ -1,3 +1,5 @@
+
+
 {
   "required": "هذا الحقل مطلوب",
   "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
@@ -43,8 +45,7 @@
   "invalidBloodPressure": "يرجى إدخال ضغط دم صحيح",
   "invalidHeartRate": "يرجى إدخال معدل نبض صحيح",
   "invalidTemperature": "يرجى إدخال درجة حرارة صحيحة",
-  "invalidWeight": "يرجى إدخال وزن صحيح",
-  "invalidHeight": "يرجى إدخال طول صحيح",
+ 
   "invalidBMI": "يرجى إدخال مؤشر كتلة جسم صحيح",
   "invalidInsuranceNumber": "يرجى إدخال رقم تأمين صحيح",
   "invalidPolicyNumber": "يرجى إدخال رقم بوليصة صحيح",

@@ -22,12 +22,14 @@ const DataAdultUser = ({
   maskSensitiveInfo,
   formatDate,
 }: DataAdultUser) => (
+  
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.1 }}
     className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-white/30 shadow-lg"
   >
+    
     <div className="flex flex-col">
         <h2 className="text-lg sm:text-xl justify-center  font-semibold text-white mb-3 sm:mb-4 flex items-center">
          

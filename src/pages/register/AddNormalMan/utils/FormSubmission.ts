@@ -188,6 +188,10 @@ export const submitForm = async (
         'license_expiration',
         formData.license_expiration || ''
       );
+      formDataToSend.append(
+        'license_governorate',
+        formData.license_governorate || ''
+      );
       formDataToSend.append('expiration_year', formData.expiration_year || '');
       formDataToSend.append(
         'manufacture_year',

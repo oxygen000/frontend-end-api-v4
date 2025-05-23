@@ -56,11 +56,7 @@ interface VehicleInfoSectionProps {
         />
 
         
-        <InfoRow
-          label={t('registration.vehicleType', 'Vehicle Type:')}
-          value={user.vehicle_type  || ''} 
-          icon={<></>}
-        />
+        
          <InfoRow
           label={t('registration.trafficUnit', 'Traffic Unit:')}
             value={user.traffic_unit || ''}

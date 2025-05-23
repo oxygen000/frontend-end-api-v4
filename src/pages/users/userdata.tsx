@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
 import axios from 'axios';
 import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
@@ -228,6 +227,16 @@ function Userdata() {
     return maskSensitiveInfo(value, isIdentityRevealed);
   };
 
+  const hasCaseInfo = Boolean(
+    user.record_number ||
+    user.court_governorate ||
+    user.case_number ||
+    user.dossier_number ||
+    user.charge ||
+    user.judgment ||
+    user.sentence
+
+  );
   return (
     <div className="p-3 sm:p-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Back button */}
@@ -236,7 +245,6 @@ function Userdata() {
           onClick={() => navigate(-1)}
           className="px-4 sm:px-6 py-2 bg-blue-600/30 text-white rounded-md hover:bg-blue-700/50 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 backdrop-blur-lg backdrop-opacity-60 transition-all duration-300 text-sm sm:text-base"
         >
-          <FiArrowLeft className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`} />
           {t('common.back', 'Back to Search')}
         </button>
       </div>
@@ -279,12 +287,13 @@ function Userdata() {
               />
 
               {/* Case Information */}
-              <CaseInfoSection
+              {hasCaseInfo &&(
+                <CaseInfoSection
                 user={user}
-               
                 t={t}
                 maskSensitiveInfo={maskInfo}
               />
+              )}
               {/* Vehicle Information - only show when vehicle data exists */}
               {hasVehicleInfo && (
                 <VehicleInfoSection user={user}  t={t} />

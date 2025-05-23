@@ -1,5 +1,6 @@
 // Define the telecom company options
 export type TelecomCompany = 'vodafone' | 'etisalat' | 'orange' | 'we';
+export type VehicleType = 'car' | 'motorcycle';
 
 // Define gender options
 export type Gender = 'male' | 'female';
@@ -166,7 +167,6 @@ export const initialFormData: FormData = {
   manufacture_year: '',
   expiration_year: '',
   traffic_department: '',
-  engine_number: '',
   vehicle_type: '',
   fuel_type: '',
   registration_number: '',

@@ -581,6 +581,9 @@
     "full_name": "الاسم الكامل",
     "nickname": "اللقب",
     "registeredOn": "تاريخ التسجيل",
+    "confirmDeletion": "تأكيد الحذف",
+    "deleteWarning": "هل أنت متأكد أنك تريد حذف هذا السجل؟ لا يمكن التراجع عن هذا الإجراء.",
+
     "age": "العمر",
     "reporterThis":"صلة القرابة",
     "reporter_name": "اسم المبلغ",
