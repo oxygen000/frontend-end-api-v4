@@ -283,6 +283,7 @@ export const submitForm = async (
       issue_date: formData.issue_date || '',
       phone_number: formData.phone_number,
       phone_company: formData.phone_company,
+      service_provider: formData.service_provider || '',
       second_phone_number: formData.second_phone_number || '',
       category: 'female',
       form_type: 'woman',
@@ -333,8 +334,6 @@ export const submitForm = async (
       // Other fields that need to be preserved
       governorate: formData.governorate || '',
       date_of_birth: formData.dob || '',
-      service_provider:
-        formData.service_provider || formData.phone_company || '',
       security_directorate: formData.security_directorate || '',
       sentence: formData.sentence || '',
       has_motorcycle: formData.has_motorcycle ? '1' : '0',
