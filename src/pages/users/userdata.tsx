@@ -293,6 +293,14 @@ function Userdata() {
                 maskSensitiveInfo={maskInfo}
                 formatDate={formatDate}
               />
+
+                {/* Case Information */}
+                <CaseInfoSection
+                user={user}
+                isRTL={isRTL}
+                t={t}
+                maskSensitiveInfo={maskInfo}
+              />
               {/* Vehicle Information - only show when vehicle data exists */}
               {hasVehicleInfo && (
                 <VehicleInfoSection user={user} isRTL={isRTL} t={t} />
@@ -308,13 +316,7 @@ function Userdata() {
                 />
               )}
 
-              {/* Case Information */}
-              <CaseInfoSection
-                user={user}
-                isRTL={isRTL}
-                t={t}
-                maskSensitiveInfo={maskInfo}
-              />
+            
             </>
           )}
 

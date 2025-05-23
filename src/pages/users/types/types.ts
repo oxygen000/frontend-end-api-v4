@@ -164,7 +164,6 @@ export interface User {
   special_needs: string | null;
   emergency_contact: string | null;
   emergency_phone: string | null;
-
   // Additional fields
   additional_notes: string | null;
   brand_affiliation: string | null;

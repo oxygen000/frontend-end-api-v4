@@ -136,6 +136,13 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           onChange={handleInputChange}
           
         />
+        <Input
+          label={t('registration.issue_date', 'Issue Date')}
+          name="issue_date"
+          value={formData.issue_date || ''}
+          onChange={handleInputChange}
+          
+        />
 
        
       </div>

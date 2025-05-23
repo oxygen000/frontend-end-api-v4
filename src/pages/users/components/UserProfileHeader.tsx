@@ -144,7 +144,9 @@ const UserProfileHeader = ({
                 }`}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
-                <FiAlertCircle className="inline mx-2" />
+                <FiAlertCircle
+                  className={`inline ${isRTL ? 'ml-2' : 'mr-2'}`}
+                />
                 {t('users.hasCriminalRecord', 'Has Criminal Record')}
               </div>
             </div>
