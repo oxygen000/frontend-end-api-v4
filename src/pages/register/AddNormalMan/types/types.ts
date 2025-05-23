@@ -78,10 +78,7 @@ export interface FormData {
   passport_issue_date?: string;
   passport_expiry_date?: string;
   passport_issuing_country?: string;
-  visa_number?: string;
-  visa_type?: string;
-  visa_issue_date?: string;
-  visa_expiry_date?: string;
+
   departure_country?: string;
   departure_destination?: string;
   departure_date?: string;
@@ -183,10 +180,7 @@ export const initialFormData: FormData = {
   passport_issue_date: '',
   passport_expiry_date: '',
   passport_issuing_country: '',
-  visa_number: '',
-  visa_type: '',
-  visa_issue_date: '',
-  visa_expiry_date: '',
+  
   departure_country: '',
   departure_destination: '',
   departure_date: '',

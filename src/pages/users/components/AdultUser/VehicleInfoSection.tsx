@@ -40,11 +40,14 @@ const VehicleInfoSection = ({ user, isRTL, t }: VehicleInfoSectionProps) => {
       transition={{ delay: 0.2 }}
       className={`bg-gradient-to-br ${gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${border} shadow-lg`}
     >
-      <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 flex items-center">
+
+      
+      <h2 className="text-lg sm:text-xl justify-center font-semibold text-white mb-4 flex items-center">
         <VehicleIcon
           className={`${isRTL ? 'ml-3' : 'mr-3'} ${iconColor}`}
           size={20}
         />
+        
         {t(
           'users.vehicleInfo',
           hasMotorcycle ? 'Motorcycle Information' : 'Vehicle Information'
@@ -52,46 +55,36 @@ const VehicleInfoSection = ({ user, isRTL, t }: VehicleInfoSectionProps) => {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Vehicle Info */}
 
-        <InfoRow
-          label={t('registration.vehicleType', 'Vehicle Type:')}
-          value={user.vehicle_type  || ''} 
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
-        <InfoRow
-          label={t('registration.brand', 'Brand:')}
-          value={user.brand || ''}
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
-        <InfoRow
-          label={t('registration.vehicleModel', 'Vehicle Model:')}
-          value={user.vehicle_model || ''}
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
-        <InfoRow
-          label={t('registration.manufactureYear', 'Manufacture Year:')}
-          value={user.manufacture_year || ''}
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
-        <InfoRow
-          label={t('registration.vehicleColor', 'Vehicle Color:')}
-          value={user.vehicle_color || ''}
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
-        <InfoRow
-          label={t('registration.chassisNumber', 'Chassis Number:')}
-          value={user.chassis_number || ''}
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
-        <InfoRow
+      <InfoRow
           label={t('registration.vehicleNumber', 'Vehicle Number:')}
             value={user.vehicle_number || ''}
           icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
         />
 
+        
+        <InfoRow
+          label={t('registration.vehicleType', 'Vehicle Type:')}
+          value={user.vehicle_type  || ''} 
+          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+         <InfoRow
+          label={t('registration.trafficUnit', 'Traffic Unit:')}
+            value={user.traffic_unit || ''}
+          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
 
 
+
+
+
+       
+       
+       
+       
+       
+
+      
 
 
         {/* License Info */}
@@ -106,25 +99,47 @@ const VehicleInfoSection = ({ user, isRTL, t }: VehicleInfoSectionProps) => {
           value={user.license_expiration || ''}
           icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
         />
-        <InfoRow
-          label={t('registration.expirationYear', 'Expiration Year')}
-          value={user.expiration_year || ''}
-          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-        />
+      
 
-        {/* Traffic Info */}
-        
-        <InfoRow
-          label={t('registration.trafficDepartment', 'Traffic Department:')}
-          value={user.traffic_department || ''}
+      
+      <InfoRow
+          label={t('registration.brand', 'Brand:')}
+          value={user.brand || ''}
+          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+          <InfoRow
+          label={t('registration.chassisNumber', 'Chassis Number:')}
+          value={user.chassis_number || ''}
+          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+       <InfoRow
+          label={t('registration.vehicleModel', 'Vehicle Model:')}
+          value={user.vehicle_model || ''}
+          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+         <InfoRow
+          label={t('registration.vehicleColor', 'Vehicle Color:')}
+          value={user.vehicle_color || ''}
           icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
         />
         <InfoRow
-          label={t('registration.trafficUnit', 'Traffic Unit:')}
-            value={user.traffic_unit || ''}
+          label={t('registration.manufactureYear', 'Manufacture Year:')}
+          value={user.manufacture_year || ''}
           icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
-          />
+        />
+       
+       <InfoRow
+          label={t('registration.engineNumber', 'Engine Number:')}
+          value={user.license_governorate || ''}
+          icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
+       
       </div>
+      
+
+        
+  
+      
     </motion.div>
   );
 };

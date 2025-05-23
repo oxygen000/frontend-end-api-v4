@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion';
-import {  FiPhone } from 'react-icons/fi';
-import type { User, FormatDateFunction, MaskSensitiveInfoFunction } from '../types/types';
+import { FiPhone, FiUser, FiCalendar, FiHome } from 'react-icons/fi';
+import type {
+  User,
+  FormatDateFunction,
+  MaskSensitiveInfoFunction,
+} from '../types/types';
+import InfoRow from '../../../components/InfoRow';
 
 interface PhoneNumbersSectionProps {
   user: User;
@@ -48,101 +53,94 @@ const PhoneNumbersSection = ({
         {t('users.phoneNumbers', 'Phone Numbers')}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.primaryPhone', 'Primary Phone:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.phone_number)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.secondaryPhone', 'Secondary Phone:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.second_phone_number)}
-          </span>
-        </div>
+        {/* Primary Phone */}
+        {user.phone_number && (
+          <InfoRow
+            label={t('users.primaryPhone', 'Primary Phone:')}
+            value={maskSensitiveInfo(user.phone_number)}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
+        {/* Secondary Phone */}
+        {user.second_phone_number && (
+          <InfoRow
+            label={t('users.secondaryPhone', 'Secondary Phone:')}
+            value={maskSensitiveInfo(user.second_phone_number)}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
+        {/* Landline Number */}
         {user.landline_number && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">
-              {t('users.landlineNumber', 'Landline Number:')}
-            </span>
-            <span className="text-white font-medium text-sm">
-              {maskSensitiveInfo(user.landline_number)}
-            </span>
-          </div>
+          <InfoRow
+            label={t('users.landlineNumber', 'Landline Number:')}
+            value={maskSensitiveInfo(user.landline_number)}
+            icon={<FiHome className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
         )}
+
+        {/* Last Number */}
         {user.last_number && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">
-              {t('users.lastNumber', 'Last Number:')}
-            </span>
-            <span className="text-white font-medium text-sm">
-              {maskSensitiveInfo(user.last_number)}
-            </span>
-          </div>
+          <InfoRow
+            label={t('users.lastNumber', 'Last Number:')}
+            value={maskSensitiveInfo(user.last_number)}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
         )}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.phoneProvider', 'Phone Provider:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.service_provider || user.phone_company)}
-          </span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.registrationDate', 'Registration Date:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {formatDate(user.registration_date || user.created_at)}
-          </span>
-        </div>
+        {user.phone_company && (
+          <InfoRow
+            label={t('users.phoneCompany', 'Phone Company:')}
+            value={user.phone_company}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
+        {/* Phone Provider */}
+        {(user.service_provider ) && (
+          <InfoRow
+            label={t('users.phoneProvider', 'Phone Provider:')}
+            value={maskSensitiveInfo(
+              user.service_provider 
+            )}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
         {/* Emergency Phone */}
         {user.emergency_phone && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">{t('users.emergencyPhone', 'Emergency Phone:')}</span>
-            <span className="text-white font-medium text-sm">{maskSensitiveInfo(user.emergency_phone)}</span>
-          </div>
+          <InfoRow
+            label={t('users.emergencyPhone', 'Emergency Phone:')}
+            value={maskSensitiveInfo(user.emergency_phone)}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
         )}
+
         {/* Guardian Phone */}
         {user.guardian_phone && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">{t('users.guardianPhone', 'Guardian Phone:')}</span>
-            <span className="text-white font-medium text-sm">{maskSensitiveInfo(user.guardian_phone)}</span>
-          </div>
+          <InfoRow
+            label={t('users.guardianPhone', 'Guardian Phone:')}
+            value={maskSensitiveInfo(user.guardian_phone)}
+            icon={<FiUser className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
         )}
-        {/* Reporter Phone */}
-        {user.reporter_phone && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">{t('users.reporterPhone', 'Reporter Phone:')}</span>
-            <span className="text-white font-medium text-sm">{maskSensitiveInfo(user.reporter_phone)}</span>
-          </div>
-        )}
-        {/* Reporter Secondary Phone */}
-        {user.reporter_secondary_phone && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">{t('users.reporterSecondaryPhone', 'Reporter Secondary Phone:')}</span>
-            <span className="text-white font-medium text-sm">{maskSensitiveInfo(user.reporter_secondary_phone)}</span>
-          </div>
-        )}
+
+
         {/* Emergency Contact */}
         {user.emergency_contact && (
-          <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-            <span className="text-white/70 text-sm">{t('users.emergencyContact', 'Emergency Contact:')}</span>
-            <span className="text-white font-medium text-sm">{maskSensitiveInfo(user.emergency_contact)}</span>
-          </div>
+          <InfoRow
+            label={t('users.emergencyContact', 'Emergency Contact:')}
+            value={maskSensitiveInfo(user.emergency_contact)}
+            icon={<FiPhone className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
         )}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.registeredOn', 'Registered On:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {formatDate(user.created_at)}
-          </span>
-        </div>
+
+        {/* Registration Date */}
+        <InfoRow
+          label={t('users.registeredOn', 'Registered On:')}
+          value={formatDate(user.created_at)}
+          icon={<FiCalendar className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+        />
       </div>
     </motion.div>
   );

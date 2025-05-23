@@ -123,7 +123,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
             <Input
               label={t('registration.chassis_number', 'Chassis Number (VIN)')}
               name="chassis_number"
-              type="text"
+              type="number"
               value={formData.chassis_number || ''}
               onChange={handleInputChange}
 
@@ -164,7 +164,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
              <Input
               label={t('registration.vehicleNumber', 'Vehicle Number')}
               name="vehicle_number"
-              type="text"
+              type="number"
               value={formData.vehicle_number || ''}
               onChange={handleInputChange}
              
@@ -184,6 +184,14 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
               value={formData.manufacture_year || ''}
               onChange={handleInputChange}
             />
+            <Input
+              label={t('registration.engineNumber', 'Engine Number')}
+              name="license_governorate"
+              type="number"
+              value={formData.license_governorate || ''}
+              onChange={handleInputChange}
+              />
+            
           </div>
         </motion.div>
       )}

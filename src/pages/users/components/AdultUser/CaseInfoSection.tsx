@@ -1,6 +1,13 @@
 import { motion } from 'framer-motion';
-import { FiAlertCircle } from 'react-icons/fi';
+import {
+  FiAlertCircle,
+  FiFileText,
+  FiShield,
+  FiMapPin,
+  FiHash,
+} from 'react-icons/fi';
 import type { User, MaskSensitiveInfoFunction } from '../../types/types';
+import InfoRow from '../../../../components/InfoRow';
 
 interface CaseInfoSectionProps {
   user: User;
@@ -37,84 +44,93 @@ const CaseInfoSection = ({
       transition={{ delay: 0.4 }}
       className="bg-red-500/20 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-red-500/30 shadow-lg"
     >
+      <div className='flex flex-col'>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4'>
+      
       <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
-        <FiAlertCircle className={`${isRTL ? 'mr-2' : 'ml-2'}`} />
+        <FiAlertCircle className={`${isRTL ? 'ml-2' : 'mr-2'}`} />
         {t('users.caseInfo', 'Case Information')}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
+        <FiAlertCircle className={`${isRTL ? 'ml-2' : 'mr-2'}`} />
+        {t('users.caseInfo', 'Case Information')}
+      </h2>
+</div>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4'>
+
       
 
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
         {/* Record Number */}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('registration.recordNumber', 'Record Number:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.record_number)}
-          </span>
-        </div>
+        {user.record_number && (
+          <InfoRow
+            label={t('registration.recordNumber', 'Record Number:')}
+            value={maskSensitiveInfo(user.record_number)}
+            icon={<FiHash className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
 
         {/* Governorate */}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('registration.governorate', 'Governorate:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.governorate)}
-          </span>
-        </div>
+        {user.court_governorate && (
+          <InfoRow
+            label={t('registration.court_governorate', 'Court Governorate:')}
+            value={maskSensitiveInfo(user.court_governorate)}
+            icon={<FiMapPin className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
 
-      
-
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.caseNumber', 'Case Number:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.case_number)}
-          </span>
-        </div>
+        {/* Case Number */}
+        {user.case_number && (
+          <InfoRow
+            label={t('users.caseNumber', 'Case Number:')}
+            value={maskSensitiveInfo(user.case_number)}
+            icon={<FiFileText className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
 
         {/* Dossier Number */}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('registration.dossierNumber', 'Dossier Number:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.dossier_number)}
-          </span>
-        </div>
-
-        {/* Charge */}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('registration.charge', 'Charge:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.charge || user.accusation)}
-          </span>
-        </div>
-
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('users.judgment', 'Judgment:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.judgment)}
-          </span>
-        </div>
-
-        {/* Sentence */}
-        <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-          <span className="text-white/70 text-sm">
-            {t('registration.sentence', 'Sentence:')}
-          </span>
-          <span className="text-white font-medium text-sm">
-            {maskSensitiveInfo(user.sentence)}
-          </span>
-        </div>
+        {user.dossier_number && (
+          <InfoRow
+            label={t('registration.dossierNumber', 'Dossier Number:')}
+            value={maskSensitiveInfo(user.dossier_number)}
+            icon={<FiFileText className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
 
         
+      </div>
+      <div className='grid grid-cols-1 md:grid-cols-1 gap-3'>
+{/* Charge */}
+{(user.charge || user.accusation) && (
+          <InfoRow
+            label={t('registration.charge', 'Charge:')}
+            value={maskSensitiveInfo(user.charge || user.accusation)}
+            icon={<FiShield className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
+        {/* Judgment */}
+        {user.judgment && (
+          <InfoRow
+            label={t('users.judgment', 'Judgment:')}
+            value={maskSensitiveInfo(user.judgment)}
+            icon={<FiShield className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
+        {/* Sentence */}
+        {user.sentence && (
+          <InfoRow
+            label={t('registration.sentence', 'Sentence:')}
+            value={maskSensitiveInfo(user.sentence)}
+            icon={<FiShield className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
+          />
+        )}
+
+      </div>
+      </div>
       </div>
     </motion.div>
   );

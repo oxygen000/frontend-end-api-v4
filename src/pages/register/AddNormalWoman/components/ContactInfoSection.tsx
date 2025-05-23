@@ -45,6 +45,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
           value={formData.phone_number}
           onChange={handleInputChange}
           required
+          
         />
 
         <div>
@@ -58,23 +59,15 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
             className="w-full px-3 sm:px-4 text-white py-2 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
             required
           >
-            <option value="" className="text-black">
-              {t('common.select', 'Select Company')}
-            </option>
-            <option value="vodafone" className="text-black">
-              Vodafone
-            </option>
-            <option value="etisalat" className="text-black">
-              Etisalat
-            </option>
-            <option value="orange" className="text-black">
-              Orange
-            </option>
-            <option value="we" className="text-black">
-              WE
-            </option>
+            <option value="" className="text-black">{t('common.select', 'Select Company')}</option>
+            <option value="vodafone" className="text-black">Vodafone</option>
+            <option value="etisalat" className="text-black">Etisalat</option>
+            <option value="orange" className="text-black">Orange</option>
+            <option value="we" className="text-black">WE</option>
           </select>
         </div>
+
+       
 
         <Input
           label={t('registration.landlineNumber', 'Landline Number')}
@@ -82,13 +75,15 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
           type="tel"
           value={formData.landline_number || ''}
           onChange={handleInputChange}
+          
         />
-        <Input
+         <Input
           label={t('registration.serviceProvider', 'Service Provider')}
           name="service_provider"
           type="text"
           value={formData.service_provider || ''}
           onChange={handleInputChange}
+          
         />
 
         <Input
@@ -105,15 +100,18 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
           type="text"
           value={formData.last_number || ''}
           onChange={handleInputChange}
+          
         />
 
-        <Input
+ <Input
           label={t('registration.secondPhoneNumber', 'second Phone Number')}
           name="second_phone_number"
           type="text"
           value={formData.second_phone_number || ''}
           onChange={handleInputChange}
+          
         />
+        
       </div>
 
       <SectionButtons onPrev={prevSection} onNext={nextSection} />

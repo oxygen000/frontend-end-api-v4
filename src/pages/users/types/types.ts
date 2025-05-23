@@ -45,6 +45,7 @@ export interface User {
   vehicle_color: string | null;
   color: string | null;
   chassis_number: string | null;
+  license_governorate: string | null;
   vehicle_number: string | null;
   expiration_year: string | null;
   license_expiration: string | null;
@@ -78,6 +79,7 @@ export interface User {
   dossier_number: string | null;
   record_number: string | null;
   charge: string | null;
+  court_governorate: string | null;
 
   // Travel fields
   travel_date: string | null;

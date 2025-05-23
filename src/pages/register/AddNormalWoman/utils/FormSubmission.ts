@@ -114,10 +114,7 @@ export const submitForm = async (
     formDataToSend.append('address', formData.address || '');
     formDataToSend.append('phone_number', formData.phone_number);
     formDataToSend.append('phone_company', formData.phone_company);
-    formDataToSend.append(
-      'service_provider',
-      formData.service_provider || formData.phone_company
-    );
+    formDataToSend.append('service_provider', formData.service_provider || '');
     formDataToSend.append('occupation', formData.occupation || '');
     formDataToSend.append('mothers_name', formData.mothers_name || '');
     formDataToSend.append('marital_status', formData.marital_status || '');

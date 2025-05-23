@@ -124,7 +124,7 @@ const DataAdultUser = ({
         />
       )}
 
-{user.address && (
+{user.governorate && (
         <InfoRow
           label={t('registration.governorate', 'Governorate:')}
           value={user.governorate || ''}
