@@ -74,12 +74,7 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
 
       {/* Personal details related to contact */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          label={t('registration.occupation', 'Occupation (Optional)')}
-          name="missing_person_occupation"
-          value={formData.missing_person_occupation || ''}
-          onChange={handleInputChange}
-        />
+    
 
         <Input
           label={t('registration.education', 'Education Level (Optional)')}
@@ -87,7 +82,16 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
           value={formData.missing_person_education || ''}
           onChange={handleInputChange}
         />
+
+        <Input
+          label={t('registration.distinctive_mark', 'Distinctive Mark ')}
+          name="distinctive_mark"
+          value={formData.distinctive_mark|| ''}
+          onChange={handleInputChange}
+        />
       </div>
+
+
 
     
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

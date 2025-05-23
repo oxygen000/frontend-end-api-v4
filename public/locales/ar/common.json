@@ -259,7 +259,11 @@
     "secondPhoneNumber": "رقم الهاتف الثانوي",
     "second_phone_numberPlaceholder": "أدخل رقم هاتفك الثانوي",
     "courtGovernorate": "محافظة المحكمة",
-    "courtGovernoratePlaceholder": "أدخل محافظة المحكمة"
+    "courtGovernoratePlaceholder": "أدخل محافظة المحكمة",
+    "court_governorate": "محافظة المحكمة",
+    "confirmDeletion": "تأكيد الحذف",
+    "deleteWarning": "هل أنت متأكد أنك تريد حذف هذا السجل؟ لا يمكن التراجع عن هذا الإجراء.",
+    "medicalHistory":"التاريخ الطبي"
   },
   "camera": {
     "permissionDenied": "تم رفض إذن الكاميرا. يرجى تمكينه في إعدادات المتصفح الخاص بك."
@@ -471,7 +475,7 @@
     "insuranceExpiryDate": "تاريخ انتهاء التأمين",
     "serviceProvider": "مزود الخدمة",
     "serviceProviderPlaceholder": "أدخل مزود الخدمة",
-    "landlineNumber": " الخط الارضي / الانترنت  ",
+    "landlineNumber": "رقم الهاتف الأرضي",
     "landlinePlaceholder": "أدخل رقم الهاتف الأرضي",
     "governoratePlaceholder": "أدخل المحافظة",
     "recordNumberPlaceholder": "أدخل رقم السجل",
@@ -539,6 +543,7 @@
     "primaryPhone": "الهاتف الأساسي",
     "secondaryPhone": "الهاتف الثانوي",
     "phoneProvider": "مزود الخدمة",
+    "phoneCompany": "شركة الاتصالات",
     "registrationDate": "تاريخ التسجيل",
     "actions": "الإجراءات",
     "editInformation": "تعديل المعلومات",
@@ -626,6 +631,7 @@
     "reporterAddress": "عنوان المبلغ",
     "reporterSecondaryPhone": "هاتف إضافي للمبلغ",
     "governorate": "المحافظة",
+
     "police_station": "قسم الشرطة",
     "emergencyContact": "جهة اتصال للطوارئ",
     "date_of_birth": "تاريخ الميلاد",
@@ -647,7 +653,8 @@
         "travel": "شهادة تحركات (الجوازات)",
         "vehicle": "معلومات المركبة",
         "photo": "الصورة"
-      }
+      },
+      "clickToEnlarge": "انقر للتكبير"
     },
     "woman": {
       "title": "تسجيل أنثى",
@@ -676,6 +683,18 @@
       "disappearanceDetails": "تفاصيل الاختفاء",
       "policeReport": "تقرير الشرطة",
       "firstFriend": "الصديق الأول",
+      
+      "previousDisputes": "خلافات سابقة",
+      "goneMissingBefore": "فُقِد من قبل",
+      "wasAccompanied": "كان برفقة",
+      "lastSighting": "آخر مشاهدة",
+      "clothes":"الملابس",
+      "reasonForLocation":"سبب التواجد",
+      "disappearanceLocation":"مكان الاختفاء",
+      "timeOfDisappearance":"وقت الاختفاء",
+      "yes": "نعم",
+      "no": "لا",
+      
       "firstFriendPhone": "هاتف الصديق الأول",
       "secondFriend": "الصديق الثاني",
       "secondFriendPhone": "هاتف الصديق الثاني",

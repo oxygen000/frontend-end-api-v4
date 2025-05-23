@@ -2,7 +2,7 @@
   "title": "Child Registration Form",
   "childFullName": "Child's Full Name",
   "dateOfBirth": "Date of Birth",
-  "childId": "Child's ID (Optional)",
+  "childId": "Child's ID ",
   "locationInfo": "Location Information",
   "physicalDescription": "Physical Description",
   "reporterInfo": "Reporter Information / First Degree",
@@ -10,6 +10,7 @@
   "age": "Age",
   "yearsOld": "years old",
   "dateOfDisappearance": "Date of Disappearance",
+  "timeOfDisappearance": "Time of Disappearance",
   "lastSeenLocation": "Last Seen Location",
   "distinguishingMark": "Distinguishing Mark",
   "previousDisputes": "Previous Disputes",
@@ -27,6 +28,7 @@
   "reporterAltPhone": "Alternative Phone",
   "phoneNumber": "Phone Number",
   "disappearanceLocation": "Disappearance Location",
+  "reasonForLocation": "Reason for Being at Location",
   "clothes": "Clothing Description",
   "recentPhoto": "Recent Photo",
   "additionalData": "Previous Disputes",
@@ -38,6 +40,9 @@
   "secondFriendPhone": "Second Friend Phone",
   "disappearanceDetails": "Disappearance Details",
   "policeReport": "Police Report",
+  "lastSighting": "Last Sighting Details",
+  "wasAccompanied": "Was Accompanied When Last Seen",
+  "goneMissingBefore": "Has Gone Missing Before",
  
   "form": {
     "errors": {

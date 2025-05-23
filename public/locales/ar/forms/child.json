@@ -10,6 +10,7 @@
   "age": "العمر",
   "yearsOld": "سنوات",
   "dateOfDisappearance": "تاريخ الاختفاء",
+  "timeOfDisappearance": "وقت الاختفاء",
   "lastSeenLocation": "آخر مكان شوهد فيه",
   "distinguishingMark": "العلامات المميزة",
   "previousDisputes": "خلافات سابقة",
@@ -26,10 +27,14 @@
   "reporterAltPhone": "رقم هاتف بديل",
   "phoneNumber": "رقم الهاتف",
   "disappearanceLocation": "مكان الاختفاء",
+  "reasonForLocation": "سبب التواجد في المكان",
   "clothes": "وصف الملابس",
   "recentPhoto": "صورة حديثة",
   "additionalData": "خلافات سابقة",
   "medicalCondition": "التاريخ الطبي",
+  "lastSighting": "تفاصيل آخر مشاهدة",
+  "wasAccompanied": "كان برفقة شخص عندما شوهد آخر مرة",
+  "goneMissingBefore": "سبق أن فُقد من قبل",
  
   "form": {
     "errors": {

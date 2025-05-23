@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { inputFocusAnimation } from '../config/animations';
-import { useTranslationWithFallback } from '../hooks/useTranslationWithFallback';
 
 const Textarea = ({
   label,
@@ -21,12 +20,7 @@ const Textarea = ({
   required?: boolean;
   className?: string;
   disabled?: boolean;
-}) => {
-  const { t } = useTranslationWithFallback();
- const defaultPlaceholder = t('common:enterField', {
-  defaultValue: 'Enter {{field}}',
-  field: label.toLowerCase(),
-});
+}) => { 
 
   return (
     <div className={`mb-6 ${className}`}>
@@ -51,7 +45,6 @@ const Textarea = ({
                    transition-all duration-200
                    disabled:opacity-60 disabled:cursor-not-allowed
                    shadow-sm`}
-          placeholder={defaultPlaceholder}
           rows={4}
         />
         {error && <p className="text-red-400 text-xs mt-1 ml-1">{error}</p>}

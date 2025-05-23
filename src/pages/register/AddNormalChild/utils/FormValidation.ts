@@ -31,17 +31,7 @@ export const validateForm = (
       errors.push('National ID should be 14 digits');
     }
 
-  } else if (currentSection === 2) {
-    // Section 2: Contact Information - optional but should be valid if provided
-    if (
-      formData.missing_person_phone &&
-      formData.missing_person_phone.length > 0 &&
-      formData.missing_person_phone.length < 11
-    ) {
-      errors.push('Phone Number should be 11 digits');
-    }
-
-  } else if (currentSection === 3) {
+  }  else if (currentSection === 3) {
     // Section 3: Reporter Information - mandatory for case follow-up
     if (!formData.reporter_name) {
       errors.push("Reporter's Name is required");

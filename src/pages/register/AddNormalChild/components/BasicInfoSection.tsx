@@ -128,12 +128,7 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       required
     />
 
-    <Input
-      label={t('registration.reasonForLocation', 'Reason for Location')}
-      name="reason_for_location"
-      value={formData.reason_for_location || ''}
-      onChange={handleInputChange}
-    />
+    
   </div>
 
   <div className="flex justify-end mt-4">

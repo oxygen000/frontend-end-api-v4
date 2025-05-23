@@ -92,6 +92,16 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
             'contact.secondPhoneNumberPlaceholder',
             'Enter secondary phone number (optional)'
           )}
+
+        />
+
+<Input
+          label={t('basic.distinctive_mark', 'distinctive_mark')}
+          name="distinctive_mark"
+          value={formData.distinctive_mark || ''}
+          onChange={onChange}
+          required
+          placeholder={t('basic.distinctive_mark', 'Enter distinctive_mark')}
         />
 
         <Input

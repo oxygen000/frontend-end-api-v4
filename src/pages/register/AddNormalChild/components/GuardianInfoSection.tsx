@@ -43,6 +43,13 @@ const GuardianInfoSection: React.FC<GuardianInfoSectionProps> = ({
           onChange={handleInputChange}
           required
         />
+        <Input
+          label={t('reporterNationalId', 'National ID')}
+          name="reporter_national_id"
+          value={formData.reporter_national_id || ''}
+          onChange={handleInputChange}
+          required
+        />
 
         <div>
           <label className="block font-medium mb-1 text-sm sm:text-base">

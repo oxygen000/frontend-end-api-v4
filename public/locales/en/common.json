@@ -2,7 +2,7 @@
   "title": "Child Registration",
   "childFullName": "Child's Full Name",
   "dateOfBirth": "Date of Birth",
-  "childId": "Child's ID (Optional)",
+  "childId": "Child's ID ",
   "locationInfo": "Location Information",
   "areaOfDisappearance": "Area of Disappearance",
   "sections": {
@@ -48,7 +48,8 @@
     "connectionLost": "Connection Lost",
     "tryAgain": "Try Again",
     "serverError": "Server Error",
-    "unexpectedError": "Unexpected Error"
+    "unexpectedError": "Unexpected Error",
+    "enterField": "Enter Field"
   },
   "camera": {
     "permissionDenied": "Camera permission denied. Please enable it in your browser settings."
@@ -212,7 +213,7 @@
     "dossierNumberPlaceholder": "Enter dossier number",
     "chargePlaceholder": "Enter charges",
     "sentencePlaceholder": "Enter sentence details",
-    "courtGovernorate": "Court Governorate",
+    "court_governorate": "Court Governorate",
     "courtGovernoratePlaceholder": "Enter court governorate",
     "travelInfo": "Travel Information",
     "hasTravelInfo": "Has International Travel Plans",
@@ -475,7 +476,8 @@
     "woman": "Female",
     "man": "Male",
     "confirmDeletion": "Confirm Deletion",
-    "deleteWarning": "Are you sure you want to delete this record? This action cannot be undone."
+    "deleteWarning": "Are you sure you want to delete this record? This action cannot be undone.",
+    "phoneCompany": "Phone Company"
   },
   "forms": {
     "man": {
@@ -487,7 +489,8 @@
         "travel": "Travel Information",
         "vehicle": "Vehicle Information",
         "photo": "Photo"
-      }
+      },
+      "clickToEnlarge": "Click to Enlarge"
     },
     "disabled": {
       "disabilityInfo": "Disability Information",
@@ -566,6 +569,16 @@
       "governorate": "Governorate",
       "medicalSection": "Medical Information Section",
       "medicalHistory": "Medical History",
+
+      "previousDisputes": "Previous Disputes",
+      "goneMissingBefore": "Gone Missing Before",
+      "wasAccompanied": "Was Accompanied",
+      "lastSighting": "Last Sighting",
+      "clothes":"Clothes",
+      "reasonForLocation":"Reason for Location",
+      "disappearanceLocation":"Disappearance Location",
+      "timeOfDisappearance":"Time of Disappearance",
+      
       "physicianInfo": "Physician Information",
       "treatingPhysician": "Treating Physician",
       "physicianPhone": "Physician Phone",

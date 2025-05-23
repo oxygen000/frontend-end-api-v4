@@ -126,7 +126,7 @@ const DataAdultUser = ({
 
 {user.governorate && (
         <InfoRow
-          label={t('registration.governorate', 'Governorate:')}
+          label={t('users.governorate', 'Governorate:')}
           value={user.governorate || ''}
           icon={<FiMap className={`${isRTL ? 'ml-2' : 'mr-2'}`} />}
         />

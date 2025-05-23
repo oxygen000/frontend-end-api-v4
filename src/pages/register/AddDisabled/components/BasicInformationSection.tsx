@@ -99,14 +99,7 @@ const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
           </select>
         </div>
 
-        <Input
-          label={t('basic.distinctive_mark', 'distinctive_mark')}
-          name="distinctive_mark"
-          value={formData.distinctive_mark || ''}
-          onChange={onChange}
-          required
-          placeholder={t('basic.distinctive_mark', 'Enter distinctive_mark')}
-        />
+        
         <Input
           label={t('basic.reporter_occupation', 'Missing Person Occupation')}
           name="missing_person_occupation"
