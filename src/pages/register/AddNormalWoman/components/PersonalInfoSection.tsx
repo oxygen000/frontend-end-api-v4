@@ -43,6 +43,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           onChange={handleInputChange}
           required
          
+         
         />
         <Input
           label={t('registration.dateOfBirth', 'Date of Birth')}
@@ -51,6 +52,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           value={formData.dob}
           onChange={handleInputChange}
           required
+          
         />
 
         <Input
@@ -59,12 +61,14 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           value={formData.nickname || ''}
           onChange={handleInputChange}
          
+         
         />
         <Input
           label={t('registration.mothers_name', 'mother name')}
           name="mothers_name"
           value={formData.mothers_name || ''}
           onChange={handleInputChange}
+         
          
         />
         <Input
@@ -73,21 +77,24 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           value={formData.marital_status || ''}
           onChange={handleInputChange}
          
+           
         />
     
 
      
         <Input
-          label={t('registration.nationalId', 'National ID')}
+          label={t('users.nationalId', 'National ID')}
           name="national_id"
           value={formData.national_id}
+        
           onChange={handleInputChange}
           required
+          
           
         />
         <Input
           label={t(
-            'registration.educational_qualification',
+            'users.educational_qualification',
             'Educational Qualification'
           )}
           name="educational_qualification"
@@ -95,17 +102,19 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           onChange={handleInputChange}
           required
           
+          
         />
         <Input
-          label={t('registration.occupation', 'Occupation')}
+          label={t('users.occupation', 'Occupation')}
           name="occupation"
           value={formData.occupation || ''}
           onChange={handleInputChange}
           
+          
         />
  
         <Input
-          label={t('registration.governorate', 'governorate')}
+          label={t('users.governorate', 'governorate')}
           name="governorate"
           value={formData.governorate || ''}
           onChange={handleInputChange}
@@ -113,7 +122,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         />
 
         <Input
-          label={t('registration.address', 'Address')}
+          label={t('users.address', 'Address')}
           name="address"
           value={formData.address || ''}
           onChange={handleInputChange}
@@ -130,6 +139,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
         <Input
           label={t('registration.issue_date', 'Issue Date')}
           name="issue_date"
+           type="date"
           value={formData.issue_date || ''}
           onChange={handleInputChange}
           

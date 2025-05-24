@@ -21,6 +21,7 @@ interface CriminalRecordSectionProps {
 const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
   formData,
   handleInputChange,
+  handleToggleCriminalRecord,
   prevSection,
   nextSection,
   t,
@@ -37,7 +38,27 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
         {t('registration.criminalRecord', 'Criminal Record Status')}
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex items-center space-x-2 bg-gray-800/50 p-4 rounded-lg border border-gray-700/50">
+        <input
+          type="checkbox"
+          checked={formData.has_criminal_record}
+          onChange={handleToggleCriminalRecord}
+          className="h-4 w-4 sm:h-5 sm:w-5 accent-blue-500"
+        />
+        <label className="text-sm sm:text-base">
+          {t('registration.hasCriminalRecord', 'Has Criminal Record')}
+        </label>
+      </div>
+
+      {formData.has_criminal_record && (
+  <motion.div
+    initial={{ opacity: 0, height: 0 }}
+    animate={{ opacity: 1, height: 'auto' }}
+    className="space-y-4 pt-2"
+  >
+  
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Input
         label={t('registration.caseNumber', 'Case Number')}
         name="case_number"
@@ -112,6 +133,11 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
         
     />
     </div>
+
+  
+  </motion.div>
+)}
+
 
       <SectionButtons onPrev={prevSection} onNext={nextSection} />
     </motion.div>
