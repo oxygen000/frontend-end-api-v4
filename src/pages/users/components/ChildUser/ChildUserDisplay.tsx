@@ -9,7 +9,6 @@ import type { User } from '../../types/types';
 import { formatDate, maskSensitiveInfo } from '../../utils/utils';
 import { useState } from 'react';
 import { SECTION_COLORS } from '../../types/types';
-import { FaAddressCard, FaIdCard, FaPhone, FaUser } from 'react-icons/fa';
 import InfoRow from '../../../../components/InfoRow';
 
 interface ChildUserDisplayProps {
@@ -78,23 +77,23 @@ const ChildUserDisplay = ({
                 <InfoRow
                   label={t('forms.child.reporterName', 'Reporter Name:')}
                   value={maskInfo(user.reporter_name)}
-                  icon={<FaUser />}
+                  icon={<></>}
                 />
                 <InfoRow
                   label={t('users.reporterNationalId', 'Reporter National ID:')}
                   value={maskInfo(user.reporter_national_id)}
-                  icon={<FaIdCard />}
+                  icon={<></>}
                 />
                 <InfoRow
                   label={t('users.reporterAddress', 'Reporter Address:')}
                   value={maskInfo(user.reporter_address)}
-                  icon={<FaAddressCard />}
+                  icon={<></>}
                 />
 
                 <InfoRow
                   label={t('users.reporterPhone', 'Reporter Phone:')}
                   value={maskInfo(user.reporter_phone)}
-                  icon={<FaPhone />}
+                  icon={<></>}
                 />
 
                 <InfoRow
@@ -105,7 +104,7 @@ const ChildUserDisplay = ({
                   ]
                     .filter(Boolean)
                     .join('، ')}
-                  icon={<FaUser />}
+                  icon={<></>}
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">

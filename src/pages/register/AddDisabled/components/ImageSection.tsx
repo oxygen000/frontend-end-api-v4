@@ -168,7 +168,7 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
                 <AnimatedFaceIcon
                   size="md"
                   text={t('photo.clickToUpload', 'Click to Upload')}
-                
+                  color="#ffff" 
                 />
                 <input
                   id="fileInput"

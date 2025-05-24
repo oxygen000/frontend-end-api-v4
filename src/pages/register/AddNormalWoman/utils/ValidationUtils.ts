@@ -60,12 +60,7 @@ export const validateForm = (
   // Section 3: Criminal Record
   else if (currentSection === 3) {
     if (formData.has_criminal_record) {
-      if (!formData.case_details) {
-        errors.push('Case Details are required when criminal record exists');
-      }
-      if (!formData.police_station) {
-        errors.push('Police Station is required when criminal record exists');
-      }
+     
       if (!formData.case_number) {
         errors.push('Case Number is required when criminal record exists');
       }

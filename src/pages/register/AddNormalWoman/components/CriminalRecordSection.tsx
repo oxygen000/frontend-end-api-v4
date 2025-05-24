@@ -68,9 +68,9 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
       />
 
       <Input
-        label={t('registration.policeStation', 'Police Station')}
-        name="police_station"
-        value={formData.police_station || ''}
+        label={t('registration.judgment', 'judgment ')}
+        name="judgment"
+        value={formData.judgment || ''}
         onChange={handleInputChange}
         
       />
@@ -102,14 +102,6 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
     />
 
     <Input
-      label={t('registration.accusation', 'Accusation/Charges')}
-      name="accusation"
-      value={formData.accusation || ''}
-      onChange={handleInputChange}
-      
-    />
-
-    <Input
       label={t('registration.sentence', 'Sentence')}
       name="sentence"
       value={formData.sentence || ''}
@@ -125,13 +117,7 @@ const CriminalRecordSection: React.FC<CriminalRecordSectionProps> = ({
       
     />
 
-    <Input
-      label={t('registration.judgment', 'Judgment/Sentence')}
-      name="judgment"
-      value={formData.judgment || ''}
-      onChange={handleInputChange}
-        
-    />
+  
     </div>
 
   

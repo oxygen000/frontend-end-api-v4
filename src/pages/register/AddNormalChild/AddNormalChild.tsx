@@ -232,13 +232,13 @@ const AddNormalChild = () => {
 
   // Define section items for progress indicator
   const sections = [
-    { id: 1, name: t('forms.child.sections.basic', 'Basic') },
-    { id: 2, name: t('forms.child.sections.contact', 'Contact') },
-    { id: 3, name: t('forms.child.sections.guardian', 'Guardian') },
-    { id: 4, name: t('forms.child.sections.medical', 'Medical') },
-    { id: 5, name: t('forms.child.sections.disappearance', 'Disappearance') },
-    { id: 6, name: t('forms.child.sections.police', 'Police Report') },
-    { id: 7, name: t('forms.child.sections.photo', 'Photo') },
+    { id: 1, name: t('forms.child.sections.1', 'Basic') },
+    { id: 2, name: t('forms.child.sections.2', 'Contact') },
+    { id: 3, name: t('forms.child.sections.3', 'Guardian') },
+    { id: 4, name: t('forms.child.sections.4', 'Medical') },
+    { id: 5, name: t('forms.child.sections.5', 'Disappearance') },
+    { id: 6, name: t('forms.child.sections.6', 'Police Report') },
+    { id: 7, name: t('forms.child.sections.7', 'Photo') },
   ];
 
   return (
@@ -246,7 +246,7 @@ const AddNormalChild = () => {
       <div className="max-w-4xl mx-auto">
         <Link
           to="/home"
-          className="inline-flex items-center text-2xl text-cyan-400 hover:text-cyan-300 transition-colors font-medium mb-6"
+          className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors font-medium mb-6"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

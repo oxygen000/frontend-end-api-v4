@@ -311,6 +311,7 @@
     "departureDestination": "Departure Destination",
     "departureDate": "Departure Date",
     "departureTime": "Departure Time",
+    "distinctive_mark": "Distinctive Mark",
     "departureDatetime": "Departure Date & Time",
     "departureFlightNumber": "Departure Flight Number",
     "arrivalOrigin": "Arrival Origin",
@@ -512,6 +513,7 @@
     },
     "disabled": {
       "disabilityInfo": "Disability Information",
+      
       "disabilityType": {
         "label": "Disability Type",
         "options": {
@@ -538,6 +540,7 @@
       "relationshipToMissing": "Relationship to Missing Person",
       "missingPersonInfo": "Missing Person Information",
       "missingPersonName": "Missing Person Name",
+      "fullName": "Full Name",
       "age": "Age",
       "nationalId": "National ID",
       "phoneNumber": "Phone Number",
@@ -553,15 +556,7 @@
     },
     "child": {
       "title": "Child Registration",
-      "sections": {
-        "basic": "Basic Information",
-        "contact": "Contact Information",
-        "guardian": "Guardian Information",
-        "medical": "Medical Information",
-        "disappearance": "Disappearance Details",
-        "police": "Police Information",
-        "photo": "Photo"
-      },
+      
       "reporterInfo": "Reporter Information",
       "relationshipToMissing": "Relationship to Missing Child",
       "missingPersonInfo": "Missing Person Information",
@@ -572,6 +567,7 @@
       "clickToEnlarge": "Click to Enlarge",
       "socialConnections": "Social Connections",
       "disappearanceDetails": "Disappearance Details",
+      "reporterName": "Reporter Name",
       "policeReport": "Police Report",
       "firstFriend": "First Friend",
       "firstFriendPhone": "First Friend Phone",
@@ -584,8 +580,11 @@
       "securityDirectorate": "Security Directorate",
       "governorate": "Governorate",
       "medicalSection": "Medical Information Section",
+     
+      
       "medicalHistory": "Medical History",
-
+      "missingLocation":"Missing Location",
+      "reportDetails":"Report Details",
       "previousDisputes": "Previous Disputes",
       "goneMissingBefore": "Gone Missing Before",
       "wasAccompanied": "Was Accompanied",
@@ -598,7 +597,16 @@
       "physicianInfo": "Physician Information",
       "treatingPhysician": "Treating Physician",
       "physicianPhone": "Physician Phone",
-      "additionalData": "Additional Information"
+      "additionalData": "Additional Information",
+      "sections": {
+        "1": "Basic Information",
+        "2": "Contact Information",
+        "3": "Guardian Information",
+        "4": "Medical Information",
+        "5": "Disappearance Details",
+        "6": "Police Report",
+        "7": "Photo"
+      }
     },
     "woman": {
       "title": "Female Registration",
@@ -719,14 +727,14 @@
   "reporterAdditionalInfo": "Additional Information",
   "reporterOccupation": "Reporter Occupation",
   "reporterEducation": "Reporter Education",
+  "reporterNationalId": "Reporter National ID",
   "card": {
     "id": "ID",
     "Number": "Number",
     "address": "Address",
     "notAvailable": "Not Available",
     "viewDetails": "View Details"
-  },
-  "reporterNationalId": "Reporter National ID"
+  }
 
  
 }

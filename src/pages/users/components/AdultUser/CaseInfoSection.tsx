@@ -16,7 +16,6 @@ const CaseInfoSection = ({
   const hasCaseInfo =
     user.has_criminal_record === 1 ||
     user.case_details ||
-    user.police_station ||
     user.case_number ||
     user.judgment ||
     user.accusation ||
@@ -84,10 +83,10 @@ const CaseInfoSection = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
             {/* Charge */}
-            {(user.charge || user.accusation) && (
+            {(user.charge) && (
               <InfoRow
                 label={t('registration.charge', 'Charge:')}
-                value={maskSensitiveInfo(user.charge || user.accusation)}
+                value={maskSensitiveInfo(user.charge )}
                 icon={<></>}
               />
             )}

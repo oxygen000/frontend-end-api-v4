@@ -141,23 +141,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               onChange={handleInputChange}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label={t('registration.arrivalDate', 'Arrival Date')}
-              name="arrival_date"
-              type="date"
-              value={formData.arrival_date || ''}
-              onChange={handleInputChange}
-            />
-
-            <Input
-              label={t('registration.returnDate', 'Return Date')}
-              name="return_date"
-              type="date"
-              value={formData.return_date || ''}
-              onChange={handleInputChange}
-            />
-          </div>
+         
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label={t(
@@ -206,11 +190,11 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               onChange={handleInputChange}
             />
 
-            <Input
-              label={t('registration.departureDate', 'Departure Date')}
-              name="departure_date"
+<Input
+              label={t('registration.returnDate', 'Return Date')}
+              name="return_date"
               type="date"
-              value={formData.departure_date || ''}
+              value={formData.return_date || ''}
               onChange={handleInputChange}
             />
             <Input

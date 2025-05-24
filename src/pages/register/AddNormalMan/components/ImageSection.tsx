@@ -57,9 +57,11 @@ const ImageSection: React.FC<ImageSectionProps> = ({
         </button>
         <div>
           {formData.useCamera ? (
-            <FaUpload className="text-white text-xl sm:text-2xl" />
+          <FaCamera className="text-white text-xl sm:text-2xl" />
+
           ) : (
-            <FaCamera className="text-white text-xl sm:text-2xl" />
+            <FaUpload className="text-white text-xl sm:text-2xl" />
+
           )}
         </div>
       </div>
@@ -77,6 +79,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
             <AnimatedFaceIcon
               size="md"
               text={t('registration.clickToUpload', 'Click to upload')}
+              color="#ffff" 
             />
           </div>
           <input

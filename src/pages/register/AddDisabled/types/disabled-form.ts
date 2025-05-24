@@ -19,6 +19,7 @@ export interface DisabledFormData {
 
   // Disability information (required fields)
   disability_type: string;
+  full_name: string;
   disability_description: string; // Used for both disability_details and disability_description in backend
   medical_condition: string; // Maps to both medical_condition and medical_history in backend
   special_needs: string;
@@ -26,12 +27,13 @@ export interface DisabledFormData {
   emergency_phone: string;
 
   // Guardian/Reporter information (required fields)
-  guardian_name: string; // Maps to both guardian_name and reporter_name in backend
-  guardian_phone: string; // Maps to both guardian_phone and reporter_phone in backend
+  reporter_name: string; // Maps to both guardian_name and reporter_name in backend
+  reporter_phone: string;
   relationship: string; // Maps to reporter_relationship in backend
   reporter_address: string; // Required for guardian/reporter
   previous_disputes: string;
   missing_person_phone: string;
+  reporter_relationship: string;
   missing_person_occupation: string;
   missing_person_education: string;
 
@@ -81,6 +83,7 @@ export interface DisabledFormData {
 export const initialFormData: DisabledFormData = {
   // Basic information
   name: '',
+  full_name: '',
   dob: '',
   gender: '',
   national_id: '',
@@ -104,8 +107,9 @@ export const initialFormData: DisabledFormData = {
   emergency_phone: '',
 
   // Guardian/Reporter information (required fields)
-  guardian_name: '',
-  guardian_phone: '',
+  reporter_name: '',
+  reporter_relationship: '',
+  reporter_phone: '',
   relationship: '',
   reporter_address: '',
   missing_person_education: '',

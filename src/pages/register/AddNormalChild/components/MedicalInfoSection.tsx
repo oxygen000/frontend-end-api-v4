@@ -38,29 +38,17 @@ const MedicalInfoSection: React.FC<MedicalInfoSectionProps> = ({
         {t('forms.child.medicalSection', 'Medical Information')}
       </h3>
 
-      {/* Medical conditions */}
-      <div className="grid grid-cols-1 gap-4">
-        <Textarea
-          label={t('forms.child.medicalHistory', 'Medical History')}
-          name="medical_condition"
-          value={formData.medical_condition || ''}
-          onChange={handleInputChange}
-        />
+   
 
-        <Textarea
+   
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <Input
           label={t('registration.medicalHistory', 'Additional Medical History')}
           name="medical_history"
           value={formData.medical_history || ''}
           onChange={handleInputChange}
         />
-      </div>
-
-      {/* Physician information */}
-      <h4 className="text-base font-medium mt-4 text-blue-200">
-        {t('forms.child.physicianInfo', 'Physician Information')}
-      </h4>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t(
             'forms.child.treatingPhysician',

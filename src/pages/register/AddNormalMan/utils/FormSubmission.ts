@@ -333,7 +333,6 @@ export const submitForm = async (
 
     // Add vehicle fields to the user data object too
     if (formData.has_vehicle) {
-      userData.license_plate = formData.license_plate || '';
       userData.vehicle_model = formData.vehicle_model || '';
       userData.vehicle_color = formData.vehicle_color || '';
       userData.chassis_number = formData.chassis_number || '';

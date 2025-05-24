@@ -75,9 +75,9 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label={t('registration.licensePlate', 'License Plate')}
-              name="license_plate"
+              name="vehicle_number"
               type="text"
-              value={formData.license_plate || ''}
+              value={formData.vehicle_number || ''}
               onChange={handleInputChange}
             />
             <Input
@@ -110,14 +110,14 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
               value={formData.chassis_number || ''}
               onChange={handleInputChange}
             />
-
-            <Input
-              label={t('registration.trafficDepartment', 'Traffic Department')}
-              name="traffic_department"
+        <Input
+              label={t('registration.engineNumber', 'Engine Number')}
+              name="license_governorate"
               type="text"
-              value={formData.traffic_department || ''}
+              value={formData.license_governorate|| ''}
               onChange={handleInputChange}
             />
+            
             <Input
               label={t('registration.brand', 'Vehicle Brand/Make')}
               name="brand"
@@ -139,20 +139,8 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
               value={formData.vehicle_model || ''}
               onChange={handleInputChange}
             />
-            <Input
-              label={t('registration.vehicleNumber', 'Vehicle Number')}
-              name="vehicle_number"
-              type="text"
-              value={formData.vehicle_number || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              label={t('registration.expirationYear', 'Expiration Year')}
-              name="expiration_year"
-              type="date"
-              value={formData.expiration_year || ''}
-              onChange={handleInputChange}
-            />
+           
+         
             <Input
               label={t('registration.manufactureYear', 'Manufacture Year')}
               name="manufacture_year"
@@ -160,16 +148,7 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
               value={formData.manufacture_year || ''}
               onChange={handleInputChange}
             />
-            <Input
-              label={t(
-                'registration.licenseGovernorate',
-                'License Governorate'
-              )}
-              name="license_governorate"
-              type="text"
-              value={formData.license_governorate || ''}
-              onChange={handleInputChange}
-            />
+           
           </div>
         </motion.div>
       )}

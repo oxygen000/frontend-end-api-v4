@@ -8,7 +8,7 @@ import { useTranslationWithFallback } from '../../../../hooks/useTranslationWith
 
 interface ContactInformationSectionProps {
   formData: DisabledFormData;
-  onChange: (
+  handleInputChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
@@ -19,7 +19,7 @@ interface ContactInformationSectionProps {
 
 const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
   formData,
-  onChange,
+  handleInputChange,
   onNext,
   onPrev,
 }) => {
@@ -38,28 +38,24 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
         {t('sections.contact', 'Contact Information')}
       </h3>
 
-      {/* Primary contact information */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
+        {/* Missing person contact information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label={t('contact.phoneNumber', 'Phone Number')}
-          name="phone_number"
-          value={formData.phone_number}
-          onChange={onChange}
-          required
-         
+          label={t('registration.phoneNumber', 'Phone Number')}
+          name="missing_person_phone"
+          value={formData.missing_person_phone || ''}
+          onChange={handleInputChange}
         />
 
         <div>
-          <label className="block text-white font-medium mb-1 text-sm sm:text-base">
-            {t('contact.phoneCompany', 'Phone Company')}{' '}
-            <span className="text-red-500">*</span>
+          <label className="block font-medium text-white mb-1 text-sm sm:text-base">
+            {t('registration.phoneCompany', 'Telecom Company')}
           </label>
           <select
             name="phone_company"
             value={formData.phone_company}
-            onChange={onChange}
-            className="w-full px-3 sm:px-4 py-2 bg-white/10 text-white border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
-            required
+            onChange={handleInputChange}
+            className="w-full px-3  sm:px-4 py-2 text-white bg-white/10 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
           >
             <option value="" className="text-black bg-white">
               {t('contact.selectCompany', 'Select Phone Company')}
@@ -78,46 +74,61 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
             </option>
           </select>
         </div>
-
-        <Input
-          label={t('contact.secondPhoneNumber', 'Secondary Phone Number')}
-          name="second_phone_number"
-          value={formData.second_phone_number}
-          onChange={onChange}
-         
-        />
-
-        <Input
-          label={t('contact.first_friend', 'First Friend')}
-          name="first_friend"
-          value={formData.first_friend || ''}
-          onChange={onChange}
-        />
-        <Input
-          label={t('contact.second_friend', 'Second Friend')}
-          name="second_friend"
-          value={formData.second_friend || ''}
-          onChange={onChange}
-        />
-        <Input
-          label={t('contact.first_friend_phone', 'First Friend Phone')}
-          name="first_friend_phone"
-          value={formData.first_friend_phone || ''}
-          onChange={onChange}
-        />
-        <Input
-          label={t('contact.second_friend_phone', 'Second Friend Phone')}
-          name="second_friend_phone"
-          value={formData.second_friend_phone || ''}
-          onChange={onChange}
-        />
-        
-        
-        
-
-       
       </div>
 
+      {/* Personal details related to contact */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    
+
+        <Input
+          label={t('registration.education', 'Education Level (Optional)')}
+          name="missing_person_education"
+          value={formData.missing_person_education || ''}
+          onChange={handleInputChange}
+        />
+  <Input
+          label={t('registration.distinctive_mark', 'Distinctive Mark ')}
+          name="distinctive_mark"
+          value={formData.distinctive_mark|| ''}
+          onChange={handleInputChange}
+        />
+      
+      </div>
+
+
+
+    
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input
+          label={t('forms.child.firstFriend', "Friend's Name")}
+          name="first_friend"
+          value={formData.first_friend || ''}
+          onChange={handleInputChange}
+        />
+
+        <Input
+          label={t('forms.child.firstFriendPhone', "Friend's Phone")}
+          name="first_friend_phone"
+          value={formData.first_friend_phone || ''}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input
+          label={t('forms.child.secondFriend', "Second Friend's Name")}
+          name="second_friend"
+          value={formData.second_friend || ''}
+          onChange={handleInputChange}
+        />
+
+        <Input
+          label={t('forms.child.secondFriendPhone', "Second Friend's Phone")}
+          name="second_friend_phone"
+          value={formData.second_friend_phone || ''}
+          onChange={handleInputChange}
+        />
+      </div>
       <div className="mt-6">
         <SectionButtons onNext={onNext} onPrev={onPrev} />
       </div>

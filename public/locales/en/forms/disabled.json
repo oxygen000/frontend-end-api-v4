@@ -1,5 +1,5 @@
 {
-  "title": "Accompanying Person Registration",
+  "title": "Accompanying Person Disabled",
   "disabilityInfo": "Disability Information",
   "disabilityType": "Disability Type",
   "disabilityDetails": "Disability Details",
@@ -17,7 +17,7 @@
   "missingPersonInfo": "Missing Person's Information",
   "missingPersonName": "Name",
   "age": "Age",
-  "nationalId": "National ID (if available)",
+  "nationalId": "National ID ",
   "phoneNumber": "Phone Number",
   "disappearanceLocation": "Place of Disappearance",
   "dateOfDisappearance": "Date of Disappearance",
@@ -28,14 +28,7 @@
   "medicalHistory": "Medical History",
   "recentPhoto": "Recent Photo",
   "sections": {
-    "personal": "Personal Information",
-    "disability": "Disability Information",
-    "photo": "Photo",
-    "disappearance": "Disappearance Details",
-    "basic": "Basic Information",
-    "contact": "Contact Information",
-    "reporter": "Reporter Information",
-    "missing": "Missing Person Information",
+ 
     "1": "Basic Information",
     "2": "Contact Information",
     "3": "Reporter Information",

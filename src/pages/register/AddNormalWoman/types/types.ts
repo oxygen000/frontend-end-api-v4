@@ -137,7 +137,7 @@ export const initialFormData: FormData = {
   category: 'female',
   additional_notes: '',
   image: undefined,
-  useCamera: true,
+  useCamera: false,
 
   // Contact information
   phone_number: '',

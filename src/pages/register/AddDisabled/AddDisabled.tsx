@@ -21,8 +21,8 @@ import type {
 import { initialFormData } from './types/disabled-form';
 import BasicInformationSection from './components/BasicInformationSection';
 import ContactInformationSection from './components/ContactInformationSection';
-import ReporterInformationSection from './components/ReporterInformationSection';
-import MissingInformationSection from './components/MissingInformationSection';
+import ReporterInformationSection from './components/GuardianInfoSection';
+import MissingInformationSection from './components/DisappearanceDetailsSection';
 import PhotoCaptureSection from './components/ImageSection';
 import MedicalInformationSection from './components/MedicalInfoSection';
 // Import utility functions
@@ -390,13 +390,13 @@ function AddDisabled() {
    * Each section has an ID and a name that is displayed in the UI
    */
   const sections = [
-    { id: 1, name: t('forms.disabled.sections.basic', 'Basic') },
-    { id: 2, name: t('forms.disabled.sections.contact', 'Contact') },
-    { id: 3, name: t('forms.disabled.sections.guardian', 'Guardian') },
-    { id: 4, name: t('forms.disabled.sections.medical', 'Medical') },
-    { id: 5, name: t('forms.disabled.sections.disappearance', 'Disappearance') },
-    { id: 6, name: t('forms.disabled.sections.police', 'Police Report') },
-    { id: 7, name: t('forms.disabled.sections.photo', 'Photo') },
+    { id: 1, name: t('forms.child.sections.1', 'Basic') },
+    { id: 2, name: t('forms.child.sections.2', 'Contact') },
+    { id: 3, name: t('forms.child.sections.3', 'Guardian') },
+    { id: 4, name: t('forms.child.sections.4', 'Medical') },
+    { id: 5, name: t('forms.child.sections.5', 'Disappearance') },
+    { id: 6, name: t('forms.child.sections.6', 'Police Report') },
+    { id: 7, name: t('forms.child.sections.7', 'Photo') },
   ];
 
   /**
@@ -437,10 +437,8 @@ function AddDisabled() {
 
             {/* Progress text */}
             <p className="text-white/80 text-center mb-8 text-lg">
-              {t('progress.current', {
-                current: currentSection,
-                total: 6,
-              })}
+              {' '}
+              <span className="text-purple-600">({currentSection}/7)</span>
             </p>
 
             {/* Progress indicator */}
@@ -493,7 +491,6 @@ function AddDisabled() {
                 idLabel={t('registration.caseReferenceId', 'Registration ID:')}
               />
 
-              {/* زر العودة للتسجيل الجديد */}
               <motion.button
                 onClick={() => {
                   setFormData(initialFormData);
@@ -557,7 +554,7 @@ function AddDisabled() {
                 {currentSection === 1 ? (
                   <BasicInformationSection
                     formData={formData}
-                    onChange={handleInputChange}
+                    handleInputChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
@@ -565,7 +562,7 @@ function AddDisabled() {
                 currentSection === 2 ? (
                   <ContactInformationSection
                     formData={formData}
-                    onChange={handleInputChange}
+                    handleInputChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
@@ -573,7 +570,7 @@ function AddDisabled() {
                 currentSection === 3 ? (
                   <ReporterInformationSection
                     formData={formData}
-                    onChange={handleInputChange}
+                    handleInputChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
@@ -581,7 +578,7 @@ function AddDisabled() {
                 currentSection === 4 ? (
                   <MedicalInformationSection
                     formData={formData}
-                    onChange={handleInputChange}
+                    handleInputChange={handleInputChange}
                     t={t}
                     onNext={nextSection}
                     onPrev={prevSection}
@@ -590,7 +587,7 @@ function AddDisabled() {
                 currentSection === 5 ? (
                   <MissingInformationSection
                     formData={formData}
-                    onChange={handleInputChange}
+                    handleInputChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
@@ -600,7 +597,7 @@ function AddDisabled() {
                   <PoliceReportSection
                     formData={formData}
                     t={t} 
-                    onChange={handleInputChange}
+                      handleInputChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />

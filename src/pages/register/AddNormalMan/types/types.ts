@@ -127,7 +127,7 @@ export const initialFormData: FormData = {
   category: 'male',
   additional_notes: '',
   image: undefined,
-  useCamera: true,
+  useCamera: false,
 
   // Contact information
   phone_number: '',
@@ -180,7 +180,7 @@ export const initialFormData: FormData = {
   passport_issue_date: '',
   passport_expiry_date: '',
   passport_issuing_country: '',
-  
+
   departure_country: '',
   departure_destination: '',
   departure_date: '',

@@ -61,9 +61,6 @@ export const validateForm = (
     // Criminal record validation
     if (formData.has_criminal_record) {
     
-      if (!formData.police_station) {
-        errors.push('Police Station is required when criminal record exists');
-      }
       if (!formData.case_number) {
         errors.push('Case Number is required when criminal record exists');
       }

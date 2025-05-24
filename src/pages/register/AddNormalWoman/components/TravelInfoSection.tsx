@@ -63,10 +63,8 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
           className="space-y-4 pt-2"
         >
           <h2 className="text-lg sm:text-xl justify-center font-semibold text-white mb-3 sm:mb-4 flex items-center">
-        {t('users.travelInfo', 'Travel Information')}
-      </h2>
-
-          
+            {t('users.travelInfo', 'Travel Information')}
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
             <Input
@@ -74,14 +72,11 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="passport_number"
               value={formData.passport_number || ''}
               onChange={handleInputChange}
-            
             />
-
-           
           </div>
           <h1 className="text-lg sm:text-xl justify-center font-semibold text-white mb-3 sm:mb-4 flex items-center">
-       {t('users.travelInfo2', 'Travel Information')}
-      </h1>
+            {t('users.travelInfo2', 'Travel Information')}
+          </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -106,7 +101,6 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="departure_country"
               value={formData.departure_country || ''}
               onChange={handleInputChange}
-             
             />
 
             <Input
@@ -114,14 +108,12 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="travel_destination"
               value={formData.travel_destination || ''}
               onChange={handleInputChange}
-              
             />
             <Input
               label={t('registration.departureAirline', 'Airline')}
               name="departure_airline"
               value={formData.departure_airline || ''}
               onChange={handleInputChange}
-             
             />
             <Input
               label={t(
@@ -131,7 +123,6 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="departure_flight_number"
               value={formData.departure_flight_number || ''}
               onChange={handleInputChange}
-             
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,7 +132,6 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               type="date"
               value={formData.travel_date || ''}
               onChange={handleInputChange}
-             
             />
             <Input
               label={t('registration.departureTime', 'Departure Time')}
@@ -151,27 +141,8 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               onChange={handleInputChange}
             />
           </div>
+         
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label={t('registration.arrivalDate', 'Arrival Date')}
-              name="arrival_date"
-              type="date"
-              value={formData.arrival_date || ''}
-              onChange={handleInputChange}
-             
-            />
-
-            <Input
-              label={t('registration.returnDate', 'Return Date')}
-              name="return_date"
-              type="date"
-              value={formData.return_date || ''}
-              onChange={handleInputChange}
-             
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
             <Input
               label={t(
                 'registration.returnFlightNumber',
@@ -180,13 +151,11 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="return_flight_number"
               value={formData.return_flight_number || ''}
               onChange={handleInputChange}
-           
             />
           </div>
           <h1 className="text-lg sm:text-xl justify-center font-semibold text-white mb-3 sm:mb-4 flex items-center">
-        {t('users.arrivalInfo', 'Arrival Information')}
-      </h1>
-          
+            {t('users.arrivalInfo', 'Arrival Information')}
+          </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -204,14 +173,12 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="arrival_destination"
               value={formData.arrival_destination || ''}
               onChange={handleInputChange}
-
             />
             <Input
               label={t('registration.arrivalAirline', 'Arrival Airline')}
               name="arrival_airline"
               value={formData.arrival_airline || ''}
               onChange={handleInputChange}
-              
             />
             <Input
               label={t(
@@ -221,14 +188,13 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
               name="arrival_flight_number"
               value={formData.arrival_flight_number || ''}
               onChange={handleInputChange}
-
             />
 
-            <Input
-              label={t('registration.departureDate', 'Departure Date')}
-              name="departure_date"
+<Input
+              label={t('registration.returnDate', 'Return Date')}
+              name="return_date"
               type="date"
-              value={formData.departure_date || ''}
+              value={formData.return_date || ''}
               onChange={handleInputChange}
             />
             <Input

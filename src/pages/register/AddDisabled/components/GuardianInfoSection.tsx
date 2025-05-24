@@ -8,7 +8,7 @@ import { useTranslationWithFallback } from '../../../../hooks/useTranslationWith
 
 interface ReporterInformationSectionProps {
   formData: DisabledFormData;
-  onChange: (
+  handleInputChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
@@ -19,7 +19,7 @@ interface ReporterInformationSectionProps {
 
 const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
   formData,
-  onChange,
+  handleInputChange,
   onNext,
   onPrev,
 }) => {
@@ -38,28 +38,36 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
         {t('sections.reporter', 'Reporter Information')}
       </h3>
 
-      {/* Basic reporter information */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
+  {/* Basic reporter information */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label={t('reporter.name', 'Reporter Name')}
-          name="guardian_name"
-          value={formData.guardian_name || ''}
-          onChange={onChange}
-          
+          label={t('reporterName', 'Reporter Name')}
+          name="reporter_name"
+          value={formData.reporter_name || ''}
+          onChange={handleInputChange}
+          required
+        />
+        <Input
+          label={t('reporterNationalId', 'National ID')}
+          name="reporter_national_id"
+          value={formData.reporter_national_id || ''}
+          onChange={handleInputChange}
+          required
         />
 
         <div>
-          <label className="block text-white font-medium mb-1 text-sm sm:text-base">
-            {t('reporter.relationship', 'Relationship to Person')}
+          <label className="block font-medium mb-1 text-sm sm:text-base">
+            {t('relationshipToMissing', 'Relationship to Reporter')}{' '}
+            <span className="text-red-500">*</span>
           </label>
           <select
-            name="relationship"
-            value={formData.relationship || ''}
-            onChange={onChange}
-            className="w-full px-3 sm:px-4 py-2 bg-white/10 text-white border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
-            style={{ colorScheme: 'dark' }}
+            name="reporter_relationship"
+            value={formData.reporter_relationship || ''}
+            onChange={handleInputChange}
+            className="w-full px-3 sm:px-4 py-2 text-white bg-white/10 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+            required
           >
-            <option value="" className="text-black bg-white">
+           <option value="" className="text-black bg-white">
               {t('common.select', 'Select Relationship')}
             </option>
             <option value="father" className="text-black bg-white">
@@ -94,88 +102,54 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
             </option>
           </select>
         </div>
+      </div>
 
+      {/* Reporter address */}
+      <div className="grid grid-cols-1 gap-4">
         <Input
-          label={t('reporter.occupation', 'Reporter Occupation')}
-          name="reporter_occupation"
-          value={formData.reporter_occupation || ''}
-          onChange={onChange}
+          label={t('reporterAddress', 'Address')}
+          name="reporter_address"
+          value={formData.reporter_address || ''}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
 
+    
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input
+          label={t('reporterPhone', 'Primary Phone')}
+          name="reporter_phone"
+          value={formData.reporter_phone || ''}
+          onChange={handleInputChange}
+          required
         />
 
         <Input
-          label={t('reporter.education', 'Reporter Education')}
-          name="reporter_education"
-          value={formData.reporter_education || ''}
-          onChange={onChange}
-        />
-
-        <Input
-          label={t('reporter.reporterNationalId', 'Reporter National ID')}
-          name="reporter_national_id"
-          value={formData.reporter_national_id || ''}
-          onChange={onChange}
-          
+          label={t('reporterSecondaryPhone', 'Secondary Phone (Optional)')}
+          name="reporter_secondary_phone"
+          value={formData.reporter_secondary_phone || ''}
+          onChange={handleInputChange}
         />
       </div>
 
      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label={t('reporter.phoneNumber', 'Primary Phone Number')}
-          name="guardian_phone"
-          value={formData.guardian_phone || ''}
-          onChange={onChange}
-          
+          label={t('reporterOccupation', 'Occupation')}
+          name="reporter_occupation"
+          value={formData.reporter_occupation || ''}
+          onChange={handleInputChange}
         />
 
         <Input
-          label={t('reporter.reporterSecondaryPhone', 'Secondary Phone Number')}
-          name="reporter_secondary_phone"
-          value={formData.reporter_secondary_phone || ''}
-          onChange={onChange}
-        />
-
-        <Input
-          label={t('reporter.address', 'Address')}
-          name="reporter_address"
-          value={formData.reporter_address || ''}
-          onChange={onChange}
-          
+          label={t('reporterEducation', 'Education Level')}
+          name="reporter_education"
+          value={formData.reporter_education || ''}
+          onChange={handleInputChange}
         />
       </div>
 
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 sm:gap-y-4">
-        <Input
-          label={t('reporter.absenceReportNumber', 'Absence Report Number')}
-          name="absence_report_number"
-          value={formData.absence_report_number || ''}
-          onChange={onChange}
-        />
-
-        <Input
-          label={t('reporter.absenceReportDate', 'Report Date')}
-          name="absence_report_date"
-          type="date"
-          value={formData.absence_report_date || ''}
-          onChange={onChange}
-        />
-
-        <Input
-          label={t('reporter.policeStation', 'Police Station')}
-          name="police_station"
-          value={formData.police_station || ''}
-          onChange={onChange}
-        />
-
-        <Input
-          label={t('reporter.securityDirectorate', 'Security Directorate')}
-          name="security_directorate"
-          value={formData.security_directorate || ''}
-          onChange={onChange}
-        />
-      </div>
 
       <div className="mt-6">
         <SectionButtons onNext={onNext} onPrev={onPrev} />

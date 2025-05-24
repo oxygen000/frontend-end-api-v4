@@ -80,7 +80,7 @@ interface VehicleInfoSectionProps {
         
           <InfoRow
           label={t('registration.licensePlate', 'licensePlate')}
-          value={user.license_plate || ''}
+          value={user.vehicle_number|| ''}
           icon={<></>}
         />
         <InfoRow

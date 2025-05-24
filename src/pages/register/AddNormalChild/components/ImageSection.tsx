@@ -83,6 +83,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
               <AnimatedFaceIcon
                 size="md"
                 text={t('registration.clickToUpload', 'Click to Upload')}
+                color="#ffff" 
               />
               <input
                 id="fileInput"
@@ -247,7 +248,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
                   d="M4 12l2 2 4-4m6 2a9 9 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              {t('registration.submitting', 'Processing...')}
+              {t('common.loading', 'Processing...')}
             </div>
           ) : (
             <>

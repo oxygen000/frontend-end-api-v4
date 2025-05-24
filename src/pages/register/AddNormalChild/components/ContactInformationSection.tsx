@@ -82,13 +82,13 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
           value={formData.missing_person_education || ''}
           onChange={handleInputChange}
         />
-
-        <Input
+  <Input
           label={t('registration.distinctive_mark', 'Distinctive Mark ')}
           name="distinctive_mark"
           value={formData.distinctive_mark|| ''}
           onChange={handleInputChange}
         />
+      
       </div>
 
 

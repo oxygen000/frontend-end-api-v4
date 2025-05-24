@@ -20,7 +20,7 @@ export const validateForm = (
 
   // Section 1: Basic Information
   if (currentSection === 1) {
-    if (!personDetails.name?.trim())
+    if (!personDetails.full_name?.trim())
       errors.push(
         "Please enter the person's name. You cannot proceed without it."
       );
@@ -37,11 +37,11 @@ export const validateForm = (
   // Section 3: Reporter Info
   else if (currentSection === 3) {
     if (
-      personDetails.guardian_phone &&
-      !/^[0-9]{10,11}$/.test(personDetails.guardian_phone.replace(/\D/g, ''))
+      personDetails.reporter_phone &&
+      !/^[0-9]{10,11}$/.test(personDetails.reporter_phone.replace(/\D/g, ''))
     ) {
       errors.push(
-        "Guardian's phone number is invalid. It must contain 11 digits."
+        "Reporter's phone number is invalid. It must contain 11 digits."
       );
     }
 
@@ -159,8 +159,6 @@ interface UserData {
   emergency_phone: string;
 
   // Guardian/Reporter information (required fields)
-  guardian_name: string;
-  guardian_phone: string;
   reporter_name: string;
   reporter_phone: string;
   reporter_relationship: string;
@@ -264,11 +262,9 @@ export const buildSubmissionFormData = (
     emergency_phone: personDetails.emergency_phone || '',
 
     // Guardian/Reporter information (required fields)
-    guardian_name: personDetails.guardian_name || '',
-    guardian_phone: personDetails.guardian_phone || '',
-    reporter_name: personDetails.guardian_name || '', // Map to both fields
-    reporter_phone: personDetails.guardian_phone || '', // Map to both fields
-    reporter_relationship: personDetails.relationship || '',
+    reporter_name: personDetails.reporter_name || '',
+    reporter_phone: personDetails.reporter_phone || '',
+    reporter_relationship: personDetails.reporter_relationship || '',
     relationship: personDetails.relationship || '', // Add both field names for compatibility
     reporter_address: personDetails.reporter_address || '',
 
