@@ -235,8 +235,8 @@ const AddNormalChild = () => {
     { id: 1, name: t('forms.child.sections.1', 'Basic') },
     { id: 2, name: t('forms.child.sections.2', 'Contact') },
     { id: 3, name: t('forms.child.sections.3', 'Guardian') },
-    { id: 4, name: t('forms.child.sections.4', 'Medical') },
-    { id: 5, name: t('forms.child.sections.5', 'Disappearance') },
+    { id: 4, name: t('forms.child.sections.5', 'Medical') },
+    { id: 5, name: t('forms.child.sections.4', 'Disappearance') },
     { id: 6, name: t('forms.child.sections.6', 'Police Report') },
     { id: 7, name: t('forms.child.sections.7', 'Photo') },
   ];

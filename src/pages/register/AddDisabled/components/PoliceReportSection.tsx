@@ -33,7 +33,7 @@ const PoliceReportSection: React.FC<PoliceReportSectionProps> = ({
       transition={transition}
       className="space-y-4"
     >
-      <h3 className="text-base sm:text-lg font-semibold">
+      <h3 className="text-base sm:text-lg text-white font-semibold">
         {t('forms.child.policeReport', 'Police Report Information')}
       </h3>
 
@@ -54,11 +54,7 @@ const PoliceReportSection: React.FC<PoliceReportSectionProps> = ({
         />
       </div>
 
-      {/* Location information */}
-      <h4 className="text-base font-medium mt-4 text-blue-200">
-        {t('forms.child.missingLocation', 'Missing Location')}
-      </h4>
-
+   
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('forms.child.policeStation', 'Police Station')}

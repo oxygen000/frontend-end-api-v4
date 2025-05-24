@@ -23,13 +23,12 @@ import BasicInformationSection from './components/BasicInformationSection';
 import ContactInformationSection from './components/ContactInformationSection';
 import ReporterInformationSection from './components/GuardianInfoSection';
 import MissingInformationSection from './components/DisappearanceDetailsSection';
-import PhotoCaptureSection from './components/ImageSection';
 import MedicalInformationSection from './components/MedicalInfoSection';
 // Import utility functions
 import { validateForm, buildSubmissionFormData } from './utils/formValidation';
 import type { RegistrationResult } from '../../../services/api/types';
 import PoliceReportSection from './components/PoliceReportSection';
-
+import PhotoCaptureSection from './components/ImageSection';
 // Track submissions to prevent duplicates
 const pendingSubmissions = new Set<string>();
 
@@ -171,7 +170,7 @@ function AddDisabled() {
     try {
       // Validate all sections before submission
       const allSectionErrors = [];
-      for (let section = 1; section <= 6; section++) {
+      for (let section = 1; section <= 7; section++) {
         const sectionErrors = validateForm(
           formData,
           section as DisabledFormSection,
@@ -591,18 +590,17 @@ function AddDisabled() {
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
-                )
-                : /* Section 6: Missing Information */
+                ) : /* Section 6: Missing Information */
                 currentSection === 6 ? (
                   <PoliceReportSection
                     formData={formData}
-                    t={t} 
-                      handleInputChange={handleInputChange}
+                    t={t}
+                    handleInputChange={handleInputChange}
                     onNext={nextSection}
                     onPrev={prevSection}
                   />
-                ) : (
-                  /* Section 7: Photo Capture */
+                ) : /* Section 7: Photo Capture */
+                currentSection === 7 ? (
                   <PhotoCaptureSection
                     formData={formData}
                     useCamera={useCamera}
@@ -610,11 +608,11 @@ function AddDisabled() {
                     capturedImage={capturedImage}
                     onImageCapture={handleImageCapture}
                     onFileSelect={handleFileSelect}
-                    onSubmit={handleFormSubmit}
                     onPrev={prevSection}
+                    onSubmit={handleFormSubmit}
                     loading={loading}
                   />
-                )}
+                ) : null}
               </AnimatePresence>
             </motion.form>
           )}

@@ -58,7 +58,7 @@ export const validateForm = (
   }
 
   // Section 4: Missing Information
-  else if (currentSection === 4) {
+  else if (currentSection === 2) {
     if (
       personDetails.disappearance_date &&
       !/^\d{4}-\d{2}-\d{2}$/.test(personDetails.disappearance_date)
@@ -101,7 +101,7 @@ export const validateForm = (
   }
 
   // Section 5: Image Upload
-  else if (currentSection === 5) {
+  else if (currentSection === 7) {
     if (!personDetails.image && !capturedImage) {
       errors.push(
         'A personal photo is required. You cannot proceed without uploading or capturing a photo.'
@@ -236,8 +236,8 @@ export const buildSubmissionFormData = (
     category: 'disabled',
 
     // Basic user information
-    full_name: personDetails.name,
-    name: personDetails.name, // Required for database NOT NULL constraint
+    full_name: personDetails.full_name,
+    name: personDetails.full_name, // Required for database NOT NULL constraint
     date_of_birth: personDetails.dob,
     dob: personDetails.dob, // Include both formats for compatibility
     national_id: personDetails.national_id || '',
@@ -345,8 +345,8 @@ export const buildSubmissionFormData = (
   formDataToSend.append('train_multiple', 'true');
 
   // Add direct field mappings for critical fields that must be present as form fields
-  formDataToSend.append('name', personDetails.name);
-  formDataToSend.append('full_name', personDetails.name);
+  formDataToSend.append('name', personDetails.full_name);
+  formDataToSend.append('full_name', personDetails.full_name);
   formDataToSend.append('dob', personDetails.dob);
   formDataToSend.append('date_of_birth', personDetails.dob);
   formDataToSend.append('gender', personDetails.gender || '');

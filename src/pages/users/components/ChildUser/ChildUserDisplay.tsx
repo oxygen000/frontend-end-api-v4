@@ -158,19 +158,8 @@ const ChildUserDisplay = ({
                   icon={<></>}
                 />
 
-                <InfoRow
-                  label={t(
-                    'forms.child.relationshipToMissing',
-                    'Relationship to Missing Child:'
-                  )}
-                  value={maskInfo(user.reporter_relationship)}
-                  icon={<></>}
-                />
-                <InfoRow
-                  label={t('users.reporterOccupation', 'Reporter Occupation:')}
-                  value={maskInfo(user.reporter_occupation)}
-                  icon={<></>}
-                />
+                
+               
                 <InfoRow
                   label={t('users.reporterEducation', 'Reporter Education:')}
                   value={maskInfo(user.reporter_education)}

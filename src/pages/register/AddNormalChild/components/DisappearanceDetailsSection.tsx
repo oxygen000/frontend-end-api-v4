@@ -99,7 +99,7 @@ const DisappearanceDetailsSection: React.FC<
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block font-medium mb-1 text-sm sm:text-base">
+          <label className="block font-medium mb-1 text-white text-sm sm:text-base">
             {t(
               'forms.child.wasAccompanied',
               'Was the Person Accompanied by Someone?'
@@ -127,7 +127,7 @@ const DisappearanceDetailsSection: React.FC<
         </div>
 
         <div>
-          <label className="block font-medium mb-1 text-sm sm:text-base">
+          <label className="block font-medium mb-1 text-white text-sm sm:text-base">
             {t(
               'forms.child.goneMissingBefore',
               'Has the Child Gone Missing Before?'

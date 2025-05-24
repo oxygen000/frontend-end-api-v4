@@ -136,7 +136,7 @@ export const initialFormData: DisabledFormData = {
   treating_physician: '',
   physician_phone: '',
   medication: '',
-  medical_history:'',
+  medical_history: '',
 
   // Missing person information
   area_of_disappearance: '',
@@ -161,4 +161,4 @@ export const initialFormData: DisabledFormData = {
   missing_person_phone: '',
 };
 
-export type DisabledFormSection = 1 | 2 | 3 | 4 | 5 | 6;
+export type DisabledFormSection = 1 | 2 | 3 | 4 | 5 | 6 | 7;

@@ -34,7 +34,7 @@ const MedicalInfoSection: React.FC<MedicalInfoSectionProps> = ({
       transition={transition}
       className="space-y-4"
     >
-      <h3 className="text-base sm:text-lg font-semibold">
+      <h3 className="text-base text-white sm:text-lg font-semibold">
         {t('forms.child.medicalSection', 'Medical Information')}
       </h3>
 

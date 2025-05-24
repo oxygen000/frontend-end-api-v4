@@ -56,7 +56,7 @@ const ReporterInformationSection: React.FC<ReporterInformationSectionProps> = ({
         />
 
         <div>
-          <label className="block font-medium mb-1 text-sm sm:text-base">
+          <label className="block font-medium text-white mb-1 text-sm sm:text-base">
             {t('relationshipToMissing', 'Relationship to Reporter')}{' '}
             <span className="text-red-500">*</span>
           </label>

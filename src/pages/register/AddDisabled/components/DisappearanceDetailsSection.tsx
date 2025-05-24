@@ -104,7 +104,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block font-medium mb-1 text-sm sm:text-base">
+          <label className="block font-medium text-white mb-1 text-sm sm:text-base">
             {t(
               'forms.child.wasAccompanied',
               'Was the Person Accompanied by Someone?'
@@ -114,7 +114,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
             name="was_accompanied"
             value={formData.was_accompanied || ''}
             onChange={handleInputChange}
-            className="w-full px-3 sm:px-4 py-2 text-white bg-white/10 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+            className="w-full px-3 sm:px-4 py-2  text-white bg-white/10 border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
           >
             <option value="" className="text-black">
               {t('common.select', 'Select an option')}
@@ -132,7 +132,7 @@ const MissingInformationSection: React.FC<MissingInformationSectionProps> = ({
         </div>
 
         <div>
-          <label className="block font-medium mb-1 text-sm sm:text-base">
+          <label className="block font-medium mb-1 text-white text-sm sm:text-base">
             {t(
               'forms.child.goneMissingBefore',
               'Has the Child Gone Missing Before?'

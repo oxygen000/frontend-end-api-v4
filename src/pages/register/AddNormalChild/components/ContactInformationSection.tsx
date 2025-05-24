@@ -44,7 +44,7 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
         />
 
         <div>
-          <label className="block font-medium mb-1 text-sm sm:text-base">
+          <label className="block font-medium mb-1 text-white text-sm sm:text-base">
             {t('registration.phoneCompany', 'Telecom Company')}
           </label>
           <select
