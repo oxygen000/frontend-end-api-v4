@@ -196,7 +196,7 @@ function AddDisabled() {
       }
 
       // Generate a unique key for this submission
-      const submissionKey = `${formData.name}-${Date.now()}`;
+      const submissionKey = `${formData.full_name}-${Date.now()}`;
 
       // Check if this submission is already pending
       if (pendingSubmissions.has(submissionKey)) {

@@ -38,12 +38,12 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
         {t('sections.contact', 'Contact Information')}
       </h3>
 
-        {/* Missing person contact information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Missing person contact information */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('registration.phoneNumber', 'Phone Number')}
-          name="missing_person_phone"
-          value={formData.missing_person_phone || ''}
+          name="emergency_phone"
+          value={formData.emergency_phone || ''}
           onChange={handleInputChange}
         />
 
@@ -78,26 +78,20 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
 
       {/* Personal details related to contact */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    
-
         <Input
           label={t('registration.education', 'Education Level (Optional)')}
           name="missing_person_education"
           value={formData.missing_person_education || ''}
           onChange={handleInputChange}
         />
-  <Input
+        <Input
           label={t('registration.distinctive_mark', 'Distinctive Mark ')}
           name="distinctive_mark"
-          value={formData.distinctive_mark|| ''}
+          value={formData.distinctive_mark || ''}
           onChange={handleInputChange}
         />
-      
       </div>
 
-
-
-    
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('forms.child.firstFriend', "Friend's Name")}

@@ -85,7 +85,7 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
   <Input
           label={t('registration.distinctive_mark', 'Distinctive Mark ')}
           name="distinctive_mark"
-          value={formData.distinctive_mark|| ''}
+          value={formData.distinctive_mark || ''}
           onChange={handleInputChange}
         />
       

@@ -114,7 +114,6 @@ export interface User {
 
   // Child form fields - FIELD MAPPING NOTES:
   // Frontend form uses different field names than backend:
-  // - physical_description → distinctive_mark
   // - last_clothes → clothes_description
   // - last_seen_location → area_of_disappearance
   // - last_seen_time → disappearance_date + disappearance_time

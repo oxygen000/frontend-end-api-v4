@@ -210,9 +210,9 @@ const ChildUserDisplay = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
-                <InfoRow
+              <InfoRow
                   label={t('users.distinctive_mark', 'Distinctive Marks:')}
-                  value={formatDate(user.distinctive_mark)}
+                  value={maskInfo(user.distinctive_mark)}
                   icon={<></>}
                 />
                 <InfoRow

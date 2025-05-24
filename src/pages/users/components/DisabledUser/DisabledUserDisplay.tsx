@@ -7,7 +7,7 @@ import BiometricVerificationSection from '../BiometricVerificationSection';
 import DocumentVerificationSection from '../DocumentVerificationSection';
 import InfoRow from '../../../../components/InfoRow';
 import type { User } from '../../types/types';
-import { formatDate,  maskSensitiveInfo } from '../../utils/utils';
+import { formatDate, maskSensitiveInfo } from '../../utils/utils';
 import { useState } from 'react';
 import { SECTION_COLORS } from '../../types/types';
 
@@ -59,12 +59,12 @@ const DisabledUserDisplay = ({
         imageModalOpen={imageModalOpen}
         setImageModalOpen={setImageModalOpen}
       />
-       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* 1. REPORTER INFORMATION */}
           <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
-            >
+          >
             <h2 className="text-lg sm:text-xl font-semibold text-center justify-center text-white mb-3 sm:mb-4 flex items-center">
               <span
                 className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
@@ -77,24 +77,23 @@ const DisabledUserDisplay = ({
                 <InfoRow
                   label={t('forms.child.reporterName', 'Reporter Name:')}
                   value={maskInfo(user.reporter_name)}
-                  icon={ <></>}
+                  icon={<></>}
                 />
                 <InfoRow
                   label={t('users.reporterNationalId', 'Reporter National ID:')}
                   value={maskInfo(user.reporter_national_id)}
-                  icon={ <></>}
+                  icon={<></>}
                 />
                 <InfoRow
                   label={t('users.reporterAddress', 'Reporter Address:')}
                   value={maskInfo(user.reporter_address)}
-                  icon={ <></>}
-
+                  icon={<></>}
                 />
 
                 <InfoRow
                   label={t('users.reporterPhone', 'Reporter Phone:')}
                   value={maskInfo(user.reporter_phone)}
-                  icon={ <></>}
+                  icon={<></>}
                 />
 
                 <InfoRow
@@ -105,7 +104,7 @@ const DisabledUserDisplay = ({
                   ]
                     .filter(Boolean)
                     .join('، ')}
-                  icon={ <></>}
+                  icon={<></>}
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
@@ -159,7 +158,6 @@ const DisabledUserDisplay = ({
                   icon={<></>}
                 />
 
-             
                 <InfoRow
                   label={t('users.reporterEducation', 'Reporter Education:')}
                   value={maskInfo(user.reporter_education)}
@@ -172,7 +170,7 @@ const DisabledUserDisplay = ({
           {/* 2. MISSING PERSON INFORMATION */}
           <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
-            >
+          >
             <h2 className="text-lg sm:text-xl font-semibold justify-center text-white mb-3 sm:mb-4 flex items-center">
               <span
                 className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
@@ -212,7 +210,7 @@ const DisabledUserDisplay = ({
               <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
                 <InfoRow
                   label={t('users.distinctive_mark', 'Distinctive Marks:')}
-                  value={formatDate(user.distinctive_mark)}
+                  value={maskInfo(user.distinctive_mark)}
                   icon={<></>}
                 />
                 <InfoRow
@@ -220,7 +218,7 @@ const DisabledUserDisplay = ({
                     'users.missing_person_phone',
                     'Missing Person Phone'
                   )}
-                  value={maskInfo(user.missing_person_phone)}
+                  value={maskInfo(user.emergency_phone)}
                   icon={<></>}
                 />
                 <InfoRow
@@ -238,7 +236,7 @@ const DisabledUserDisplay = ({
           {/* 3. DISAPPEARANCE LOCATION & DETAILS */}
           <div
             className={`bg-gradient-to-br ${SECTION_COLORS.disabled.gradient} backdrop-blur-md rounded-xl p-4 sm:p-6 border ${SECTION_COLORS.disabled.border} shadow-lg`}
-            >
+          >
             <h2 className="text-lg sm:text-xl font-semibold justify-center text-white mb-3 sm:mb-4 flex items-center">
               <span
                 className={`${isRTL ? 'ml-2 sm:ml-3' : 'mr-2 sm:mr-3'} ${SECTION_COLORS.child.icon}`}
@@ -325,18 +323,17 @@ const DisabledUserDisplay = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
+                <InfoRow
+                  label={t('users.first_friend', 'First Friend:')}
+                  value={`${maskInfo(user.first_friend)} - ${maskInfo(user.first_friend_phone)}`}
+                  icon={<></>}
+                />
 
-              <InfoRow
-  label={t('users.first_friend', 'First Friend:')}
-  value={`${maskInfo(user.first_friend)} - ${maskInfo(user.first_friend_phone)}`}
-  icon={<></>}
-/>
-
-<InfoRow
-  label={t('users.second_friend', 'Second Friend:')}
-  value={`${maskInfo(user.second_friend)} - ${maskInfo(user.second_friend_phone)}`}
-  icon={<></>}
-/>
+                <InfoRow
+                  label={t('users.second_friend', 'Second Friend:')}
+                  value={`${maskInfo(user.second_friend)} - ${maskInfo(user.second_friend_phone)}`}
+                  icon={<></>}
+                />
 
                 <InfoRow
                   label={t('users.gone_missing_before', 'gone_missing_before:')}
