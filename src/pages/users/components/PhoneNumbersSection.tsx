@@ -32,66 +32,63 @@ const PhoneNumbersSection = ({
         {t('users.phoneNumbers', 'Phone Numbers')}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+  {/* العمود الأيمن */}
+  <div className="flex flex-col gap-4 w-full">
+    {/* Primary Phone */}
+    {user.phone_number && (
       <InfoRow
-          label={t('users.landlineNumber', 'Landline Number:')}
-          value={maskSensitiveInfo(user.landline_number) || 'N/A'}
-          icon={<></>}
-        />
+        label={t('users.primaryPhone', 'Primary Phone:')}
+        value={maskSensitiveInfo(user.phone_number)}
+        icon={<></>}
+      />
+    )}
 
-        {/* Primary Phone */}
-        {user.phone_number && (
-          <InfoRow
-            label={t('users.primaryPhone', 'Primary Phone:')}
-            value={maskSensitiveInfo(user.phone_number)}
-            icon={<></>}
-          />
-        )}
+    {/* Landline */}
+    <InfoRow
+      label={t('users.landlineNumber', 'Landline Number:')}
+      value={maskSensitiveInfo(user.landline_number) || 'N/A'}
+      icon={<></>}
+    />
 
-        {/* Secondary Phone */}
-        {user.second_phone_number && (
-          <InfoRow
-            label={t('users.secondaryPhone', 'Secondary Phone:')}
-            value={maskSensitiveInfo(user.second_phone_number)}
-            icon={<></>}
-          />
-        )}
-         {/* Phone Provider */}
-         <InfoRow
-          label={t('users.phoneProvider', 'Phone Provider:')}
-          value={maskSensitiveInfo(user.service_provider) || 'N/A'}
-          icon={<></>}
-        />
+    {/* Secondary Phone */}
+    {user.second_phone_number && (
+      <InfoRow
+        label={t('users.secondaryPhone', 'Secondary Phone:')}
+        value={maskSensitiveInfo(user.second_phone_number)}
+        icon={<></>}
+      />
+    )}
+  </div>
 
-        
-        {user.phone_company && (
-          <InfoRow
-            label={t('users.phoneCompany', 'Phone Company:')}
-            value={user.phone_company}
-            icon={<></>}
-          />
-        )}
+  {/* العمود الأيسر */}
+  <div className="flex flex-col gap-4 w-full">
+    {/* Phone Company */}
+    {user.phone_company && (
+      <InfoRow
+        label={t('users.phoneCompany', 'Phone Company:')}
+        value={user.phone_company}
+        icon={<></>}
+      />
+    )}
 
-       
+    {/* Phone Provider */}
+    <InfoRow
+      label={t('users.phoneProvider', 'Phone Provider:')}
+      value={maskSensitiveInfo(user.service_provider) || 'N/A'}
+      icon={<></>}
+    />
 
-       
-       
-      
+    {/* Registration Date */}
+    {user.created_at && (
+      <InfoRow
+        label={t('users.registeredOn', 'Registered On:')}
+        value={formatDate(user.created_at)}
+        icon={<></>}
+      />
+    )}
+  </div>
+</div>
 
-       
-
-       
-
-       
-
-        {/* Registration Date */}
-        {user.created_at && (
-          <InfoRow
-            label={t('users.registeredOn', 'Registered On:')}
-            value={formatDate(user.created_at)}
-            icon={<></>}
-          />
-        )}
-      </div>
     </motion.div>
   );
 };

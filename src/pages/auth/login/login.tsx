@@ -36,10 +36,12 @@ function Login() {
       className="relative w-screen h-screen overflow-hidden"
       style={{
         backgroundImage: "url('/login/login.png')",
-        backgroundSize: '100% 100%', 
-        backgroundPosition: 'center',
+        backgroundSize: 'cover',         
+        backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',       
       }}
+      
     >
       {/* الخلفية */}
 

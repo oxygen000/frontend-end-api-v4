@@ -40,76 +40,77 @@ const CaseInfoSection = ({
           </h2>
          
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
-            {/* Record Number */}
-            {user.record_number && (
-              <InfoRow
-                label={t('registration.recordNumber', 'Record Number:')}
-                value={maskSensitiveInfo(user.record_number)}
-                  icon={<></>}
-              />
-            )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* العمود الأول */}
+  <div className="flex flex-col gap-4 w-full">
+    {/* Record Number */}
+    {user.record_number && (
+      <InfoRow
+        label={t('registration.recordNumber', 'Record Number:')}
+        value={maskSensitiveInfo(user.record_number)}
+        icon={<></>}
+      />
+    )}
 
-            {/* Governorate */}
-            {user.court_governorate && (
-              <InfoRow
-                label={t(
-                  'registration.court_governorate',
-                  'Court Governorate:'
-                )}
-                value={maskSensitiveInfo(user.court_governorate)}
-                icon={<></>}
-              />
-            )}
+    {/* Governorate */}
+    {user.court_governorate && (
+      <InfoRow
+        label={t('registration.court_governorate', 'Court Governorate:')}
+        value={maskSensitiveInfo(user.court_governorate)}
+        icon={<></>}
+      />
+    )}
 
-            {/* Case Number */}
-            {user.case_number && (
-              <InfoRow
-                label={t('users.caseNumber', 'Case Number:')}
-                value={maskSensitiveInfo(user.case_number)}
-                icon={<></>}
-              />
-            )}
+    {/* Case Number */}
+    {user.case_number && (
+      <InfoRow
+        label={t('users.caseNumber', 'Case Number:')}
+        value={maskSensitiveInfo(user.case_number)}
+        icon={<></>}
+      />
+    )}
 
-            {/* Dossier Number */}
-            {user.dossier_number && (
-              <InfoRow
-                label={t('registration.dossierNumber', 'Dossier Number:')}
-                value={maskSensitiveInfo(user.dossier_number)}
-                  icon={<></>}
-              />
-            )}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
-            {/* Charge */}
-            {(user.charge) && (
-              <InfoRow
-                label={t('registration.charge', 'Charge:')}
-                value={maskSensitiveInfo(user.charge )}
-                icon={<></>}
-              />
-            )}
+    {/* Dossier Number */}
+    {user.dossier_number && (
+      <InfoRow
+        label={t('registration.dossierNumber', 'Dossier Number:')}
+        value={maskSensitiveInfo(user.dossier_number)}
+        icon={<></>}
+      />
+    )}
+  </div>
 
-            {/* Judgment */}
-            {user.judgment && (
-              <InfoRow
-                label={t('users.judgment', 'Judgment:')}
-                value={maskSensitiveInfo(user.judgment)}
-                icon={<></>}
-              />
-            )}
+  {/* العمود الثاني */}
+  <div className="flex flex-col gap-4 w-full">
+    {/* Charge */}
+    {user.charge && (
+      <InfoRow
+        label={t('registration.charge', 'Charge:')}
+        value={maskSensitiveInfo(user.charge)}
+        icon={<></>}
+      />
+    )}
 
-            {/* Sentence */}
-            {user.sentence && (
-              <InfoRow
-                label={t('registration.sentence', 'Sentence:')}
-                value={maskSensitiveInfo(user.sentence)}
-                icon={<></>}
-              />
-            )}
-          </div>
-        </div>
+    {/* Judgment */}
+    {user.judgment && (
+      <InfoRow
+        label={t('users.judgment', 'Judgment:')}
+        value={maskSensitiveInfo(user.judgment)}
+        icon={<></>}
+      />
+    )}
+
+    {/* Sentence */}
+    {user.sentence && (
+      <InfoRow
+        label={t('registration.sentence', 'Sentence:')}
+        value={maskSensitiveInfo(user.sentence)}
+        icon={<></>}
+      />
+    )}
+  </div>
+</div>
+
       </div>
     </motion.div>
   );

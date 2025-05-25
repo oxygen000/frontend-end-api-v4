@@ -90,16 +90,7 @@ const IdentityVerificationSection = ({
           </span>
         </div>
       )}
-      {user.has_criminal_record === 1 && (
-        <div className="flex justify-between items-center">
-          <span className="text-white/70">
-            {t('users.criminalRecordVerified', 'Criminal Record Verified:')}
-          </span>
-          <span className="text-white font-medium">
-            {isIdentityRevealed ? t('common.yes', 'Yes') : t('common.no', 'No')}
-          </span>
-        </div>
-      )}
+      
       {hasVehicleInfo && (
         <div className="flex justify-between items-center">
           <span className="text-white/70">

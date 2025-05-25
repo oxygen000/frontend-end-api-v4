@@ -37,99 +37,92 @@ const DataAdultUser = ({
         </h2>
         
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
-          {user.full_name && (
-            <InfoRow
-              label={t('users.fullName', 'Full Name:')}
-              value={user.full_name}
-              icon={<></>}
-            />
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* العمود الأول */}
+  <div className="flex flex-col gap-4 w-full">
+    {user.full_name && (
+      <InfoRow
+        label={t('users.fullName', 'Full Name:')}
+        value={user.full_name}
+        icon={<></>}
+      />
+    )}
+    {user.dob && (
+      <InfoRow
+        label={t('users.dateOfBirth', 'Date of Birth:')}
+        value={formatDate(user.dob)}
+        icon={<></>}
+      />
+    )}
+    {user.nickname && (
+      <InfoRow
+        label={t('users.nickname', 'Nickname:')}
+        value={user.nickname}
+        icon={<></>}
+      />
+    )}
+    {(user.mothers_name || showEmptyFields) && (
+      <InfoRow
+        label={t('users.mothersName', "Mother's Name:")}
+        value={maskSensitiveInfo(user.mothers_name)}
+        icon={<></>}
+      />
+    )}
+    {(user.marital_status || showEmptyFields) && (
+      <InfoRow
+        label={t('users.maritalStatus', 'Marital Status:')}
+        value={maskSensitiveInfo(user.marital_status)}
+        icon={<></>}
+      />
+    )}
+  </div>
 
-          {user.dob && (
-            <InfoRow
-              label={t('users.dateOfBirth', 'Date of Birth:')}
-              value={formatDate(user.dob)}
-              icon={<></>}
-            />
-          )}
-          {user.nickname && (
-            <InfoRow
-              label={t('users.nickname', 'Nickname:')}
-              value={user.nickname}
-              icon={<></>}
-            />
-          )}
-
-          {(user.mothers_name || showEmptyFields) && (
-            <InfoRow
-              label={t('users.mothersName', "Mother's Name:")}
-              value={maskSensitiveInfo(user.mothers_name)}
-              icon={<></>}
-            />
-          )}
-          {(user.marital_status || showEmptyFields) && (
-            <InfoRow
-              label={t('users.maritalStatus', 'Marital Status:')}
-              value={maskSensitiveInfo(user.marital_status)}
-              icon={<></>}
-            />
-          )}
-         
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-3 sm:gap-4">
-        {(user.educational_qualification || showEmptyFields) && (
-            <InfoRow
-              label={t('users.educational_qualification', 'educational_qualification:')}
-              value={user.educational_qualification || ''}
-              icon={<></>}
-            />
-          )}
-         
-
-          {(user.occupation || showEmptyFields) && (
-            <InfoRow
-              label={t('users.occupation', 'Occupation:')}
-              value={maskSensitiveInfo(user.occupation)}
-              icon={<></>}
-            />
-          )}
-
-          {user.governorate && (
-            <InfoRow
-              label={t('users.governorate', 'Governorate:')}
-              value={user.governorate || ''}
-              icon={<></>}
-            />
-          )}
-
-          {user.address && (
-            <InfoRow
-              label={t('users.address', 'Address:')}
-              value={user.address}
-              icon={<></>}
-            />
-          )}
-
-          {(user.issuing_authority || showEmptyFields) && (
-            <InfoRow
-              label={t('users.issuingAuthority', 'Issuing Authority:')}
-              value={maskSensitiveInfo(user.issuing_authority)}
-              icon={<></>}
-            />
-          )}
-
-          {(user.issue_date || showEmptyFields) && (
-            <InfoRow
-              label={t('users.issueDate', 'Issue Date:')}
-              value={formatDate(user.issue_date)}
-              icon={<></>}
-            />
-          )}
-        </div>
-      </div>
+  {/* العمود الثاني */}
+  <div className="flex flex-col gap-4 w-full">
+    {(user.educational_qualification || showEmptyFields) && (
+      <InfoRow
+        label={t('users.educational_qualification', 'Educational Qualification:')}
+        value={user.educational_qualification || ''}
+        icon={<></>}
+      />
+    )}
+    {(user.occupation || showEmptyFields) && (
+      <InfoRow
+        label={t('users.occupation', 'Occupation:')}
+        value={maskSensitiveInfo(user.occupation)}
+        icon={<></>}
+      />
+    )}
+    {user.governorate && (
+      <InfoRow
+        label={t('users.governorate', 'Governorate:')}
+        value={user.governorate || ''}
+        icon={<></>}
+      />
+    )}
+    {user.address && (
+      <InfoRow
+        label={t('users.address', 'Address:')}
+        value={user.address}
+        icon={<></>}
+      />
+    )}
+    {(user.issuing_authority || showEmptyFields) && (
+      <InfoRow
+        label={t('users.issuingAuthority', 'Issuing Authority:')}
+        value={maskSensitiveInfo(user.issuing_authority)}
+        icon={<></>}
+      />
+    )}
+    {(user.issue_date || showEmptyFields) && (
+      <InfoRow
+        label={t('users.issueDate', 'Issue Date:')}
+        value={formatDate(user.issue_date)}
+        icon={<></>}
+      />
+    )}
+  </div>
+</div>
     </div>
   </motion.div>
 );

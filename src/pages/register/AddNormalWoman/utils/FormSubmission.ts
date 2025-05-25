@@ -58,6 +58,7 @@ interface UserDataType {
   arrival_date: string;
   arrival_time: string;
   arrival_datetime: string;
+  license_governorate: string;
   flight_number: string;
   return_airport: string;
   return_flight_number: string;
@@ -254,6 +255,7 @@ export const submitForm = async (
       );
       formDataToSend.append('brand', formData.brand || '');
       formDataToSend.append('license_type', formData.license_type || '');
+      formDataToSend.append('license_governorate', formData.license_governorate || '');
 
       // Keep original expiration_year
       formDataToSend.append('expiration_year', formData.expiration_year || '');
@@ -327,6 +329,7 @@ export const submitForm = async (
       arrival_destination: formData.arrival_destination || '',
       arrival_airline: formData.arrival_airline || '',
       arrival_flight_number: formData.arrival_flight_number || '',
+      license_governorate: formData.license_governorate || '',
 
       return_date: formData.return_date || '',
       flight_number: formData.departure_flight_number || '', // Use departure flight number as fallback

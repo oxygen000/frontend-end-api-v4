@@ -204,6 +204,7 @@ export const submitForm = async (
       formDataToSend.append('brand', formData.brand || '');
       formDataToSend.append('license_type', formData.license_type || '');
       formDataToSend.append('traffic_unit', formData.traffic_unit || '');
+      formDataToSend.append('vehicle_number', formData.vehicle_number || '');
     }
 
     // Add travel fields if has_travel is true
@@ -297,6 +298,7 @@ export const submitForm = async (
       employee_id: '',
       department: '',
       role: '',
+      vehicle_number: formData.vehicle_number || '',
       occupation: formData.occupation || '',
       has_criminal_record: formData.has_criminal_record ? '1' : '0',
       case_details: formData.case_details || '',

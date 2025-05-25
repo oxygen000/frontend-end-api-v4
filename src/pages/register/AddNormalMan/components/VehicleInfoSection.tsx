@@ -72,14 +72,14 @@ const VehicleInfoSection: React.FC<VehicleInfoSectionProps> = ({
           {/* Basic Vehicle Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label={t('registration.licensePlate', 'License Plate')}
+              label={t('registration.vehicleNumber', 'Vehicle Number')}
               name="vehicle_number"
               type="text"
               value={formData.vehicle_number || ''}
               onChange={handleInputChange}
             />
             <Input
-              label={t('registration.licenseType', 'License Type')}
+              label={t('registration.licensePlate', 'License Type')}
               name="license_type"
               type="text"
               value={formData.license_type || ''}

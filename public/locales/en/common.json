@@ -94,9 +94,11 @@
   },
   "identification": {
     "title": "Face Identification",
+    "similarity": "Similarity",
     "subtitle": "Upload or capture an image to identify a person",
     "verifySubtitle": "Verify this person's identity",
     "faceRecognized": "Face Recognized!",
+    "readyForScan": "Ready for Scan",
     "identifiedAs": "Identified as:",
     "useCamera": "Use Camera",
     "uploadImage": "Upload Image",

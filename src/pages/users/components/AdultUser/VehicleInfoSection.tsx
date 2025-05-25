@@ -38,7 +38,7 @@ interface VehicleInfoSectionProps {
     >
 
       
-      <h2 className="text-lg sm:text-xl justify-center font-semibold text-white mb-4 flex items-center">
+      <h2 className="text-lg sm:text-xl justify-center text-center font-semibold text-white mb-4 flex items-center">
     
         
         {t(
@@ -80,7 +80,7 @@ interface VehicleInfoSectionProps {
         
           <InfoRow
           label={t('registration.licensePlate', 'licensePlate')}
-          value={user.vehicle_number|| ''}
+          value={user.license_type  || ''}
           icon={<></>}
         />
         <InfoRow

@@ -126,7 +126,7 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
         
         <InfoRow
           label={t('registration.arrivalDate', 'Arrival Date:')}
-          value={formatDate(user.arrival_date)}
+          value={formatDate(user.return_date)}
         />
          <InfoRow
           label={t('registration.arrivalDestination', 'Arrival Destination:')}

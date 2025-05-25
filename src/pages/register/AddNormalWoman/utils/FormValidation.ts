@@ -56,33 +56,19 @@ export const validateForm = (
     }
   } else if (currentSection === 3) {
     if (formData.has_criminal_record) {
-      if (!formData.case_details) {
-        errors.push('Case Details are required when criminal record exists');
-      }
-      if (!formData.police_station) {
-        errors.push('Police Station is required when criminal record exists');
-      }
+     
+     
       if (!formData.case_number) {
         errors.push('Case Number is required when criminal record exists');
       }
     }
   } else if (currentSection === 5) {
     if (formData.has_vehicle) {
-      if (!formData.license_plate) {
-        errors.push('License Plate is required for motorcycle');
-      }
+     
       if (!formData.vehicle_model) {
         errors.push('Vehicle Model is required for motorcycle');
       }
-      if (!formData.license_expiration) {
-        errors.push('License Expiration Date is required for motorcycle');
-      } else {
-        const expDate = new Date(formData.license_expiration);
-        const today = new Date();
-        if (expDate < today && !formData.expiration_year) {
-          errors.push('License has expired');
-        }
-      }
+     
     }
   } else if (currentSection === 6) {
     if (!formData.image && !capturedImage) {

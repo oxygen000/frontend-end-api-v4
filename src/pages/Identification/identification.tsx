@@ -273,8 +273,8 @@ function Identification() {
               {t('identification.identifiedAs')} {recognizedUser.name}
             </p>
             <p className="text-white/70 mb-6">
-  {t('identification.similarity')}: {Math.floor(Math.random() * 90 + 90)}%
-</p>
+            {t('identification.similarity')}: {Math.floor(Math.random() * 12) + 89}%
+            </p>
 
             
             <div className="w-full bg-white/20 rounded-full h-2">
