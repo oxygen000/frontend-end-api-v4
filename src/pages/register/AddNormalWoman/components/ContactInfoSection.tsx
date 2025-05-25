@@ -91,13 +91,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
           onChange={handleInputChange}
         />
 
-        <Input
-          label={t('registration.registrationDate', 'Registration Date')}
-          name="registration_date"
-          type="date"
-          value={formData.registration_date || ''}
-          onChange={handleInputChange}
-        />
+       
 
         <Input
           label={t('registration.secondPhoneNumber', 'second Phone Number')}

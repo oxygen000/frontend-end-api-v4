@@ -275,7 +275,7 @@ const AddNormalChild = () => {
             </p>
 
             <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50 mb-8">
-              <div className="flex items-center text-center justify-center gap-10">
+              <div className="flex items-center text-center justify-center gap-2 sm:gap-4 md:gap-6">
                 {sections.map((section) => (
                   <div
                     key={section.id}

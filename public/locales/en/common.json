@@ -2,9 +2,15 @@
   "title": "Child Registration",
   "childFullName": "Child's Full Name",
   "dateOfBirth": "Date of Birth",
+  "startingNewRegistration": " success Done",
   "childId": "Child's ID ",
   "locationInfo": "Location Information",
   "areaOfDisappearance": "Area of Disappearance",
+  "reporterRelationship": {
+    "brother": "Brother",
+    "father": "Father",
+    "mother": "Mother"
+  },
   "sections": {
     "personal": "Personal Information",
     "missing": "Missing Information",

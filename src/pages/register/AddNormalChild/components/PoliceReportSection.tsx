@@ -38,7 +38,7 @@ const PoliceReportSection: React.FC<PoliceReportSectionProps> = ({
       </h3>
 
       {/* Report information */}
-      <h4 className="text-base text-white font-medium mt-4 text-blue-200">
+      <h4 className="text-base text-white font-medium mt-4 ">
         {t('forms.child.reportDetails', 'Report Details')}
       </h4>
 

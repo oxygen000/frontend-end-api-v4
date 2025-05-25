@@ -69,7 +69,7 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
       <div className="mb-3 sm:mb-4">
         <InfoRow
           label={t('registration.passportNumber', 'Passport Number:')}
-          value={user.passport_number}
+          value={user.passport_number || ''}
         />
       </div>
       <h1 className="text-lg sm:text-xl justify-center font-semibold text-white mb-3 sm:mb-4 flex items-center">
@@ -79,7 +79,7 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
       <div className="mb-3 sm:mb-4 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <InfoRow
           label={t('registration.departureCountry', 'Departure Country:')}
-          value={user.departure_country}
+          value={user.departure_country || ''}
         />
         <InfoRow
           label={t('registration.departureDate', 'Departure Date:')}
@@ -91,16 +91,16 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
             'registration.departureDestination',
             'Departure Destination:'
           )}
-          value={user.departure_destination}
+          value={user.departure_destination || ''}
         />
         <InfoRow
           label={t('registration.departureTime', 'Departure Time:')}
-          value={user.departure_time}
+          value={user.departure_time || ''}
         />
 
         <InfoRow
           label={t('registration.departureAirline', 'Departure Airline:')}
-          value={user.departure_airline}
+          value={user.departure_airline || ''}
         />
 
         <InfoRow
@@ -108,7 +108,7 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
             'registration.departureFlightNumber',
             'Departure Flight Number:'
           )}
-          value={user.departure_flight_number}
+            value={user.departure_flight_number || ''}
         />
       </div>
 
@@ -120,7 +120,7 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
         {/* Arrival Info */}
         <InfoRow
           label={t('registration.arrivalOrigin', 'Arrival Origin:')}
-          value={user.arrival_origin}
+          value={user.arrival_origin || ''}
         />
        
         
@@ -130,22 +130,22 @@ const TravelInfoSection = ({ user, t, formatDate }: TravelInfoSectionProps) => {
         />
          <InfoRow
           label={t('registration.arrivalDestination', 'Arrival Destination:')}
-          value={user.arrival_destination}
+          value={user.arrival_destination || ''}
         />
         <InfoRow
           label={t('registration.arrivalTime', 'Arrival Time:')}
-          value={user.arrival_time}
+          value={user.arrival_time || ''}
         />
         <InfoRow
           label={t('registration.arrivalAirline', 'Arrival Airline:')}
-          value={user.arrival_airline}
+          value={user.arrival_airline || ''}
         />
         <InfoRow
           label={t(
             'registration.arrivalFlightNumber',
             'Arrival Flight Number:'
           )}
-          value={user.arrival_flight_number}
+          value={user.arrival_flight_number || ''}
         />
 
         

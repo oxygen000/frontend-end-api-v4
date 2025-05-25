@@ -553,7 +553,7 @@
     "treatingPhysician": "الطبيب المعالج",
     "disappearanceDate": "تاريخ الغياب",
     "disappearanceTime": "وقت الغياب",
-    "lastSighting": "آخر مشاهدة للمتغيب",
+    "lastSighting": "منطقة التغيب تفصيلاً",
     "fullName": "الاسم الكامل",
     "national_id": "الرقم القومي",
     "dateOfBirth": "تاريخ الميلاد",
@@ -655,7 +655,7 @@
     "userAvatar": "صورة المستخدم",
     "caseInfo": "صحيفة الحالة الجنائية ",
     "caseInfo2": "(قطاع الأمن العام)",
-    "areaOfDisappearance":"منطقة التغيب تفصيلاً",
+    "areaOfDisappearance":"آخر مشاهدة للمتغيب  ",
     "friends":"الأصدقاء",
     "educational_qualification": "المؤهل ",
     "occupation": "الوظيفة",
@@ -722,6 +722,7 @@
       "physicianInfo": "المعلومات الطبية",
       "treatingPhysician": "الطبيب المعالج",
       "physicianPhone": "هاتف الطبيب",
+      "medicalSection": "التاريخ الطبي",
       "additionalData": "معلومات إضافية",
       "sections": {
         "1": "المعلومات الأساسية",
@@ -914,5 +915,6 @@
     },
     "medicalInfo": "التاريخ الطبي",
     "physicianName": "اسم الطبيب",
-    "physicianPhone": "هاتف الطبيب"
+    "physicianPhone": "هاتف الطبيب",
+    "startingNewRegistration": " تم انشاء "
 }

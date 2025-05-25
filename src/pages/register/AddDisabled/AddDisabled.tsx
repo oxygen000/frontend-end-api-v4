@@ -437,12 +437,12 @@ function AddDisabled() {
             {/* Progress text */}
             <p className="text-white/80 text-center mb-8 text-lg">
               {' '}
-              <span className="text-purple-600">({currentSection}/7)</span>
+              <span className="text-purple-400">({currentSection}/7)</span>
             </p>
 
             {/* Progress indicator */}
-            <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50">
-              <div className="flex items-center text-center justify-center gap-6">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50 mb-8">
+              <div className="flex items-center text-center justify-center gap-2 sm:gap-4 md:gap-6">
                 {sections.map((section) => (
                   <div
                     key={section.id}
@@ -450,24 +450,44 @@ function AddDisabled() {
                   >
                     {/* Section number circle */}
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentSection >= section.id
-                          ? 'bg-purple-500 text-white'
-                          : 'bg-gray-700 text-gray-400'
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-2
+                      ${
+                        currentSection === section.id
+                          ? 'bg-purple-500 text-white ring-4 ring-purple-500/30'
+                          : currentSection > section.id
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-700 text-gray-400'
                       }`}
                     >
-                      {section.id}
+                      {currentSection > section.id ? (
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      ) : (
+                        section.id
+                      )}
                     </div>
 
                     {/* Section name */}
                     <span
-                      className={`text-sm mt-2 ${
-                        currentSection >= section.id
-                          ? 'text-purple-400'
-                          : 'text-gray-400'
+                      className={`text-xs sm:text-sm hidden sm:block
+                      ${
+                        currentSection === section.id
+                          ? 'text-purple-400 font-medium'
+                          : currentSection > section.id
+                            ? 'text-green-500'
+                            : 'text-gray-500'
                       }`}
                     >
-                      {t(`sections.${section.id}`, section.name)}
+                      {section.name}
                     </span>
                   </div>
                 ))}
@@ -515,10 +535,17 @@ function AddDisabled() {
           ) : (
             <motion.form
               onSubmit={handleFormSubmit}
+              className="w-full max-w-3xl mx-auto 
+                        bg-gray-800/40 backdrop-blur-md
+                        p-6 sm:p-8 
+                        rounded-2xl 
+                        shadow-[0_10px_40px_-5px_rgba(147,51,234,0.3)] 
+                        text-white 
+                        border border-gray-700/50"
               variants={formVariants}
               initial="hidden"
               animate="visible"
-              className="bg-gray-800/50 backdrop-blur-sm p-5 sm:p-6 lg:p-8 rounded-xl border border-gray-700/50 mb-10"
+              exit="exit"
             >
               {/* Display validation errors if any */}
               <AnimatePresence>
@@ -528,21 +555,29 @@ function AddDisabled() {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6"
-                    role="alert"
-                    aria-live="assertive"
+                    className="bg-red-500/20 p-4 rounded-xl border border-red-500/30 mb-6"
                   >
-                    <h4 className="text-red-400 font-semibold mb-2">
-                      {t(
-                        'common.errorsFound',
-                        'Please fix the following errors:'
-                      )}
-                    </h4>
-                    <ul className="list-disc list-inside text-white/80 space-y-1">
-                      {formErrors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                      ))}
-                    </ul>
+                    <div className="flex items-start">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-red-400 mr-2 mt-0.5 flex-shrink-0"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <ul className="list-disc pl-5 space-y-1">
+                        {formErrors.map((error, index) => (
+                          <li key={index} className="text-red-100 text-sm">
+                            {error}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

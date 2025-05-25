@@ -142,17 +142,7 @@ const TravelInfoSection: React.FC<TravelInfoSectionProps> = ({
             />
           </div>
          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label={t(
-                'registration.returnFlightNumber',
-                'Return Flight Number'
-              )}
-              name="return_flight_number"
-              value={formData.return_flight_number || ''}
-              onChange={handleInputChange}
-            />
-          </div>
+         
           <h1 className="text-lg sm:text-xl justify-center font-semibold text-white mb-3 sm:mb-4 flex items-center">
             {t('users.arrivalInfo', 'Arrival Information')}
           </h1>

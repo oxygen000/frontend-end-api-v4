@@ -4,7 +4,7 @@ import Input from '../../../../components/Input';
 import { sectionVariants, transition } from '../../../../config/animations';
 import SectionButtons from './SectionButtons';
 import type { FormData } from '../types/types';
-
+import { useTranslationWithFallback } from '../../../../hooks/useTranslationWithFallback';
 interface GuardianInfoSectionProps {
   formData: FormData;
   handleInputChange: (
@@ -22,8 +22,10 @@ const GuardianInfoSection: React.FC<GuardianInfoSectionProps> = ({
   handleInputChange,
   prevSection,
   nextSection,
-  t,
+
 }) => {
+  const { t } = useTranslationWithFallback('forms/disabled');
+
   return (
     <motion.div
       variants={sectionVariants}
