@@ -8,13 +8,7 @@
   "reporterAddress": "عنوان المبلغ",
   "reporterOccupation": "مهنة المبلغ",
   "reporterEducation": "مستوى تعليم المبلغ",
-  "reporterNamePlaceholder": "أدخل اسم المبلغ",
-  "reporterNationalIdPlaceholder": "أدخل الرقم القومي للمبلغ",
-  "reporterPhonePlaceholder": "أدخل رقم هاتف المبلغ",
-  "reporterRelationshipPlaceholder": "مثل: والد، شقيق، صديق",
-  "reporterAddressPlaceholder": "أدخل عنوان المبلغ",
-  "reporterOccupationPlaceholder": "أدخل مهنة المبلغ",
-  "reporterEducationPlaceholder": "أدخل مستوى تعليم المبلغ",
+ 
 
   "reportInfo": "معلومات البلاغ",
   "absenceReportNumber": "رقم محضر الغياب",
@@ -22,10 +16,7 @@
   "policeStation": "قسم الشرطة",
   "securityDirectorate": "مديرية الأمن",
   "governorate": "المحافظة",
-  "absenceReportNumberPlaceholder": "أدخل رقم البلاغ",
-  "policeStationPlaceholder": "أدخل اسم قسم الشرطة",
-  "securityDirectoratePlaceholder": "أدخل اسم مديرية الأمن",
-  "governoratePlaceholder": "أدخل اسم المحافظة",
+
 
   "personInfo": "معلومات الشخص المفقود",
   "age": "العمر",
@@ -42,15 +33,8 @@
   "disappearanceDate": "تاريخ الاختفاء",
   "disappearanceTime": "وقت الاختفاء",
   "wasAccompanied": "هل كان برفقة أحد؟",
-  "areaOfDisappearancePlaceholder": "أدخل المكان الذي شوهد فيه آخر مرة",
-  "lastSightingPlaceholder": "أدخل تفاصيل المكان بدقة",
-  "clothesDescriptionPlaceholder": "صف الملابس التي كان يرتديها عند اختفائه",
+
 
   "additionalInfo": "معلومات إضافية",
-  "medicalHistory": "التاريخ الطبي",
-  "friends": "الأصدقاء أو المعارف",
-  "previousIncidents": "حوادث مشابهة سابقة",
-  "medicalHistoryPlaceholder": "أدخل الحالات الطبية ذات الصلة",
-  "friendsPlaceholder": "أسماء الأصدقاء المقربين أو المعارف",
-  "previousIncidentsPlaceholder": "صف أي حوادث سابقة"
+  "medicalHistory": "التاريخ الطبي"
 } 

@@ -696,7 +696,7 @@
       "disappearanceDetails": " مكان الغياب",
       "policeReport": " معلومات عن المتغيب",
       "firstFriend": "الصديق الأول",
-      "reporterName": "اسم ",
+      "reporterName": "الاسم ",
       "previousDisputes": "خلافات سابقة",
       "goneMissingBefore": "فُقِد من قبل",
       "wasAccompanied": "كان برفقة",
@@ -751,12 +751,9 @@
       },
       "disabilityDetails": "وصف الإعاقة",
       "specialNeeds": "احتياجات خاصة",
-      "emergencyContact": {
-        "label": "جهة اتصال للطوارئ",
-        "placeholder": "أدخل اسم جهة الاتصال للطوارئ"
-      },
+    
       "reporterInfo": "معلومات المبلغ",
-      "reporterName": "اسم ",
+      "reporterName": "الاسم ",
       "reporterNationalId": "الرقم القومي ",
       "reporterAddress": "عنوان ",
       "reporterPhone": "هاتف ",
@@ -876,7 +873,7 @@
     "WE": "وي"
   },
   "reporter": {
-    "name": "اسم ",
+    "name": "الاسم ",
     "occupation": "وظيفة ",
     "education": "تعليم ",
     "reporterNationalId": "الرقم القومي ",

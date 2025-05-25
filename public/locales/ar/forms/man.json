@@ -130,18 +130,8 @@
       "arrivalDestination": "وجهة الوصول",
       "arrivalDestinationPlaceholder": "أدخل وجهة الوصول",
       "arrivalAirline": "شركة طيران الوصول",
-      "arrivalAirlinePlaceholder": "أدخل اسم شركة الطيران",
-      "arrivalFlightNumber": "رقم رحلة الوصول",
-      "arrivalFlightNumberPlaceholder": "أدخل رقم الرحلة",
-      "accommodationAddress": "عنوان الإقامة",
-      "accommodationAddressPlaceholder": "أدخل عنوان الإقامة",
-      "accommodationPhone": "هاتف الإقامة",
-      "accommodationPhonePlaceholder": "أدخل هاتف الإقامة",
-      "emergencyContactName": "اسم جهة اتصال للطوارئ",
-      "emergencyContactNamePlaceholder": "أدخل اسم جهة اتصال للطوارئ",
-      "emergencyContactPhone": "هاتف جهة اتصال للطوارئ",
-      "emergencyContactPhonePlaceholder": "أدخل هاتف جهة اتصال للطوارئ"
-    },
+      "arrivalFlightNumber": "رقم رحلة الوصول"
+       },
     "photoCapture": {
       "title": "التقاط الصورة",
       "useCamera": "استخدام الكاميرا",
