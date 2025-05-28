@@ -33,20 +33,13 @@ function Login() {
 
   return (
     <div
-      className="relative w-screen h-screen overflow-hidden"
-      style={{
-        backgroundImage: "url('/login/login.png')",
-        backgroundSize: 'cover',         
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',       
-      }}
-      
-    >
-      {/* الخلفية */}
-
-      {/* المحتوى */}
-      <div className="relative z-10 flex items-center md:justify-start justify-center h-full m-10">
+      className="relative w-screen h-screen overflow-hidden">
+ <img
+    src="/login/login.png"
+    alt="Background"
+    className="absolute top-0 left-0 w-screen h-screen object-fill z-0"
+  /> 
+      <div className="relative z-10  flex items-center md:justify-start justify-center h-full m-10">
         <div className="relative w-full max-w-[450px] items-center justify-center px-4 lg:px-0">
           <div
             className="bg-[#00e0fb] bg-opacity-20 rounded-xl shadow-xl p-8 backdrop-blur-sm h-full hover:shadow-2xl transition duration-300"
