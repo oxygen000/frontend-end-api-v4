@@ -111,11 +111,12 @@ interface VehicleInfoSectionProps {
           value={user.vehicle_color || ''}
           icon={<></>}
         />
-        <InfoRow
-          label={t('registration.manufactureYear', 'Manufacture Year:')}
-          value={user.manufacture_year || ''}
-          icon={<></>}
-        />
+       <InfoRow
+  label={t('registration.manufactureYear', 'Manufacture Year:')}
+  value={user.manufacture_year ? new Date(user.manufacture_year).getFullYear().toString() : ''}
+  icon={<></>}
+/>
+
        
        <InfoRow
           label={t('registration.engineNumber', 'Engine Number:')}
