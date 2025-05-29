@@ -14,9 +14,10 @@ import AddNormalChild from './pages/register/AddNormalChild/AddNormalChild';
 import Identification from './pages/Identification/identification';
 import Search from './pages/Search/search';
 import Userdata from './pages/users/userdata';
+import NotFound from './pages/NotFound/NotFound';
+import ProtectedRoute from './components/ProtectedRoute';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { Toaster } from 'react-hot-toast';
-
 
 function App() {
   return (
@@ -27,7 +28,13 @@ function App() {
           <Route path="/" element={<LandingLayout />}>
             <Route path="/" element={<Landing />} />
           </Route>
-          <Route element={<Layout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
             <Route path="search" element={<Search />} />
             <Route path="identification" element={<Identification />} />
             <Route path="home" element={<Home />} />
@@ -45,6 +52,9 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<Login />} />
           </Route>
+
+          {/* 404 Page - Catch all unmatched routes */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TranslationProvider>

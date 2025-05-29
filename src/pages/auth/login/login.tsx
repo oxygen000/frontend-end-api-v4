@@ -21,10 +21,19 @@ function Login() {
       // Store the logged-in user ID in localStorage
       localStorage.setItem('loggedInUserId', user.id.toString());
       localStorage.setItem('loggedInUsername', user.username);
+      localStorage.setItem('isLoggedIn', 'true');
 
       setError('');
       setIsLoading(false);
-      navigate('/home'); // Redirect to profile page instead of home
+
+      // Check if there's a redirect path stored
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(redirectPath);
+      } else {
+        navigate('/home'); // Default redirect to home
+      }
     } else {
       setError('Invalid username or password.');
       setIsLoading(false);
@@ -32,19 +41,18 @@ function Login() {
   };
 
   return (
-    <div
-      className="relative w-screen h-screen overflow-hidden">
- <img
-    src="/login/login.png"
-    alt="Background"
-    className="absolute top-0 left-0 w-screen h-screen object-fill z-0"
-  /> 
+    <div className="relative w-screen h-screen overflow-hidden">
+      <img
+        src="/login/login.png"
+        alt="Background"
+        className="absolute top-0 left-0 w-screen h-screen object-fill z-0"
+      />
       <div className="relative z-10  flex items-center md:justify-start justify-center  left-20 h-full m-10">
         <div className="relative w-full max-w-[350px] items-center justify-center -top-13 px-4 lg:px-0">
           <div
             className="bg-[#00e0fb] bg-opacity-20 rounded-xl shadow-xl p-8 backdrop-blur-sm h-full hover:shadow-2xl transition duration-300"
             style={{
-              backgroundColor: 'rgba(0, 224, 251, 0.2)'              
+              backgroundColor: 'rgba(0, 224, 251, 0.2)',
             }}
           >
             <h2 className="text-3xl font-bold text-center text-white mb-6">
