@@ -92,26 +92,13 @@ function UserMenu() {
           <ul className="list-none p-2">
             <li>
               <button
-                onClick={() => {
-                  navigate('/profile');
-                  setIsOpen(false);
-                }}
+               
                 className="w-full text-left p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300"
               >
                Police Officer
               </button>
             </li>
-            <li>
-              <button
-                onClick={() => {
-                  navigate('/settings');
-                  setIsOpen(false);
-                }}
-                className="w-full text-left p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300"
-              >
-                {t('common:settings', 'Settings')}
-              </button>
-            </li>
+           
             <li>
               <button
                 onClick={handleLogout}
