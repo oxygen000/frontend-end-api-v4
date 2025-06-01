@@ -41,8 +41,6 @@ function Identification() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Check file size (max 1MB)
-
       // Check file type
       if (!file.type.startsWith('image/')) {
         toast.error('Please upload an image file');
@@ -50,36 +48,13 @@ function Identification() {
         return;
       }
 
-      // Create a preview to check image quality
+      // Create a preview
       const reader = new FileReader();
       reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          // Check image dimensions and quality
-          if (img.width < 200 || img.height < 200) {
-            toast.error(
-              'Image resolution too low. Please use a higher quality image.'
-            );
-            event.target.value = '';
-            return;
-          }
-
-          // Ensure proper aspect ratio for face detection
-          const aspectRatio = img.width / img.height;
-          if (aspectRatio < 0.5 || aspectRatio > 2) {
-            toast.error(
-              'Image aspect ratio should be between 0.5 and 2 for better face detection.'
-            );
-            event.target.value = '';
-            return;
-          }
-
-          const preview = e.target?.result as string;
-          setUploadedImagePreview(preview);
-          setUploadedImage(file);
-          setCapturedImage(null);
-        };
-        img.src = e.target?.result as string;
+        const preview = e.target?.result as string;
+        setUploadedImagePreview(preview);
+        setUploadedImage(file);
+        setCapturedImage(null);
       };
       reader.readAsDataURL(file);
     }
@@ -90,36 +65,14 @@ function Identification() {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       if (imageSrc) {
-        // Create a temporary image to check quality
-        const img = new Image();
-        img.onload = () => {
-          // Check image dimensions and quality
-          if (img.width < 200 || img.height < 200) {
-            toast.error(
-              'Image resolution too low. Please try again with better lighting.'
-            );
-            return;
-          }
+        // Ensure proper base64 format
+        const formattedImage = imageSrc.startsWith('data:image')
+          ? imageSrc
+          : `data:image/jpeg;base64,${imageSrc}`;
 
-          // Ensure proper aspect ratio for face detection
-          const aspectRatio = img.width / img.height;
-          if (aspectRatio < 0.5 || aspectRatio > 2) {
-            toast.error(
-              'Please adjust camera position for better face detection.'
-            );
-            return;
-          }
-
-          // Ensure proper base64 format
-          const formattedImage = imageSrc.startsWith('data:image')
-            ? imageSrc
-            : `data:image/jpeg;base64,${imageSrc}`;
-
-          setCapturedImage(formattedImage);
-          setUploadedImage(null);
-          setUploadedImagePreview(null);
-        };
-        img.src = imageSrc;
+        setCapturedImage(formattedImage);
+        setUploadedImage(null);
+        setUploadedImagePreview(null);
       }
     }
   }, [webcamRef]);
@@ -273,10 +226,10 @@ function Identification() {
               {t('identification.identifiedAs')} {recognizedUser.name}
             </p>
             <p className="text-white/70 mb-6">
-            {t('identification.similarity')}: {Math.floor(Math.random() * 12) + 89}%
+              {t('identification.similarity')}:{' '}
+              {Math.floor(Math.random() * 12) + 89}%
             </p>
 
-            
             <div className="w-full bg-white/20 rounded-full h-2">
               <motion.div
                 className="bg-green-500 h-2 rounded-full"
