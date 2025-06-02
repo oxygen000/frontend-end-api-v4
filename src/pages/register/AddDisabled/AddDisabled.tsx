@@ -4,9 +4,9 @@
  * This component handles the registration form for disabled persons.
  * It includes multiple form sections and manages form state and validation.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { registrationApi } from '../../../services/api';
 import { useTranslationWithFallback } from '../../../hooks/useTranslationWithFallback';
@@ -29,6 +29,7 @@ import { validateForm, buildSubmissionFormData } from './utils/formValidation';
 import type { RegistrationResult } from '../../../services/api/types';
 import PoliceReportSection from './components/PoliceReportSection';
 import PhotoCaptureSection from './components/ImageSection';
+import type { User } from '../../users/types/types';
 // Track submissions to prevent duplicates
 const pendingSubmissions = new Set<string>();
 
@@ -40,6 +41,7 @@ const pendingSubmissions = new Set<string>();
 function AddDisabled() {
   // Translation hook
   const { t } = useTranslationWithFallback('forms/disabled');
+  const location = useLocation();
 
   // Form state
   const [currentSection, setCurrentSection] = useState<DisabledFormSection>(1);
@@ -54,6 +56,186 @@ function AddDisabled() {
   const [loading, setLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
+
+  // Edit mode state
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  // Debug initial form data
+  console.log('🏁 AddDisabled component initialized');
+  console.log('📋 Initial form data:', initialFormData);
+  console.log('📍 Current location:', location);
+
+  // Check if we're in edit mode and populate form data
+  useEffect(() => {
+    const state = location.state as {
+      editMode?: boolean;
+      editUserId?: string;
+      userData?: User;
+    } | null;
+
+    console.log('🔍 AddDisabled useEffect - Location state:', state);
+
+    // Try to get data from state or localStorage backup
+    let userData: User | null = null;
+    let editMode = false;
+
+    if (state?.editMode && state?.userData) {
+      userData = state.userData;
+      editMode = state.editMode;
+      console.log('📊 Using location.state data');
+    } else {
+      // Try localStorage backup
+      try {
+        const backupData = localStorage.getItem('editDisabledData');
+        if (backupData) {
+          userData = JSON.parse(backupData);
+          editMode = true;
+          console.log('💾 Using localStorage backup data');
+        }
+      } catch (error) {
+        console.warn('⚠️ Failed to read localStorage backup:', error);
+      }
+    }
+
+    if (editMode && userData) {
+      console.group('📝 Disabled Form Edit Mode Initialization');
+      console.log('✅ Edit mode detected');
+      console.log('📊 Received user data:', userData);
+
+      setIsEditMode(true);
+      const user = userData;
+
+      // Map user data to disabled form data structure
+      const mappedFormData: DisabledFormData = {
+        ...initialFormData,
+        // Basic information
+        name: user.name || '',
+        full_name: user.full_name || user.name || '',
+        dob: user.dob || user.date_of_birth || '',
+        gender: user.gender || '',
+        national_id: user.national_id || '',
+        address: user.address || '',
+        nickname: user.nickname || '',
+        age: user.age || '',
+
+        // Contact information
+        phone_number: user.phone_number || user.missing_person_phone || '',
+        phone_company: user.phone_company || user.service_provider || '',
+        second_phone_number: user.second_phone_number || '',
+
+        // Disability-specific information
+        disability_type: user.disability_type || '',
+        disability_description: user.disability_description || '',
+        medical_condition: user.medical_condition || user.medical_history || '',
+        medical_history: user.medical_history || user.medical_condition || '',
+        special_needs: user.special_needs || '',
+        emergency_contact: user.emergency_contact || '',
+        emergency_phone: user.emergency_phone || '',
+
+        // Physical description
+        distinctive_mark:
+          user.distinctive_mark || user.physical_description || '',
+
+        // Reporter/Guardian information
+        reporter_name: user.reporter_name || user.guardian_name || '',
+        reporter_phone: user.reporter_phone || user.guardian_phone || '',
+        reporter_national_id:
+          user.reporter_national_id || user.guardian_id || '',
+        reporter_relationship:
+          user.reporter_relationship || user.guardian_relationship || '',
+        reporter_address: user.reporter_address || user.address || '',
+        reporter_occupation: user.reporter_occupation || '',
+        reporter_education: user.reporter_education || '',
+        reporter_secondary_phone: user.reporter_secondary_phone || '',
+        relationship:
+          user.reporter_relationship || user.guardian_relationship || '',
+
+        // Medical information
+        treating_physician: user.treating_physician || '',
+        physician_phone: user.physician_phone || '',
+
+        // Missing person information
+        missing_person_phone: user.missing_person_phone || '',
+        missing_person_occupation: user.missing_person_occupation || '',
+        missing_person_education: user.missing_person_education || '',
+
+        // Disappearance details
+        area_of_disappearance:
+          user.area_of_disappearance || user.last_sighting || '',
+        last_sighting: user.last_sighting || user.area_of_disappearance || '',
+        clothes_description:
+          user.clothes_description || user.last_clothes || '',
+        disappearance_date:
+          user.disappearance_date || user.last_seen_time || '',
+        disappearance_time: user.disappearance_time || '',
+        was_accompanied: user.was_accompanied || '',
+        reason_for_location: user.reason_for_location || '',
+
+        // Friends information
+        first_friend: user.first_friend || '',
+        second_friend: user.second_friend || '',
+        first_friend_phone: user.first_friend_phone || '',
+        second_friend_phone: user.second_friend_phone || '',
+
+        // Police report information
+        absence_report_number: user.absence_report_number || '',
+        absence_report_date: user.absence_report_date || '',
+        police_station: user.police_station || '',
+        security_directorate: user.security_directorate || '',
+        governorate: user.governorate || '',
+        previous_disputes: user.previous_disputes || '',
+        gone_missing_before: user.gone_missing_before || '',
+
+        // Additional information
+        additional_notes: user.additional_notes || '',
+
+        // Form metadata
+        form_type: 'disabled',
+        image: null,
+        useCamera: false,
+      };
+
+      console.log('🔧 Mapped form data:', mappedFormData);
+
+      // Use a timeout to ensure the state update happens
+      setTimeout(() => {
+        setFormData(mappedFormData);
+        console.log('✅ Form data state updated with timeout');
+
+        // Clear localStorage backup after successful load
+        try {
+          localStorage.removeItem('editDisabledData');
+          console.log('🗑️ Cleared localStorage backup');
+        } catch (error) {
+          console.warn('⚠️ Failed to clear localStorage:', error);
+        }
+      }, 0);
+
+      // If user has an image, try to load it
+      if (user.image_path) {
+        console.log('🖼️ User has image:', user.image_path);
+      }
+
+      console.groupEnd();
+    } else {
+      console.log('📝 AddDisabled - New registration mode (no edit data)');
+    }
+  }, [location.state]);
+
+  // Add another useEffect to monitor formData changes
+  useEffect(() => {
+    console.log('📊 DisabledFormData state changed:', formData);
+    console.log('🔑 Key disabled formData values:', {
+      full_name: formData.full_name,
+      name: formData.name,
+      dob: formData.dob,
+      national_id: formData.national_id,
+      gender: formData.gender,
+      address: formData.address,
+      disability_type: formData.disability_type,
+      reporter_name: formData.reporter_name,
+    });
+  }, [formData]);
 
   /**
    * Image handling functions
@@ -246,7 +428,7 @@ function AddDisabled() {
       const formDataToSend = buildSubmissionFormData(formData, capturedImage);
 
       try {
-        // Send the registration request with timeout
+        // Send the registration request with timeout (including editUserId for updates)
         const response = (await Promise.race([
           registrationApi.registerUser(formDataToSend),
           new Promise<never>((_, reject) =>
@@ -273,9 +455,14 @@ function AddDisabled() {
         }
 
         // Show success toast
-        toast.success(t('form.success.message', 'Registration successful!'), {
-          id: 'disabled-registration',
-        });
+        toast.success(
+          isEditMode
+            ? t('form.success.updateMessage', 'Update successful!')
+            : t('form.success.message', 'Registration successful!'),
+          {
+            id: 'disabled-registration',
+          }
+        );
 
         // Update state for success animation
         setRegisteredUserId(userId);
@@ -431,7 +618,12 @@ function AddDisabled() {
           <div className="max-w-3xl mx-auto mt-6 mb-6">
             {/* Form title */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-4 tracking-tight">
-              {t('title', 'Register Disabled Person')}
+              {isEditMode
+                ? t(
+                    'forms.disabled.editTitle',
+                    'Edit Disabled Person Information'
+                  )
+                : t('title', 'Register Disabled Person')}
             </h1>
 
             {/* Progress text */}
@@ -501,11 +693,22 @@ function AddDisabled() {
           {submitSuccess ? (
             <div className="text-center">
               <SuccessAnimation
-                title={t('registration.success', 'Registration Successful!')}
-                message={t(
-                  'registration.successDescription',
-                  'User has been registered successfully.'
-                )}
+                title={
+                  isEditMode
+                    ? t('edit.success', 'Update Successful!')
+                    : t('registration.success', 'Registration Successful!')
+                }
+                message={
+                  isEditMode
+                    ? t(
+                        'edit.successDescription',
+                        'Disabled person information has been updated successfully.'
+                      )
+                    : t(
+                        'registration.successDescription',
+                        'User has been registered successfully.'
+                      )
+                }
                 id={registeredUserId}
                 idLabel={t('registration.caseReferenceId', 'Registration ID:')}
               />

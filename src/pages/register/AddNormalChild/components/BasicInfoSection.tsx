@@ -21,6 +21,17 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
   nextSection,
   t,
 }) => {
+  // Debug log to check form data values
+  console.log('🔍 BasicInfoSection - Received formData:', formData);
+  console.log('📝 BasicInfoSection - Key fields:', {
+    full_name: formData.full_name,
+    name: formData.name,
+    dob: formData.dob,
+    national_id: formData.national_id,
+    gender: formData.gender,
+    address: formData.address,
+  });
+
   // Calculate age when DOB changes
   const handleDOBChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const dob = e.target.value;

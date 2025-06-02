@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { toast } from 'react-hot-toast';
 import SuccessAnimation from '../../../components/SuccessAnimation';
@@ -24,8 +24,10 @@ import type { FormData } from './types/types';
 import { validateForm } from './utils/ValidationUtils';
 import { submitForm } from './utils/FormSubmission';
 import { initialFormData } from './types/types';
+import type { User } from '../../users/types/types';
 
 const AddNormalMan = () => {
+  const location = useLocation();
   const [currentSection, setCurrentSection] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -38,6 +40,76 @@ const AddNormalMan = () => {
   const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
   const { t } = useTranslationWithFallback();
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  // Check if we're in edit mode and populate form data
+  useEffect(() => {
+    const state = location.state as {
+      editMode?: boolean;
+      editUserId?: string;
+      userData?: User;
+    } | null;
+
+    if (state?.editMode && state?.userData) {
+      setIsEditMode(true);
+      const user = state.userData;
+
+      // Map user data to form data structure
+      const mappedFormData: FormData = {
+        ...initialFormData,
+        // Personal information
+        name: user.name || '',
+        full_name: user.full_name || '',
+        national_id: user.national_id || '',
+        dob: user.dob || user.date_of_birth || '',
+        mothers_name: user.mothers_name || '',
+        marital_status: user.marital_status || '',
+        educational_qualification: user.educational_qualification || '',
+        occupation: user.occupation || '',
+
+        // Contact information
+        address: user.address || '',
+        phone_number: user.phone_number || '',
+        second_phone_number: user.second_phone_number || '',
+        landline_number: user.landline_number || '',
+
+        // Criminal record information
+        has_criminal_record: Boolean(user.has_criminal_record),
+        case_details: user.case_details || '',
+        police_station: user.police_station || '',
+        case_number: user.case_number || '',
+        judgment: user.judgment || '',
+        accusation: user.accusation || '',
+        sentence: user.sentence || '',
+
+        // Vehicle information
+        has_vehicle: Boolean(user.has_vehicle),
+        license_plate: user.license_plate || '',
+        vehicle_model: user.vehicle_model || '',
+        vehicle_color: user.vehicle_color || user.color || '',
+        chassis_number: user.chassis_number || '',
+
+        // Travel information
+        has_travel: Boolean(user.travel_date || user.departure_date),
+        travel_date: user.travel_date || user.departure_date || '',
+        travel_destination: user.travel_destination || user.destination || '',
+        passport_number: user.passport_number || '',
+        departure_airport: user.departure_airport || '',
+        arrival_airport: user.arrival_airport || '',
+
+        form_type: 'man',
+      };
+
+      setFormData(mappedFormData);
+
+      // If user has an image, try to load it
+      if (user.image_path) {
+        // You might want to fetch the actual image here
+        // For now, we'll just set a placeholder or handle it differently
+        console.log('User has image:', user.image_path);
+      }
+    }
+  }, [location.state]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -206,7 +278,20 @@ const AddNormalMan = () => {
       // Log the final submission data
       console.log('Final submission data:', submissionData);
 
-      const result = await submitForm(submissionData, capturedImage, t);
+      // Get editUserId from location state if in edit mode
+      const state = location.state as {
+        editMode?: boolean;
+        editUserId?: string;
+        userData?: User;
+      } | null;
+      const editUserId = state?.editUserId;
+
+      const result = await submitForm(
+        submissionData,
+        capturedImage,
+        t,
+        editUserId
+      );
 
       if (result.success) {
         setSubmitSuccess(true);
@@ -274,7 +359,9 @@ const AddNormalMan = () => {
         {!submitSuccess && (
           <div className="max-w-3xl mx-auto mt-6 mb-6">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-4 tracking-tight">
-              {t('forms.man.title', 'Male Registration')}
+              {isEditMode
+                ? t('forms.man.editTitle', 'Edit Male Information')
+                : t('forms.man.title', 'Male Registration')}
             </h1>
             <p className="text-white/80 text-center mb-8 text-lg">
               {' '}
@@ -336,11 +423,22 @@ const AddNormalMan = () => {
         <AnimatePresence mode="wait">
           {submitSuccess ? (
             <SuccessAnimation
-              title={t('registration.success', 'Registration Successful!')}
-              message={t(
-                'registration.successDescription',
-                'User has been registered successfully.'
-              )}
+              title={
+                isEditMode
+                  ? t('edit.success', 'Update Successful!')
+                  : t('registration.success', 'Registration Successful!')
+              }
+              message={
+                isEditMode
+                  ? t(
+                      'edit.successDescription',
+                      'User information has been updated successfully.'
+                    )
+                  : t(
+                      'registration.successDescription',
+                      'User has been registered successfully.'
+                    )
+              }
               id={registeredUserId}
               idLabel={t('registration.caseReferenceId', 'Registration ID:')}
             />

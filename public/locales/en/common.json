@@ -307,6 +307,7 @@
     "issuing_authority": "Issuing Authority",
     "issuing_authorityPlaceholder": "Enter the issuing authority",
     "issue_date": "Issue Date",
+    "personalInfo": "Personal Information",
     "issue_datePlaceholder": "Enter the issue date",
     "statusOptions": {
       "null": "N/A"
@@ -509,6 +510,7 @@
   "forms": {
     "man": {
       "title": "Male Registration",
+      "editTitle": "Edit Male Information",
       "sections": {
         "personal": "Personal Information",
         "contact": "Contact Information",
@@ -521,7 +523,7 @@
     },
     "disabled": {
       "disabilityInfo": "Disability Information",
-      
+      "editTitle": "Edit Disabled Person Information",
       "disabilityType": {
         "label": "Disability Type",
         "options": {
@@ -564,7 +566,6 @@
     },
     "child": {
       "title": "Child Registration",
-      
       "reporterInfo": "Reporter Information",
       "relationshipToMissing": "Relationship to Missing Child",
       "missingPersonInfo": "Missing Person Information",
@@ -577,7 +578,9 @@
       "disappearanceDetails": "Disappearance Details",
       "reporterName": "Reporter Name",
       "policeReport": "Police Report",
+      
       "firstFriend": "First Friend",
+      "editTitle": "Edit Child Information",
       "firstFriendPhone": "First Friend Phone",
       "secondFriend": "Second Friend",
       "secondFriendPhone": "Second Friend Phone",

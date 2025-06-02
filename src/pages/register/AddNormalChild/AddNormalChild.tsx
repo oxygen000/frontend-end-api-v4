@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { toast } from 'react-hot-toast';
 import SuccessAnimation from '../../../components/SuccessAnimation';
@@ -25,8 +25,10 @@ import type { FormData } from './types/types';
 import { initialFormData } from './types/types';
 import { validateForm } from './utils/FormValidation';
 import { submitForm } from './utils/FormSubmission';
+import type { User } from '../../users/types/types';
 
 const AddNormalChild = () => {
+  const location = useLocation();
   const [currentSection, setCurrentSection] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -39,6 +41,187 @@ const AddNormalChild = () => {
   const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
   const { t } = useTranslationWithFallback();
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  // Debug initial form data
+  console.log('🏁 AddNormalChild component initialized');
+  console.log('📋 Initial form data:', initialFormData);
+  console.log('📍 Current location:', location);
+
+  // Check if we're in edit mode and populate form data
+  useEffect(() => {
+    const state = location.state as {
+      editMode?: boolean;
+      editUserId?: string;
+      userData?: User;
+    } | null;
+
+    console.log('🔍 AddNormalChild useEffect - Location state:', state);
+
+    // Try to get data from state or localStorage backup
+    let userData: User | null = null;
+    let editMode = false;
+
+    if (state?.editMode && state?.userData) {
+      userData = state.userData;
+      editMode = state.editMode;
+      console.log('📊 Using location.state data');
+    } else {
+      // Try localStorage backup
+      try {
+        const backupData = localStorage.getItem('editChildData');
+        if (backupData) {
+          userData = JSON.parse(backupData);
+          editMode = true;
+          console.log('💾 Using localStorage backup data');
+        }
+      } catch (error) {
+        console.warn('⚠️ Failed to read localStorage backup:', error);
+      }
+    }
+
+    if (editMode && userData) {
+      console.group('📝 Child Form Edit Mode Initialization');
+      console.log('✅ Edit mode detected');
+      console.log('📊 Received user data:', userData);
+
+      setIsEditMode(true);
+      const user = userData;
+
+      // Map user data to child form data structure
+      const mappedFormData: FormData = {
+        ...initialFormData,
+        // Basic information
+        name: user.name || '',
+        full_name: user.full_name || user.name || '',
+        national_id: user.national_id || '',
+        dob: user.dob || user.date_of_birth || '',
+        age: user.age || '',
+        gender: user.gender || '',
+
+        // Contact information
+        address: user.address || '',
+
+        // Guardian information (mapped from reporter fields)
+        guardian_name: user.guardian_name || user.reporter_name || '',
+        guardian_phone: user.guardian_phone || user.reporter_phone || '',
+        guardian_id: user.guardian_id || user.reporter_national_id || '',
+        relationship:
+          user.guardian_relationship || user.reporter_relationship || '',
+        phone_company: ['Orange', 'Etisalat', 'Vodafone', 'WE', ''].includes(
+          user.phone_company || ''
+        )
+          ? (user.phone_company as
+              | 'Orange'
+              | 'Etisalat'
+              | 'Vodafone'
+              | 'WE'
+              | '')
+          : '',
+
+        // Reporter fields (backend schema)
+        reporter_name: user.guardian_name || user.reporter_name || '',
+        reporter_phone: user.guardian_phone || user.reporter_phone || '',
+        reporter_national_id:
+          user.guardian_id || user.reporter_national_id || '',
+        reporter_address: user.address || user.reporter_address || '',
+        reporter_occupation: user.reporter_occupation || '',
+        reporter_education: user.reporter_education || '',
+        reporter_relationship:
+          user.guardian_relationship || user.reporter_relationship || '',
+        reporter_secondary_phone: user.reporter_secondary_phone || '',
+
+        // Physical and medical information
+        physical_description: user.physical_description || '',
+        distinctive_mark: user.distinctive_mark || '',
+        medical_condition: user.medical_history || user.medical_condition || '',
+        medical_history: user.medical_history || user.medical_condition || '',
+        treating_physician: user.treating_physician || '',
+        physician_phone: user.physician_phone || '',
+
+        // Disappearance details
+        last_seen_location:
+          user.area_of_disappearance || user.last_sighting || '',
+        last_seen_time: user.last_seen_time || user.disappearance_date || '',
+        last_seen_clothes: user.last_clothes || user.clothes_description || '',
+        area_of_disappearance:
+          user.area_of_disappearance || user.last_sighting || '',
+        clothes_description:
+          user.last_clothes || user.clothes_description || '',
+        disappearance_date:
+          user.disappearance_date || user.last_seen_time || '',
+        disappearance_time: user.disappearance_time || '',
+        was_accompanied: user.was_accompanied || '',
+        reason_for_location: user.reason_for_location || '',
+        last_sighting: user.last_sighting || user.area_of_disappearance || '',
+
+        // Missing person information
+        missing_person_phone: user.missing_person_phone || '',
+        missing_person_occupation: user.missing_person_occupation || '',
+        missing_person_education: user.missing_person_education || '',
+
+        // Friends information
+        first_friend: user.first_friend || '',
+        first_friend_phone: user.first_friend_phone || '',
+        second_friend: user.second_friend || '',
+        second_friend_phone: user.second_friend_phone || '',
+
+        // Police report
+        absence_report_number: user.absence_report_number || '',
+        absence_report_date: user.absence_report_date || '',
+        police_station: user.police_station || '',
+        security_directorate: user.security_directorate || '',
+        governorate: user.governorate || '',
+        previous_disputes: user.previous_disputes || '',
+        gone_missing_before: user.gone_missing_before || '',
+
+        // Additional information
+        additional_notes: user.additional_notes || '',
+
+        form_type: 'child',
+      };
+
+      console.log('🔧 Mapped form data:', mappedFormData);
+
+      // Use a timeout to ensure the state update happens
+      setTimeout(() => {
+        setFormData(mappedFormData);
+        console.log('✅ Form data state updated with timeout');
+
+        // Clear localStorage backup after successful load
+        try {
+          localStorage.removeItem('editChildData');
+          console.log('🗑️ Cleared localStorage backup');
+        } catch (error) {
+          console.warn('⚠️ Failed to clear localStorage:', error);
+        }
+      }, 0);
+
+      // If user has an image, try to load it
+      if (user.image_path) {
+        console.log('🖼️ User has image:', user.image_path);
+      }
+
+      console.groupEnd();
+    } else {
+      console.log('📝 AddNormalChild - New registration mode (no edit data)');
+    }
+  }, [location.state]);
+
+  // Add another useEffect to monitor formData changes
+  useEffect(() => {
+    console.log('📊 FormData state changed:', formData);
+    console.log('🔑 Key formData values:', {
+      full_name: formData.full_name,
+      name: formData.name,
+      dob: formData.dob,
+      national_id: formData.national_id,
+      gender: formData.gender,
+      address: formData.address,
+      guardian_name: formData.guardian_name,
+      reporter_name: formData.reporter_name,
+    });
+  }, [formData]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -198,7 +381,15 @@ const AddNormalChild = () => {
     setLoading(true);
 
     try {
-      const result = await submitForm(formData, capturedImage, t);
+      // Get editUserId from location state if in edit mode
+      const state = location.state as {
+        editMode?: boolean;
+        editUserId?: string;
+        userData?: User;
+      } | null;
+      const editUserId = state?.editUserId;
+
+      const result = await submitForm(formData, capturedImage, t, editUserId);
 
       if (result.success) {
         setSubmitSuccess(true);
@@ -267,7 +458,9 @@ const AddNormalChild = () => {
         {!submitSuccess && (
           <div className="max-w-3xl mx-auto mt-6 mb-6">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-4 tracking-tight">
-              {t('title', 'Child Registration')}
+              {isEditMode
+                ? t('forms.child.editTitle', 'Edit Child Information')
+                : t('title', 'Child Registration')}
             </h1>
             <p className="text-white/80 text-center mb-8 text-lg">
               {' '}
@@ -329,11 +522,22 @@ const AddNormalChild = () => {
         <AnimatePresence mode="wait">
           {submitSuccess ? (
             <SuccessAnimation
-              title={t('registration.success', 'Registration Successful!')}
-              message={t(
-                'registration.successDescription',
-                'User has been registered successfully.'
-              )}
+              title={
+                isEditMode
+                  ? t('edit.success', 'Update Successful!')
+                  : t('registration.success', 'Registration Successful!')
+              }
+              message={
+                isEditMode
+                  ? t(
+                      'edit.successDescription',
+                      'Child information has been updated successfully.'
+                    )
+                  : t(
+                      'registration.successDescription',
+                      'User has been registered successfully.'
+                    )
+              }
               id={registeredUserId}
               idLabel={t('registration.caseReferenceId', 'Registration ID:')}
             />

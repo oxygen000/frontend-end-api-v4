@@ -667,6 +667,7 @@
   "forms": {
     "man": {
       "title": "تسجيل ذكر",
+      "editTitle": "تعديل بيانات الذكر",
       "sections": {
         "personal": "معلومات الشخص",
         "contact": "معلومات الاتصال",
@@ -679,11 +680,12 @@
     },
     "woman": {
       "title": "تسجيل أنثى",
+      "editTitle": "تعديل بيانات الأنثى",
       "clickToEnlarge": "انقر للتكبير"
     },
     "child": {
       "title": "تسجيل طفلك",
-     
+      "editTitle": "تعديل بيانات الطفل",
       "reporterInfo": "بيانات المبلغ / الدرجة الاولى",
       "relationshipToMissing": "صلة القرابة بالطفل المفقود",
       "missingPersonInfo": "  بينات المتغيب",
@@ -738,7 +740,7 @@
       "disabilityInfo": "معلومات الإعاقة",
       "fullName": "الاسم الكامل",
       "nationalId": "الرقم القومي",
-
+      "editTitle": "تعديل بيانات المعاق",
       "disabilityType": {
         "label": "نوع الإعاقة",
         "options": {

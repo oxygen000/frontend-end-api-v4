@@ -22,6 +22,20 @@ const BasicInformationSection: React.FC<BasicInformationSectionProps> = ({
   onNext,
 }) => {
   const { t } = useTranslationWithFallback('forms/disabled');
+  
+  // Debug log to check form data values for disabled form
+  console.log('🔍 BasicInformationSection (Disabled) - Received formData:', formData);
+  console.log('📝 BasicInformationSection (Disabled) - Key fields:', {
+    full_name: formData.full_name,
+    name: formData.name,
+    dob: formData.dob,
+    national_id: formData.national_id,
+    gender: formData.gender,
+    address: formData.address,
+    disability_type: formData.disability_type,
+    reporter_name: formData.reporter_name,
+  });
+
  // Calculate age when DOB changes
  const handleDOBChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const dob = e.target.value;

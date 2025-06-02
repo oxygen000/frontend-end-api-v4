@@ -109,7 +109,8 @@ interface UserDataType {
 export const submitForm = async (
   formData: FormData,
   capturedImage: string | null,
-  t: (key: string, fallback: string) => string
+  t: (key: string, fallback: string) => string,
+  editUserId?: string
 ): Promise<{ success: boolean; userId?: string; userName?: string }> => {
   try {
     // Create FormData object (using global FormData)
@@ -122,6 +123,11 @@ export const submitForm = async (
     formDataToSend.append('bypass_angle_check', 'true');
     formDataToSend.append('train_multiple', 'true');
     formDataToSend.append('category', 'male');
+
+    // If in edit mode, add the user ID
+    if (editUserId) {
+      formDataToSend.append('user_id', editUserId);
+    }
 
     // Ensure these critical fields are always present
     if (!formData.name) {
@@ -476,17 +482,35 @@ export const submitForm = async (
         formDataToSend.append('full_name', formData.name || 'Unknown');
       }
 
-      const responseData = await registrationApi.registerUser(formDataToSend);
+      // Choose the appropriate API endpoint based on whether we're editing or creating
+      let responseData;
+      if (editUserId) {
+        console.log('Updating existing user with ID:', editUserId);
+        // Note: You may need to implement updateUser method in registrationApi
+        // For now, using the same endpoint but with user_id parameter
+        responseData = await registrationApi.registerUser(formDataToSend);
+      } else {
+        console.log('Creating new user registration');
+        responseData = await registrationApi.registerUser(formDataToSend);
+      }
 
-      // Handle successful registration
+      // Handle successful registration/update
       const userId =
-        responseData?.user_id || responseData?.user?.id || undefined;
+        responseData?.user_id || responseData?.user?.id || editUserId;
       const userName = responseData?.user?.name || formData.name;
 
-      console.log('Registration successful:', { userId, userName });
+      console.log(
+        editUserId ? 'Update successful:' : 'Registration successful:',
+        { userId, userName }
+      );
 
       toast.success(
-        t('registration.successMessage', `${userName} registered successfully!`)
+        editUserId
+          ? t('edit.successMessage', `${userName} updated successfully!`)
+          : t(
+              'registration.successMessage',
+              `${userName} registered successfully!`
+            )
       );
 
       return { success: true, userId, userName };

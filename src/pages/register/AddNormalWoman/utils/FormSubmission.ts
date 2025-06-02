@@ -90,7 +90,8 @@ interface UserDataType {
 export const submitForm = async (
   formData: FormData,
   capturedImage: string | null,
-  t: (key: string, fallback: string) => string
+  t: (key: string, fallback: string) => string,
+  editUserId?: string
 ): Promise<{ success: boolean; userId?: string; userName?: string }> => {
   try {
     // Create FormData object
@@ -103,6 +104,11 @@ export const submitForm = async (
     formDataToSend.append('bypass_angle_check', 'true');
     formDataToSend.append('train_multiple', 'true');
     formDataToSend.append('category', 'female');
+
+    // If in edit mode, add the user ID
+    if (editUserId) {
+      formDataToSend.append('user_id', editUserId);
+    }
 
     // Add individual form fields to ensure they're properly processed
     formDataToSend.append(
@@ -255,7 +261,10 @@ export const submitForm = async (
       );
       formDataToSend.append('brand', formData.brand || '');
       formDataToSend.append('license_type', formData.license_type || '');
-      formDataToSend.append('license_governorate', formData.license_governorate || '');
+      formDataToSend.append(
+        'license_governorate',
+        formData.license_governorate || ''
+      );
 
       // Keep original expiration_year
       formDataToSend.append('expiration_year', formData.expiration_year || '');
@@ -401,16 +410,27 @@ export const submitForm = async (
     }
 
     console.log(
-      'Sending registration request for female user to endpoint /register/upload'
+      editUserId
+        ? 'Sending update request for female user to endpoint /register/upload'
+        : 'Sending registration request for female user to endpoint /register/upload'
     );
     const responseData = await registrationApi.registerUser(formDataToSend);
 
-    // Handle successful registration
-    const userId = responseData?.user_id || responseData?.user?.id || undefined;
+    // Handle successful registration/update
+    const userId =
+      responseData?.user_id ||
+      responseData?.user?.id ||
+      editUserId ||
+      undefined;
     const userName = responseData?.user?.name || formData.name;
 
     toast.success(
-      t('registration.successMessage', `${userName} registered successfully!`)
+      editUserId
+        ? t('edit.successMessage', `${userName} updated successfully!`)
+        : t(
+            'registration.successMessage',
+            `${userName} registered successfully!`
+          )
     );
 
     return { success: true, userId, userName };

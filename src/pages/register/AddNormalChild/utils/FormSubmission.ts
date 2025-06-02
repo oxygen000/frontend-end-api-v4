@@ -17,7 +17,8 @@ const generateUniqueId = () => {
 export const submitForm = async (
   formData: FormData,
   capturedImage: string | null,
-  t: (key: string, fallback: string) => string
+  t: (key: string, fallback: string) => string,
+  editUserId?: string
 ): Promise<{ success: boolean; userId?: string; userName?: string }> => {
   // Generate a unique submission key for tracking
   const submissionKey = `${formData.name}-${formData.dob}-${Date.now()}`;
@@ -127,6 +128,12 @@ export const submitForm = async (
     formDataToSend.append('category', 'child');
     formDataToSend.append('bypass_angle_check', 'true');
     formDataToSend.append('train_multiple', 'true');
+
+    // If in edit mode, add the user ID
+    if (editUserId) {
+      formDataToSend.append('user_id', editUserId);
+      console.log('Adding user_id for edit mode:', editUserId);
+    }
 
     // Reporter/Guardian information - SIMPLIFY TO MATCH BACKEND SCHEMA
     formDataToSend.append('guardian_name', formData.guardian_name || '');
@@ -394,10 +401,10 @@ export const submitForm = async (
     formDataToSend.append('user_data', JSON.stringify(childData));
 
     // IMPORTANT: Only use the main registration endpoint to avoid duplicates
-    console.log('Using main registration endpoint only');
+    console.log(editUserId ? 'Using registration endpoint for child update' : 'Using main registration endpoint only');
     try {
       const responseData = await registrationApi.registerUser(formDataToSend);
-      console.log('Registration response:', responseData);
+      console.log(editUserId ? 'Update response:' : 'Registration response:', responseData);
 
       // If successful, clear pending registration
       pendingRegistrations.delete(submissionKey);
@@ -406,11 +413,14 @@ export const submitForm = async (
       const userId =
         responseData?.user_id ||
         responseData?.user?.id ||
+        editUserId ||
         `temp-${uniqueSubmissionId}`;
       const userName = responseData?.user?.name || formData.name;
 
       toast.success(
-        `${userName} ${t('registration.successMessage', 'registered successfully!')}`,
+        editUserId 
+          ? `${userName} ${t('edit.successMessage', 'updated successfully!')}`
+          : `${userName} ${t('registration.successMessage', 'registered successfully!')}`,
         { id: 'registration' }
       );
 
