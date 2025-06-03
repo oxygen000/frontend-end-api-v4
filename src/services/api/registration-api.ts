@@ -905,6 +905,253 @@ const registerWithBase64 = async (
 };
 
 /**
+ * Update an existing user
+ */
+const updateUser = async (
+  userId: string,
+  formData: FormData
+): Promise<RegistrationResult> => {
+  try {
+    // Debug logging
+    console.log(`🔄 updateUser called with ID: ${userId}`);
+    console.log('Update form data fields:', Array.from(formData.keys()));
+
+    // CRITICAL: Check if the user_id and is_update flags are properly set
+    console.log('=== CRITICAL UPDATE FLAGS CHECK ===');
+    console.log('user_id in formData:', formData.get('user_id'));
+    console.log('is_update in formData:', formData.get('is_update'));
+    console.log('operation_type in formData:', formData.get('operation_type'));
+    console.log('userId parameter:', userId);
+    console.log('Are they equal?', formData.get('user_id') === userId);
+    console.log('===================================');
+
+    // Check if there's an image file to update
+    const imageFile = formData.get('file') as File | null;
+
+    // Log detailed information about the image
+    if (imageFile) {
+      console.log(`📸 Image file detected for update:`, {
+        name: imageFile.name,
+        size: imageFile.size,
+        type: imageFile.type,
+        lastModified: imageFile.lastModified,
+      });
+    } else {
+      console.log('📸 No image file detected in formData');
+    }
+
+    if (imageFile) {
+      // If there's an image, we need to use the multipart/form-data endpoint
+      console.log('📸 Image detected, using multipart update endpoint');
+
+      // CRITICAL: Ensure update flags are set AGAIN before sending
+      if (!formData.get('user_id')) {
+        formData.append('user_id', userId);
+        console.log('⚠️ user_id was missing, added it:', userId);
+      }
+      if (!formData.get('is_update')) {
+        formData.append('is_update', 'true');
+        console.log('⚠️ is_update was missing, added it: true');
+      }
+      if (!formData.get('operation_type')) {
+        formData.append('operation_type', 'update');
+        console.log('⚠️ operation_type was missing, added it: update');
+      }
+
+      // Log all form data being sent
+      console.log('=== COMPLETE FORM DATA FOR UPDATE ===');
+      for (const [key, value] of formData.entries()) {
+        if (key === 'file') {
+          console.log(
+            `${key}: File(${value instanceof File ? `${value.name}, ${value.size} bytes` : value})`
+          );
+        } else if (key === 'user_data') {
+          console.log(`${key}: [JSON data - see below]`);
+          try {
+            const userData = JSON.parse(value as string);
+            console.log('  └─ user_data.id:', userData.id);
+            console.log('  └─ user_data.user_id:', userData.user_id);
+            console.log('  └─ user_data.name:', userData.name);
+            console.log('  └─ user_data.full_name:', userData.full_name);
+          } catch {
+            console.log('  └─ Could not parse user_data JSON');
+          }
+        } else {
+          console.log(`${key}: ${value}`);
+        }
+      }
+      console.log('====================================');
+
+      // Use the registration endpoint but with user_id to indicate update
+      console.log('📡 Sending update request to /register/upload endpoint...');
+      const response = await apiClient.post('/register/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 30000,
+      });
+
+      console.log('📡 User update with image response:', response.data);
+
+      // CRITICAL: Check if the response indicates an update or new creation
+      if (response.data) {
+        console.log('=== RESPONSE ANALYSIS ===');
+        console.log(
+          'Response indicates update?',
+          response.data.operation_type === 'update'
+        );
+        console.log(
+          'Response user_id matches our userId?',
+          response.data.user_id === userId || response.data.user?.id === userId
+        );
+        console.log('Response data keys:', Object.keys(response.data));
+        console.log('========================');
+      }
+
+      await clearCaches();
+
+      if (response.data) {
+        // Log detailed update information
+        if (response.data.image_info) {
+          console.log('📸 Image update details:', response.data.image_info);
+        }
+
+        if (response.data.operation_type === 'update') {
+          console.log('✅ Update operation confirmed by server');
+        }
+
+        const result: RegistrationResult = {
+          status: 'success',
+          message: 'User and image updated successfully',
+          user_id: userId,
+          user: response.data.user || {
+            id: userId,
+            face_id: userId,
+            name: 'Updated User',
+            image_path:
+              response.data.image_info?.filename ||
+              '/static/default-avatar.png',
+            created_at: new Date().toISOString(),
+          },
+        };
+
+        // Add image update confirmation to the message if available
+        if (response.data.image_info?.face_encoding_updated) {
+          result.message += ' (including face recognition data)';
+        }
+
+        console.log('Update with image completed successfully:', result);
+        return result;
+      }
+    } else {
+      // No image, update only user data
+      console.log('No image detected, updating user data only');
+
+      // Extract user data from form data to send as JSON
+      const userData: Record<string, any> = {};
+
+      // Extract all form fields except the file
+      for (const [key, value] of formData.entries()) {
+        if (
+          key !== 'file' &&
+          key !== 'user_id' &&
+          key !== 'is_update' &&
+          key !== 'timestamp'
+        ) {
+          if (key === 'user_data') {
+            // Parse and merge user_data JSON if present
+            try {
+              const parsedUserData = JSON.parse(value as string);
+              Object.assign(userData, parsedUserData);
+            } catch (e) {
+              console.warn('Failed to parse user_data JSON:', e);
+            }
+          } else {
+            userData[key] = value;
+          }
+        }
+      }
+
+      // Ensure form_type is set correctly
+      if (!userData.form_type) {
+        userData.form_type =
+          userData.category === 'male'
+            ? 'man'
+            : userData.category === 'female'
+              ? 'woman'
+              : 'adult';
+      }
+
+      // Clean up problematic fields that might cause DB errors
+      const fieldsToRemove = [
+        'unique_id',
+        'request_id',
+        'unique_submission_id',
+        'bypass_angle_check',
+        'train_multiple',
+        'category',
+      ];
+
+      fieldsToRemove.forEach((field) => {
+        if (field in userData) {
+          delete userData[field];
+        }
+      });
+
+      console.log('Sending update request to PUT /api/users/{userId} endpoint');
+      console.log('Update data:', userData);
+
+      // Use PUT method to update user data
+      const response = await apiClient.put(`/users/${userId}`, userData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: 30000, // 30 second timeout
+      });
+
+      console.log('User update response:', response.data);
+
+      // Clear caches after successful update
+      await clearCaches();
+
+      if (response.data && response.data.status === 'success') {
+        const result: RegistrationResult = {
+          status: 'success',
+          message: 'User updated successfully',
+          user_id: userId,
+          user: {
+            id: userId,
+            face_id: userId,
+            name: userData.name || userData.full_name || 'Unknown',
+            full_name: userData.full_name || userData.name || 'Unknown',
+            image_path: userData.image_path || '/static/default-avatar.png',
+            created_at: new Date().toISOString(),
+            form_type: userData.form_type,
+          },
+        };
+
+        console.log('Update without image completed successfully:', result);
+        return result;
+      }
+    }
+
+    throw new Error('Invalid response from user update endpoint');
+  } catch (error) {
+    console.error('Error updating user:', error);
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error('Axios error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+      });
+      throw new Error(errorMessage);
+    }
+    throw error;
+  }
+};
+
+/**
  * Check if the API is available and functioning
  * @returns True if API is healthy, false otherwise
  */
@@ -926,6 +1173,7 @@ export const registrationApi = {
   verifyRegistration,
   registerWithBase64,
   checkApiHealth,
+  updateUser,
 };
 
 export default registrationApi;

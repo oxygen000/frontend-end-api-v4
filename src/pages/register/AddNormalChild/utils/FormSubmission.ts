@@ -33,9 +33,27 @@ export const submitForm = async (
   // Mark this submission as pending
   pendingRegistrations.add(submissionKey);
 
+  // CRITICAL: Determine edit mode more robustly
+  const isEditMode = !!editUserId && editUserId.trim() !== '';
+
   try {
-    console.log('Starting child registration process...');
-    toast.loading('Registering child information...', { id: 'registration' });
+    console.log('=== CHILD FORM SUBMISSION ANALYSIS ===');
+    console.log(`📊 Form Name: ${formData.name}`);
+    console.log(`🆔 Edit User ID: ${editUserId}`);
+    console.log(`🔄 Is Edit Mode: ${isEditMode}`);
+    console.log(`📝 Submission Key: ${submissionKey}`);
+    console.log('==========================================');
+
+    if (isEditMode) {
+      console.log(`🔄 UPDATING existing child with ID: ${editUserId}`);
+    } else {
+      console.log('✨ CREATING new child registration');
+    }
+
+    toast.loading(
+      isEditMode ? 'جاري تحديث بيانات الطفل...' : 'جاري تسجيل بيانات الطفل...',
+      { id: 'registration' }
+    );
 
     // Generate a unique ID for this submission to prevent conflicts
     const uniqueSubmissionId = generateUniqueId();
@@ -88,236 +106,83 @@ export const submitForm = async (
           'Failed to process webcam image. Please try again or upload a file instead.'
         );
       }
+    } else if (isEditMode) {
+      // In edit mode, image is optional (updating data only)
+      console.log('Edit mode: No new image provided, updating data only');
     }
 
-    if (!imageFile) {
-      // No image was provided
+    // For new registrations, image is required
+    if (!imageFile && !isEditMode) {
       toast.dismiss('registration');
       pendingRegistrations.delete(submissionKey);
       throw new Error(t('validation.photoRequired', 'Please provide an image'));
     }
 
+    // Debug logging after imageFile is determined
+    console.log('=== CHILD FORM SUBMISSION DEBUG ===');
+    console.log(`📊 Form Name: ${formData.name}`);
+    console.log(`🆔 Edit User ID: ${editUserId}`);
+    console.log(`🔄 Is Edit Mode: ${isEditMode}`);
+    console.log(`📸 Has Image: ${!!imageFile}`);
+    console.log(`📸 Image Size: ${imageFile ? imageFile.size : 'N/A'}`);
+    console.log('====================================');
+
     // Create FormData for submission
     const formDataToSend = new FormData();
 
-    // CRITICAL: Add full_name field first to ensure it's not removed
-    console.log('DEBUG: Adding critical full_name field to form data');
-    formDataToSend.append(
-      'full_name',
-      formData.name || formData.full_name || ''
-    );
+    // CRITICAL FIX: Add update parameters FIRST before any other processing
+    if (isEditMode && editUserId) {
+      console.log('🔧 CRITICAL FIX: Adding update parameters at the beginning');
+      formDataToSend.append('user_id', editUserId);
+      formDataToSend.append('is_update', 'true');
+      formDataToSend.append('operation_type', 'update');
 
-    // Basic child information - KEEP THESE SIMPLE TO MATCH BACKEND SCHEMA
-    formDataToSend.append('name', formData.name);
-    formDataToSend.append('nickname', formData.name.split(' ')[0] || '');
-    formDataToSend.append('dob', formData.dob);
-    formDataToSend.append('gender', formData.gender || '');
-    formDataToSend.append('national_id', formData.national_id || '');
-    formDataToSend.append('address', formData.address || '');
-
-    // Calculate age from DOB if not provided
-    if (!formData.age && formData.dob) {
-      const age = calculateAgeFromDOB(formData.dob);
-      formDataToSend.append('age', age);
-    } else if (formData.age) {
-      formDataToSend.append('age', formData.age);
+      // Log to confirm they were added
+      console.log('✅ Update parameters confirmed:');
+      console.log('   - user_id:', formDataToSend.get('user_id'));
+      console.log('   - is_update:', formDataToSend.get('is_update'));
+      console.log('   - operation_type:', formDataToSend.get('operation_type'));
     }
 
-    // Form type identification - CRITICAL FOR BACKEND PROCESSING
+    // Add essential fields to FormData
+    formDataToSend.append(
+      'full_name',
+      formData.full_name || formData.name || ''
+    );
     formDataToSend.append('form_type', 'child');
     formDataToSend.append('category', 'child');
     formDataToSend.append('bypass_angle_check', 'true');
     formDataToSend.append('train_multiple', 'true');
 
-    // If in edit mode, add the user ID
-    if (editUserId) {
-      formDataToSend.append('user_id', editUserId);
-      console.log('Adding user_id for edit mode:', editUserId);
+    // Generate temp face ID for new registrations only
+    if (!isEditMode) {
+      const tempFaceId = `temp-face-${uniqueSubmissionId}`;
+      formDataToSend.append('face_id', tempFaceId);
+      formDataToSend.append('image_path', '/static/temp-image.jpg');
+      formDataToSend.append('operation_type', 'create');
+      console.log(
+        '✨ Create mode - New child registration with temp ID:',
+        tempFaceId
+      );
     }
 
-    // Reporter/Guardian information - SIMPLIFY TO MATCH BACKEND SCHEMA
-    formDataToSend.append('guardian_name', formData.guardian_name || '');
-    formDataToSend.append('guardian_phone', formData.guardian_phone || '');
-    formDataToSend.append('guardian_id', formData.national_id || '');
-    formDataToSend.append('relationship', formData.relationship || '');
-    formDataToSend.append('phone_number', formData.guardian_phone || '');
-    formDataToSend.append('phone_company', formData.phone_company || '');
-
-    // Explicitly add reporter fields
-    formDataToSend.append('reporter_name', formData.guardian_name || '');
-    formDataToSend.append('reporter_phone', formData.guardian_phone || '');
-    formDataToSend.append('reporter_national_id', formData.guardian_id || '');
-    formDataToSend.append('reporter_relationship', formData.relationship || '');
-    formDataToSend.append('reporter_address', formData.reporter_address || '');
-    formDataToSend.append(
-      'reporter_occupation',
-      formData.reporter_occupation || ''
-    );
-    formDataToSend.append(
-      'reporter_education',
-      formData.reporter_education || ''
-    );
-
-    // Physical description fields - SIMPLIFY TO MATCH BACKEND SCHEMA
-    formDataToSend.append(
-      'physical_description',
-      formData.physical_description || ''
-    );
-    formDataToSend.append('last_clothes', formData.last_seen_clothes || '');
-    formDataToSend.append(
-      'area_of_disappearance',
-      formData.area_of_disappearance || ''
-    );
-    formDataToSend.append('last_seen_time', formData.last_seen_time || '');
-    formDataToSend.append(
-      'medical_condition',
-      formData.medical_condition || ''
-    );
-    formDataToSend.append('additional_notes', formData.additional_notes || '');
-
-    // Add potentially required fields
-    const tempFaceId = `temp-face-${uniqueSubmissionId}`;
-    formDataToSend.append('face_id', tempFaceId);
-    formDataToSend.append('image_path', '/static/temp-image.jpg');
-
-    // Add the image file
-    formDataToSend.append('file', imageFile);
-
-    // Debug logging for reporter fields
-    console.log('Reporter fields before submission:');
-    console.log('reporter_name:', formData.guardian_name || '');
-    console.log('reporter_phone:', formData.guardian_phone || '');
-    console.log('reporter_national_id:', formData.guardian_id || '');
-    console.log('reporter_relationship:', formData.relationship || '');
-    console.log('reporter_address:', formData.reporter_address || '');
-
-    console.log('reporter_occupation:', formData.reporter_occupation || '');
-    console.log('reporter_education:', formData.reporter_education || '');
-
-    // Add missing fields that are in types.ts but not included in submission
-    formDataToSend.append('age', formData.age || '');
-    formDataToSend.append('reporter_name', formData.reporter_name || '');
-    formDataToSend.append(
-      'reporter_national_id',
-      formData.reporter_national_id || ''
-    );
-    formDataToSend.append('reporter_relationship', formData.relationship || '');
-    formDataToSend.append(
-      'reporter_secondary_phone',
-      formData.reporter_secondary_phone || ''
-    );
-    formDataToSend.append('date_of_birth', formData.dob || '');
-    formDataToSend.append('last_sighting', formData.last_sighting || '');
-    formDataToSend.append('phone_company', formData.phone_company || '');
-    formDataToSend.append(
-      'distinctive_mark',
-      formData.physical_description || ''
-    );
-    formDataToSend.append(
-      'clothes_description',
-      formData.last_seen_clothes || ''
-    );
-    formDataToSend.append(
-      'area_of_disappearance',
-      formData.area_of_disappearance || ''
-    );
-    formDataToSend.append('disappearance_date', formData.last_seen_time || '');
-    formDataToSend.append('disappearance_time', formData.last_seen_time || '');
-    formDataToSend.append('medical_history', formData.medical_condition || '');
-    formDataToSend.append(
-      'treating_physician',
-      formData.treating_physician || ''
-    );
-    formDataToSend.append('physician_phone', formData.physician_phone || '');
-    formDataToSend.append('first_friend', formData.first_friend || '');
-    formDataToSend.append('second_friend', formData.second_friend || '');
-    formDataToSend.append(
-      'first_friend_phone',
-      formData.first_friend_phone || ''
-    );
-    formDataToSend.append(
-      'second_friend_phone',
-      formData.second_friend_phone || ''
-    );
-    formDataToSend.append(
-      'previous_disputes',
-      formData.previous_disputes || ''
-    );
-    formDataToSend.append(
-      'gone_missing_before',
-      formData.gone_missing_before || ''
-    );
-    formDataToSend.append(
-      'reason_for_location',
-      formData.reason_for_location || ''
-    );
-    formDataToSend.append('was_accompanied', formData.was_accompanied || '');
-    formDataToSend.append(
-      'missing_person_phone',
-      formData.missing_person_phone || ''
-    );
-    formDataToSend.append(
-      'missing_person_occupation',
-      formData.missing_person_occupation || ''
-    );
-    formDataToSend.append(
-      'missing_person_education',
-      formData.missing_person_education || ''
-    );
-    formDataToSend.append('police_station', formData.police_station || '');
-    formDataToSend.append(
-      'security_directorate',
-      formData.security_directorate || ''
-    );
-    formDataToSend.append('governorate', formData.governorate || '');
-    formDataToSend.append(
-      'absence_report_number',
-      formData.absence_report_number || ''
-    );
-    formDataToSend.append(
-      'absence_report_date',
-      formData.absence_report_date || ''
-    );
-    formDataToSend.append('reporter_address', formData.reporter_address || '');
-    formDataToSend.append(
-      'reporter_occupation',
-      formData.reporter_occupation || ''
-    );
-    formDataToSend.append(
-      'reporter_education',
-      formData.reporter_education || ''
-    );
-
-    // Add fields from ChildUser interface that might be missing
-    formDataToSend.append('friends', formData.first_friend || '');
-    formDataToSend.append(
-      'previous_incidents',
-      formData.previous_disputes || ''
-    );
-
-    formDataToSend.append(
-      'clothes_description',
-      formData.last_seen_clothes || ''
-    );
-    formDataToSend.append(
-      'distinctive_mark',
-      formData.physical_description || ''
-    );
-    formDataToSend.append('disappearance_time', formData.last_seen_time || '');
-    formDataToSend.append('disappearance_date', formData.last_seen_time || '');
-
-    // These fields don't exist in the backend schema - removing them
-    // formDataToSend.append('school', formData.missing_person_education || '');
-    // formDataToSend.append('grade', '');
-    // formDataToSend.append('guardian_address', formData.reporter_address || '');
-    // formDataToSend.append('guardian_job', formData.reporter_occupation || '');
-    // formDataToSend.append('last_known_location', formData.last_seen_location || '');
-    // formDataToSend.append('additional_data', formData.additional_data || '');
+    // Add the image file only if available
+    if (imageFile) {
+      formDataToSend.append('file', imageFile);
+      console.log(`✅ Added image file to FormData (${imageFile.size} bytes)`);
+    } else {
+      console.log('ℹ️ No image file added to FormData (data-only update)');
+    }
 
     // Create a child data object for JSON payload - match backend field names
     const childData = {
+      // ESSENTIAL: Always include user ID in edit mode
+      ...(isEditMode && editUserId
+        ? { id: editUserId, user_id: editUserId }
+        : {}),
+
       name: formData.name,
-      full_name: formData.name, // Use the full_name field from formData
+      full_name: formData.full_name || formData.name,
       nickname: formData.name.split(' ')[0] || '',
       dob: formData.dob,
       gender: formData.gender || '',
@@ -329,10 +194,10 @@ export const submitForm = async (
       // Age calculation
       age: formData.age || calculateAgeFromDOB(formData.dob),
 
-      // Guardian information
+      // Guardian information - use correct field mappings
       guardian_name: formData.guardian_name || '',
       guardian_phone: formData.guardian_phone || '',
-      guardian_id: formData.national_id || '',
+      guardian_id: formData.guardian_id || '',
       relationship: formData.relationship || '',
       phone_number: formData.guardian_phone || '',
       phone_company: formData.phone_company || '',
@@ -340,33 +205,37 @@ export const submitForm = async (
       // Physical description
       physical_description: formData.physical_description || '',
       last_clothes: formData.last_seen_clothes || '',
-      area_of_disappearance: formData.area_of_disappearance || '',
+      area_of_disappearance:
+        formData.last_seen_location || formData.area_of_disappearance || '',
       last_seen_time: formData.last_seen_time || '',
       medical_condition: formData.medical_condition || '',
       additional_notes: formData.additional_notes || '',
 
-      // Add potentially required fields
-      face_id: tempFaceId,
-      image_path: '/static/temp-image.jpg',
-
       // Reporter information fields - matching database schema
-      reporter_name: formData.reporter_name || '',
-      reporter_phone: formData.reporter_phone || '',
-      reporter_national_id: formData.reporter_national_id || '',
-      reporter_relationship: formData.reporter_relationship || '',
+      reporter_name: formData.reporter_name || formData.guardian_name || '',
+      reporter_phone: formData.reporter_phone || formData.guardian_phone || '',
+      reporter_national_id:
+        formData.reporter_national_id || formData.guardian_id || '',
+      reporter_relationship:
+        formData.reporter_relationship || formData.relationship || '',
       reporter_secondary_phone: formData.reporter_secondary_phone || '',
-      reporter_address: formData.reporter_address || '',
+      reporter_address: formData.reporter_address || formData.address || '',
       reporter_occupation: formData.reporter_occupation || '',
       reporter_education: formData.reporter_education || '',
 
       // Missing person details - matching database schema
       service_provider: formData.phone_company || '',
       date_of_birth: formData.dob || '',
-      last_sighting: formData.last_sighting || '',
-      distinctive_mark: formData.distinctive_mark || '',
-      clothes_description: formData.clothes_description || '',
-      disappearance_date: formData.disappearance_date || '',
-      disappearance_time: formData.disappearance_time || '',
+      last_sighting:
+        formData.last_sighting || formData.last_seen_location || '',
+      distinctive_mark:
+        formData.distinctive_mark || formData.physical_description || '',
+      clothes_description:
+        formData.clothes_description || formData.last_seen_clothes || '',
+      disappearance_date:
+        formData.disappearance_date || formData.last_seen_time || '',
+      disappearance_time:
+        formData.disappearance_time || formData.last_seen_time || '',
       medical_history: formData.medical_history || '',
       treating_physician: formData.treating_physician || '',
       physician_phone: formData.physician_phone || '',
@@ -400,11 +269,103 @@ export const submitForm = async (
     // Add user_data as JSON
     formDataToSend.append('user_data', JSON.stringify(childData));
 
-    // IMPORTANT: Only use the main registration endpoint to avoid duplicates
-    console.log(editUserId ? 'Using registration endpoint for child update' : 'Using main registration endpoint only');
+    // FINAL VERIFICATION: Double-check update parameters before sending
+    if (isEditMode && editUserId) {
+      console.log('🔍 FINAL VERIFICATION OF UPDATE PARAMETERS:');
+      console.log('   - user_id in FormData:', formDataToSend.get('user_id'));
+      console.log(
+        '   - is_update in FormData:',
+        formDataToSend.get('is_update')
+      );
+      console.log(
+        '   - operation_type in FormData:',
+        formDataToSend.get('operation_type')
+      );
+      console.log('   - editUserId parameter:', editUserId);
+      console.log(
+        '   - Match check:',
+        formDataToSend.get('user_id') === editUserId
+      );
+
+      // If any critical parameter is missing, add it again
+      if (!formDataToSend.get('user_id')) {
+        console.log('⚠️ CRITICAL: user_id missing, adding again!');
+        formDataToSend.append('user_id', editUserId);
+      }
+      if (!formDataToSend.get('is_update')) {
+        console.log('⚠️ CRITICAL: is_update missing, adding again!');
+        formDataToSend.append('is_update', 'true');
+      }
+    }
+
+    // Use the appropriate API method
+    console.log(
+      isEditMode
+        ? 'Using updateUser API for child update'
+        : 'Using registerUser API for new child registration'
+    );
+
     try {
-      const responseData = await registrationApi.registerUser(formDataToSend);
-      console.log(editUserId ? 'Update response:' : 'Registration response:', responseData);
+      let responseData;
+
+      if (isEditMode && editUserId) {
+        // Use updateUser for editing existing child
+        console.log('🔄 Calling updateUser API for child edit:', editUserId);
+
+        // Enhanced logging before API call
+        console.log('=== UPDATE API CALL DEBUG ===');
+        console.log('Edit User ID:', editUserId);
+        console.log(
+          'FormData keys being sent:',
+          Array.from(formDataToSend.keys())
+        );
+        console.log('user_id in FormData:', formDataToSend.get('user_id'));
+        console.log('is_update in FormData:', formDataToSend.get('is_update'));
+        console.log(
+          'operation_type in FormData:',
+          formDataToSend.get('operation_type')
+        );
+        console.log('full_name in FormData:', formDataToSend.get('full_name'));
+        console.log('form_type in FormData:', formDataToSend.get('form_type'));
+
+        // Log user_data JSON content
+        const userDataJson = formDataToSend.get('user_data');
+        if (userDataJson) {
+          try {
+            const userData = JSON.parse(userDataJson as string);
+            console.log('user_data JSON contains id:', userData.id);
+            console.log('user_data JSON contains user_id:', userData.user_id);
+            console.log('user_data JSON name:', userData.name);
+            console.log('user_data JSON full_name:', userData.full_name);
+          } catch {
+            console.warn('Could not parse user_data JSON for logging');
+          }
+        }
+        console.log('==============================');
+
+        responseData = await registrationApi.updateUser(
+          editUserId,
+          formDataToSend
+        );
+
+        // Enhanced logging after API call
+        console.log('=== UPDATE API RESPONSE DEBUG ===');
+        console.log('Response status:', responseData?.status);
+        console.log('Response message:', responseData?.message);
+        console.log('Response user_id:', responseData?.user_id);
+        console.log('Response user object:', responseData?.user);
+        console.log('Full response:', responseData);
+        console.log('==================================');
+      } else {
+        // Use registerUser for new child registration
+        console.log('✨ Calling registerUser API for new child registration');
+        responseData = await registrationApi.registerUser(formDataToSend);
+      }
+
+      console.log(
+        isEditMode ? 'Update response:' : 'Registration response:',
+        responseData
+      );
 
       // If successful, clear pending registration
       pendingRegistrations.delete(submissionKey);
@@ -415,12 +376,45 @@ export const submitForm = async (
         responseData?.user?.id ||
         editUserId ||
         `temp-${uniqueSubmissionId}`;
-      const userName = responseData?.user?.name || formData.name;
+      const userName =
+        responseData?.user?.name ||
+        responseData?.user?.full_name ||
+        formData.name;
+
+      // VERIFICATION: Check if update was actually performed
+      if (isEditMode) {
+        const wasUpdated =
+          responseData?.operation_type === 'update' ||
+          responseData?.user_id === editUserId ||
+          responseData?.user?.id === editUserId;
+
+        if (wasUpdated) {
+          console.log('✅ Update operation confirmed - same user ID returned');
+        } else {
+          console.log('⚠️ WARNING: Update operation may have created new user');
+          console.log('Expected user ID:', editUserId);
+          console.log(
+            'Returned user ID:',
+            responseData?.user_id || responseData?.user?.id
+          );
+        }
+      }
+
+      // Log success details
+      console.log(
+        `✅ Child ${isEditMode ? 'update' : 'registration'} successful:`,
+        {
+          userId,
+          userName,
+          operation: isEditMode ? 'update' : 'create',
+          actualOperation: responseData?.operation_type || 'unknown',
+        }
+      );
 
       toast.success(
-        editUserId 
-          ? `${userName} ${t('edit.successMessage', 'updated successfully!')}`
-          : `${userName} ${t('registration.successMessage', 'registered successfully!')}`,
+        isEditMode
+          ? `تم تحديث بيانات ${userName} بنجاح!`
+          : `تم تسجيل ${userName} بنجاح!`,
         { id: 'registration' }
       );
 
@@ -440,26 +434,24 @@ export const submitForm = async (
 
       pendingRegistrations.delete(submissionKey);
 
-      let errorMessage = t(
-        'registration.generalError',
-        'An error occurred during registration'
-      );
+      let errorMessage = isEditMode
+        ? 'حدث خطأ أثناء تحديث البيانات'
+        : 'حدث خطأ أثناء تسجيل البيانات';
 
       if (error instanceof Error) {
-        errorMessage = error.message;
+        // Keep original English message for debugging, but show Arabic to user
+        console.error('Original error message:', error.message);
 
-        // Handle common errors
-        if (errorMessage.includes('UNIQUE constraint failed')) {
+        // Handle common errors with Arabic messages
+        if (error.message.includes('UNIQUE constraint failed')) {
           errorMessage =
-            'Registration could not be completed. Please try again with a different image.';
+            'لا يمكن إكمال العملية. يرجى المحاولة مرة أخرى بصورة مختلفة.';
         } else if (
-          errorMessage.includes('Face angle') ||
-          errorMessage.includes('face is not')
+          error.message.includes('Face angle') ||
+          error.message.includes('face is not')
         ) {
-          errorMessage = t(
-            'validation.faceAngleError',
-            "The uploaded photo doesn't meet our requirements. Please upload a clear front-facing photo where the person is looking directly at the camera."
-          );
+          errorMessage =
+            'الصورة المرفوعة لا تلبي المتطلبات. يرجى رفع صورة واضحة للوجه مباشرة أمام الكاميرا.';
         }
 
         // Try to extract validation errors from response
@@ -473,9 +465,11 @@ export const submitForm = async (
                   `${err.loc.join('.')}: ${err.msg}`
               );
               console.error('Validation errors:', validationErrors);
-              errorMessage = `Validation errors: ${validationErrors.join(', ')}`;
+              errorMessage =
+                'أخطاء في التحقق من البيانات. يرجى مراجعة المعلومات المدخلة.';
             } else if (typeof responseData.detail === 'string') {
-              errorMessage = responseData.detail;
+              console.error('Server error detail:', responseData.detail);
+              // Keep the Arabic error message for user display
             }
           }
         }
@@ -490,28 +484,26 @@ export const submitForm = async (
     toast.dismiss('registration');
 
     // Check for specific error types
-    let errorMessage = t(
-      'registration.generalError',
-      'An error occurred during registration'
-    );
+    let errorMessage = isEditMode
+      ? 'حدث خطأ أثناء تحديث البيانات'
+      : 'حدث خطأ أثناء تسجيل البيانات';
 
     if (err instanceof Error) {
-      errorMessage = err.message;
+      // Keep original error for debugging
+      console.error('Original error message:', err.message);
 
       // Special case for UNIQUE constraint errors
-      if (errorMessage.includes('UNIQUE constraint failed')) {
+      if (err.message.includes('UNIQUE constraint failed')) {
         errorMessage =
-          'Registration could not be completed. Please try again with a different image.';
+          'لا يمكن إكمال العملية. يرجى المحاولة مرة أخرى بصورة مختلفة.';
       }
       // Provide more user-friendly message for face angle errors
       else if (
-        errorMessage.includes('Face angle') ||
-        errorMessage.includes('face is not')
+        err.message.includes('Face angle') ||
+        err.message.includes('face is not')
       ) {
-        errorMessage = t(
-          'validation.faceAngleError',
-          "The uploaded photo doesn't meet our requirements. Please upload a clear front-facing photo where the person is looking directly at the camera."
-        );
+        errorMessage =
+          'الصورة المرفوعة لا تلبي المتطلبات. يرجى رفع صورة واضحة للوجه مباشرة أمام الكاميرا.';
       }
     }
 

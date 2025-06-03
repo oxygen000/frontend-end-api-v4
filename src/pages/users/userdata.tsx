@@ -131,10 +131,18 @@ function Userdata() {
         isRTL={isRTL}
         t={t}
         navigate={(to) => {
+          console.log('🔗 userdata.tsx: Navigation called with:', to);
+
           if (typeof to === 'number') {
-            navigate(to); // Navigate by delta
-          } else {
-            navigate(to); // Navigate to path
+            // Navigate by delta (back/forward)
+            navigate(to);
+          } else if (typeof to === 'string') {
+            // Navigate to path
+            navigate(to);
+          } else if (typeof to === 'object' && to.path) {
+            // Navigate with state (for edit mode)
+            console.log('🔗 Navigation with state:', to.state);
+            navigate(to.path, { state: to.state });
           }
         }}
         onDelete={handleDelete}
@@ -148,10 +156,21 @@ function Userdata() {
         isRTL={isRTL}
         t={t}
         navigate={(to) => {
+          console.log(
+            '🔗 userdata.tsx: Navigation called for disabled user with:',
+            to
+          );
+
           if (typeof to === 'number') {
-            navigate(to); // Navigate by delta
-          } else {
-            navigate(to); // Navigate to path
+            // Navigate by delta (back/forward)
+            navigate(to);
+          } else if (typeof to === 'string') {
+            // Navigate to path
+            navigate(to);
+          } else if (typeof to === 'object' && to.path) {
+            // Navigate with state (for edit mode)
+            console.log('🔗 Navigation with state:', to.state);
+            navigate(to.path, { state: to.state });
           }
         }}
         onDelete={handleDelete}
@@ -229,13 +248,12 @@ function Userdata() {
 
   const hasCaseInfo = Boolean(
     user.record_number ||
-    user.court_governorate ||
-    user.case_number ||
-    user.dossier_number ||
-    user.charge ||
-    user.judgment ||
-    user.sentence
-
+      user.court_governorate ||
+      user.case_number ||
+      user.dossier_number ||
+      user.charge ||
+      user.judgment ||
+      user.sentence
   );
   return (
     <div className="p-3 sm:p-6" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -279,7 +297,6 @@ function Userdata() {
             <>
               <DataAdultUser
                 user={user}
-               
                 t={t}
                 showEmptyFields={showEmptyFields}
                 maskSensitiveInfo={maskInfo}
@@ -287,26 +304,19 @@ function Userdata() {
               />
 
               {/* Case Information */}
-              {hasCaseInfo &&(
+              {hasCaseInfo && (
                 <CaseInfoSection
-                user={user}
-                t={t}
-                maskSensitiveInfo={maskInfo}
-              />
+                  user={user}
+                  t={t}
+                  maskSensitiveInfo={maskInfo}
+                />
               )}
               {/* Vehicle Information - only show when vehicle data exists */}
-              {hasVehicleInfo && (
-                <VehicleInfoSection user={user}  t={t} />
-              )}
+              {hasVehicleInfo && <VehicleInfoSection user={user} t={t} />}
 
               {/* Travel Information - only show when travel data exists */}
               {hasTravelInfo && (
-                <TravelInfoSection
-                  user={user}
-                 
-                  t={t}
-                  formatDate={formatDate}
-                />
+                <TravelInfoSection user={user} t={t} formatDate={formatDate} />
               )}
             </>
           )}

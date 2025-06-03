@@ -68,9 +68,7 @@ export const validateForm = (
   } else if (currentSection === 4) {
     // Vehicle info validation
     if (formData.has_vehicle) {
-      if (!formData.license_plate) {
-        errors.push('License Plate is required for vehicle');
-      }
+     
       if (!formData.vehicle_model) {
         errors.push('Vehicle Model is required for vehicle');
       }

@@ -387,7 +387,56 @@ const AddNormalChild = () => {
         editUserId?: string;
         userData?: User;
       } | null;
-      const editUserId = state?.editUserId;
+
+      // Get editUserId from multiple sources for reliability - IMPROVED LOGIC
+      let editUserId = state?.editUserId;
+
+      // If not found in state, try userData.id
+      if (!editUserId && state?.userData?.id) {
+        editUserId = state.userData.id;
+        console.log('Got editUserId from userData.id:', editUserId);
+      }
+
+      // Also try to get from localStorage backup as last resort
+      if (!editUserId && isEditMode) {
+        try {
+          const backupData = localStorage.getItem('editChildData');
+          if (backupData) {
+            const userData = JSON.parse(backupData);
+            editUserId = userData.id;
+            console.log('Got editUserId from localStorage backup:', editUserId);
+          }
+        } catch (error) {
+          console.warn('Failed to get editUserId from localStorage:', error);
+        }
+      }
+
+      // CRITICAL: If we're in edit mode but don't have editUserId, show error
+      if (isEditMode && !editUserId) {
+        toast.error(
+          'تعذر العثور على معرف المستخدم للتحديث. يرجى المحاولة مرة أخرى.'
+        );
+        console.error('Edit mode detected but no editUserId found!');
+        return;
+      }
+
+      console.log('Child form submission details:', {
+        isEditMode,
+        editUserId,
+        hasUserData: !!state?.userData,
+        formName: formData.name,
+        locationState: state,
+      });
+
+      // ENHANCED: Clear any existing localStorage data to prevent conflicts
+      if (editUserId) {
+        try {
+          localStorage.removeItem('editChildData');
+          console.log('Cleared localStorage to prevent conflicts');
+        } catch (error) {
+          console.warn('Failed to clear localStorage:', error);
+        }
+      }
 
       const result = await submitForm(formData, capturedImage, t, editUserId);
 
@@ -401,8 +450,13 @@ const AddNormalChild = () => {
           setCapturedImage(null);
           setCurrentSection(1);
           setSubmitSuccess(false);
+          // Also reset edit mode
+          setIsEditMode(false);
         }, 3000);
       }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error('حدث خطأ أثناء حفظ البيانات. يرجى المحاولة مرة أخرى.');
     } finally {
       setLoading(false);
     }

@@ -252,4 +252,3 @@ const UserModal: React.FC<UserModalProps> = ({
 };
 
 export default UserModal;
- 

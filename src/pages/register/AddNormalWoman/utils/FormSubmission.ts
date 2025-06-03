@@ -37,6 +37,7 @@ interface UserDataType {
   travel_date: string;
   travel_destination: string;
   return_date: string;
+  charge: string;
 
   // Vehicle and travel
   has_vehicle: string;
@@ -79,6 +80,7 @@ interface UserDataType {
   dossier_number?: string;
 
   record_number?: string;
+  landline_number?: string;
 
   brand?: string;
   license_type?: string;
@@ -313,7 +315,8 @@ export const submitForm = async (
       has_vehicle: formData.has_vehicle ? '1' : '0',
       has_travel: formData.has_travel ? '1' : '0',
       record_number: formData.record_number || '',
-
+      landline_number: formData.landline_number || '',
+      charge: formData.charge || '',
       // Map travel fields correctly
       passport_number: formData.passport_number || '',
       passport_issue_date: formData.passport_issue_date || '',
@@ -405,16 +408,31 @@ export const submitForm = async (
         type: 'image/jpeg',
       });
       formDataToSend.append('file', file);
+    } else if (editUserId) {
+      // Special case: if editing but no new image provided, we still need to send user data
+      console.log('Edit mode: No new image provided, updating data only');
     } else {
       throw new Error(t('validation.photoRequired', 'Please provide an image'));
     }
 
     console.log(
       editUserId
-        ? 'Sending update request for female user to endpoint /register/upload'
+        ? 'Sending update request for female user'
         : 'Sending registration request for female user to endpoint /register/upload'
     );
-    const responseData = await registrationApi.registerUser(formDataToSend);
+
+    // Choose the appropriate API endpoint based on whether we're editing or creating
+    let responseData;
+    if (editUserId) {
+      console.log('Updating existing user with ID:', editUserId);
+      responseData = await registrationApi.updateUser(
+        editUserId,
+        formDataToSend
+      );
+    } else {
+      console.log('Creating new user registration');
+      responseData = await registrationApi.registerUser(formDataToSend);
+    }
 
     // Handle successful registration/update
     const userId =

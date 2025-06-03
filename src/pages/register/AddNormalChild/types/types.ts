@@ -64,7 +64,6 @@ export interface FormData {
   reason_for_location?: string;
   disappearance_date?: string; // Derived from last_seen_time
   disappearance_time?: string; // Derived from last_seen_time
- 
 
   // Frontend naming for disappearance (mapped to database fields)
   last_seen_time: string; // Maps to disappearance_date and disappearance_time
@@ -91,9 +90,7 @@ export interface FormData {
   image: File | null;
   useCamera: boolean;
 
-
   was_accompanied: string;
- 
 }
 
 export const initialFormData: FormData = {
@@ -166,13 +163,9 @@ export const initialFormData: FormData = {
   first_friend_phone: '',
   second_friend_phone: '',
 
-
-
-
   // History information
   previous_disputes: '',
   gone_missing_before: '',
-
 
   // Police Report Information
 
@@ -181,6 +174,4 @@ export const initialFormData: FormData = {
   disappearance_time: '',
   disappearance_date: '',
   area_of_disappearance: '',
-
-
 };

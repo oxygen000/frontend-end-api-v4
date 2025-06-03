@@ -30,8 +30,7 @@ export const validateForm = (
     ) {
       errors.push('National ID should be 14 digits');
     }
-
-  }  else if (currentSection === 3) {
+  } else if (currentSection === 3) {
     // Section 3: Reporter Information - mandatory for case follow-up
     if (!formData.reporter_name) {
       errors.push("Reporter's Name is required");
@@ -42,25 +41,17 @@ export const validateForm = (
     if (!formData.reporter_relationship) {
       errors.push('Relationship to Reporter is required');
     }
-    if (
-      formData.reporter_phone &&
-      formData.reporter_phone.length < 11
-    ) {
+    if (formData.reporter_phone && formData.reporter_phone.length < 11) {
       errors.push("Reporter's Phone should be 11 digits");
     }
     if (!formData.reporter_address) {
       errors.push("Reporter's Address is required");
     }
-
   } else if (currentSection === 4) {
     // Section 4: Medical Information - optional, limited to 500 characters
-    if (
-      formData.medical_condition &&
-      formData.medical_condition.length > 500
-    ) {
+    if (formData.medical_condition && formData.medical_condition.length > 500) {
       errors.push('Medical History is too long (max 500 characters)');
     }
-
   } else if (currentSection === 5) {
     // Section 5: Disappearance Details - required for investigation
     if (!formData.disappearance_date) {
@@ -72,10 +63,8 @@ export const validateForm = (
     if (!formData.area_of_disappearance) {
       errors.push('Last Known Location is required');
     }
-
   } else if (currentSection === 6) {
     // Section 6: Police Report - optional, no validation required currently
-
   } else if (currentSection === 7) {
     // Section 7: Image Upload - required for identification
     if (!capturedImage && !formData.image) {

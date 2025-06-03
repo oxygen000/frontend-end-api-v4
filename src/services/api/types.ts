@@ -575,6 +575,7 @@ export interface RegistrationResult {
   message: string;
   user_id?: string;
   face_id?: string;
+  operation_type?: string;
   user?: {
     id: string;
     face_id: string;
@@ -585,6 +586,7 @@ export interface RegistrationResult {
     role?: string;
     image_path: string;
     created_at: string;
+    updated_at?: string;
     form_type?: string;
     [key: string]: unknown;
   };
@@ -600,6 +602,17 @@ export interface RegistrationResult {
   };
   form_data?: Record<string, string | number | boolean | undefined>;
   multi_angle_trained?: boolean;
+  image_info?: {
+    filename?: string;
+    size_bytes?: number;
+    backup_paths?: {
+      primary?: string;
+      backup?: string;
+      data_backup?: string;
+    };
+    face_encoding_updated?: boolean;
+    multi_angle_encoding_updated?: boolean;
+  };
 }
 
 export interface ApiResponse<T = undefined> {

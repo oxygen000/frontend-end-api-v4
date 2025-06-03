@@ -168,7 +168,7 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
                 <AnimatedFaceIcon
                   size="md"
                   text={t('photo.clickToUpload', 'Click to Upload')}
-                  color="#ffff" 
+                  color="#ffff"
                 />
                 <input
                   id="fileInput"
@@ -182,7 +182,6 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
               {/* Selected image preview - always shown below upload area */}
               {(previewUrl || formData.image) && (
                 <div className="flex flex-col items-center space-y-2 w-full">
-                  
                   <div className="flex justify-center w-full">
                     <img
                       src={
@@ -195,7 +194,6 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
                       className="max-w-full max-h-48 sm:max-h-64 rounded-lg shadow-md border-2 border-purple-400"
                     />
                   </div>
-                 
                 </div>
               )}
             </div>

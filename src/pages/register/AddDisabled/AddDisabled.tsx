@@ -59,6 +59,7 @@ function AddDisabled() {
 
   // Edit mode state
   const [isEditMode, setIsEditMode] = useState(false);
+  const [editUserId, setEditUserId] = useState<string | null>(null);
 
   // Debug initial form data
   console.log('🏁 AddDisabled component initialized');
@@ -78,10 +79,12 @@ function AddDisabled() {
     // Try to get data from state or localStorage backup
     let userData: User | null = null;
     let editMode = false;
+    let userId: string | null = null;
 
     if (state?.editMode && state?.userData) {
       userData = state.userData;
       editMode = state.editMode;
+      userId = state.editUserId || state.userData.id || null;
       console.log('📊 Using location.state data');
     } else {
       // Try localStorage backup
@@ -90,6 +93,7 @@ function AddDisabled() {
         if (backupData) {
           userData = JSON.parse(backupData);
           editMode = true;
+          userId = userData?.id || null;
           console.log('💾 Using localStorage backup data');
         }
       } catch (error) {
@@ -101,9 +105,20 @@ function AddDisabled() {
       console.group('📝 Disabled Form Edit Mode Initialization');
       console.log('✅ Edit mode detected');
       console.log('📊 Received user data:', userData);
+      console.log('🆔 Edit user ID:', userId);
 
       setIsEditMode(true);
+      setEditUserId(userId);
       const user = userData;
+
+      // Debug medical_history specifically
+      console.log('🏥 Medical history debug:');
+      console.log('   - user.medical_history:', user.medical_history);
+      console.log('   - user.medical_condition:', user.medical_condition);
+      console.log(
+        '   - Which will be used for medical_history:',
+        user.medical_history || user.medical_condition || ''
+      );
 
       // Map user data to disabled form data structure
       const mappedFormData: DisabledFormData = {
@@ -197,6 +212,16 @@ function AddDisabled() {
 
       console.log('🔧 Mapped form data:', mappedFormData);
 
+      // Debug final medical_history value
+      console.log(
+        '🏥 Final medical_history in mapped data:',
+        mappedFormData.medical_history
+      );
+      console.log(
+        '🏥 Final medical_condition in mapped data:',
+        mappedFormData.medical_condition
+      );
+
       // Use a timeout to ensure the state update happens
       setTimeout(() => {
         setFormData(mappedFormData);
@@ -234,6 +259,8 @@ function AddDisabled() {
       address: formData.address,
       disability_type: formData.disability_type,
       reporter_name: formData.reporter_name,
+      medical_history: formData.medical_history,
+      medical_condition: formData.medical_condition,
     });
   }, [formData]);
 
@@ -349,6 +376,15 @@ function AddDisabled() {
     setFormErrors([]);
     setLoading(true);
 
+    console.log('🚀 Form submission started');
+    console.log('   - Edit mode:', isEditMode);
+    console.log('   - Edit user ID:', editUserId);
+    console.log('   - Form data preview:', {
+      full_name: formData.full_name,
+      national_id: formData.national_id,
+      disability_type: formData.disability_type,
+    });
+
     try {
       // Validate all sections before submission
       const allSectionErrors = [];
@@ -425,16 +461,38 @@ function AddDisabled() {
       }, 30000); // 30 second timeout
 
       // Prepare form data for submission
-      const formDataToSend = buildSubmissionFormData(formData, capturedImage);
+      const formDataToSend = buildSubmissionFormData(
+        formData,
+        capturedImage,
+        editUserId
+      );
 
       try {
         // Send the registration request with timeout (including editUserId for updates)
-        const response = (await Promise.race([
-          registrationApi.registerUser(formDataToSend),
-          new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error('Request timeout')), 25000)
-          ),
-        ])) as RegistrationResult;
+        let response: RegistrationResult;
+
+        if (isEditMode && editUserId) {
+          // Update existing user
+          console.log(
+            '🔄 Updating existing disabled user with ID:',
+            editUserId
+          );
+          response = (await Promise.race([
+            registrationApi.updateUser(editUserId, formDataToSend),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('Request timeout')), 25000)
+            ),
+          ])) as RegistrationResult;
+        } else {
+          // Create new user
+          console.log('✨ Creating new disabled user registration');
+          response = (await Promise.race([
+            registrationApi.registerUser(formDataToSend),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('Request timeout')), 25000)
+            ),
+          ])) as RegistrationResult;
+        }
 
         // Clear timeout
         clearTimeout(submissionTimeout);
@@ -442,10 +500,22 @@ function AddDisabled() {
         // Clear pending submission
         pendingSubmissions.delete(submissionKey);
 
+        console.log('✅ API call successful');
+        console.log('   - Response:', response);
+        console.log('   - Operation type:', isEditMode ? 'UPDATE' : 'CREATE');
+        console.log('   - Expected user ID:', editUserId);
+        console.log(
+          '   - Response user ID:',
+          response?.user_id || response?.user?.id
+        );
+
         // Extract user ID from response
         let userId = '';
 
-        if (response?.user_id || response?.user?.id) {
+        if (isEditMode && editUserId) {
+          // In edit mode, use the original editUserId
+          userId = editUserId;
+        } else if (response?.user_id || response?.user?.id) {
           userId = response.user_id || response.user?.id || '';
         } else if (response?.user?.face_id) {
           userId = response.user.face_id;

@@ -59,43 +59,84 @@ const AddNormalWoman = () => {
         ...initialFormData,
         // Personal information
         name: user.name || '',
-        full_name: user.full_name || '',
+        full_name: user.full_name || user.name || '',
+        nickname: user.nickname || '',
         national_id: user.national_id || '',
         dob: user.dob || user.date_of_birth || '',
         mothers_name: user.mothers_name || '',
         marital_status: user.marital_status || '',
         educational_qualification: user.educational_qualification || '',
         occupation: user.occupation || '',
+        issuing_authority: user.issuing_authority || '',
+        issue_date: user.issue_date || '',
+        governorate: user.governorate || '',
 
         // Contact information
         address: user.address || '',
         phone_number: user.phone_number || '',
+        phone_company: user.phone_company || user.service_provider || 'other',
+        service_provider: user.service_provider || user.phone_company || '',
         second_phone_number: user.second_phone_number || '',
         landline_number: user.landline_number || '',
 
         // Criminal record information
         has_criminal_record: Boolean(user.has_criminal_record),
+        record_number: user.record_number || '',
         case_details: user.case_details || '',
         police_station: user.police_station || '',
         case_number: user.case_number || '',
+        dossier_number: user.dossier_number || '',
         judgment: user.judgment || '',
-        accusation: user.accusation || '',
+        charge: user.charge || '',
         sentence: user.sentence || '',
+        accusation: user.accusation || '',
+        court_governorate: user.court_governorate || '',
 
         // Vehicle information
         has_vehicle: Boolean(user.has_vehicle),
+        has_motorcycle: Boolean(user.has_motorcycle),
+        vehicle_number: user.vehicle_number || '',
         license_plate: user.license_plate || '',
         vehicle_model: user.vehicle_model || '',
         vehicle_color: user.vehicle_color || user.color || '',
+        brand: user.brand || '',
         chassis_number: user.chassis_number || '',
+        license_type: user.license_type || '',
+        traffic_unit: user.traffic_unit || '',
+        license_expiration: user.license_expiration || '',
+        license_governorate: user.license_governorate || '',
+        manufacture_year: user.manufacture_year || '',
+        expiration_year: user.expiration_year || '',
+        traffic_department: user.traffic_department || '',
+        vehicle_type: user.vehicle_type || '',
 
         // Travel information
         has_travel: Boolean(user.travel_date || user.departure_date),
+        passport_number: user.passport_number || '',
+        passport_issue_date: user.passport_issue_date || '',
+        passport_expiry_date: user.passport_expiry_date || '',
         travel_date: user.travel_date || user.departure_date || '',
         travel_destination: user.travel_destination || user.destination || '',
-        passport_number: user.passport_number || '',
+        departure_country: user.departure_country || '',
+        departure_destination: user.departure_destination || '',
+        departure_date: user.departure_date || user.travel_date || '',
+        departure_time: user.departure_time || '',
+        departure_airline: user.departure_airline || '',
+        departure_flight_number: user.departure_flight_number || '',
         departure_airport: user.departure_airport || '',
+        arrival_origin: user.arrival_origin || '',
+        arrival_destination: user.arrival_destination || '',
+        arrival_airline: user.arrival_airline || '',
+        arrival_flight_number: user.arrival_flight_number || '',
+        arrival_date: user.arrival_date || '',
+        arrival_time: user.arrival_time || '',
         arrival_airport: user.arrival_airport || '',
+        return_date: user.return_date || '',
+        return_flight_number: user.return_flight_number || '',
+        return_airport: user.return_airport || '',
+
+        // Additional information
+        additional_notes: user.additional_notes || '',
 
         form_type: 'woman',
       };
@@ -108,18 +149,6 @@ const AddNormalWoman = () => {
       }
     }
   }, [location.state]);
-
-  // Add useEffect to ensure all form fields are initialized
-  useEffect(() => {
-    // Force update of form data to ensure all fields are defined
-    setFormData((current) => {
-      // Make sure expiration_year is defined
-      if (current.expiration_year === undefined) {
-        return { ...current, expiration_year: '' };
-      }
-      return current;
-    });
-  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -285,6 +314,9 @@ const AddNormalWoman = () => {
       // Explicitly set has_travel flag
       submissionData.has_travel = !!submissionData.has_travel;
 
+      // Explicitly set has_criminal_record flag
+      submissionData.has_criminal_record = !!submissionData.has_criminal_record;
+
       // Log the final submission data
       console.log('Final submission data:', submissionData);
 
@@ -313,8 +345,13 @@ const AddNormalWoman = () => {
           setCapturedImage(null);
           setCurrentSection(1);
           setSubmitSuccess(false);
+          // Also reset edit mode
+          setIsEditMode(false);
         }, 3000);
       }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error('حدث خطأ أثناء حفظ البيانات. يرجى المحاولة مرة أخرى.');
     } finally {
       setLoading(false);
     }

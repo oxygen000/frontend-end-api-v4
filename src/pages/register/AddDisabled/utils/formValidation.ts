@@ -152,7 +152,6 @@ interface UserData {
   disability_type: string;
   disability_details: string;
   disability_description: string;
-  medical_condition: string;
   medical_history: string;
   special_needs: string;
   emergency_contact: string;
@@ -215,11 +214,13 @@ interface UserData {
  * Builds form data for API submission
  * @param personDetails Form data
  * @param capturedImage Optional captured webcam image
+ * @param editUserId Optional edit user ID for update operations
  * @returns FormData object ready for submission
  */
 export const buildSubmissionFormData = (
   personDetails: DisabledFormData,
-  capturedImage: string | null
+  capturedImage: string | null,
+  editUserId?: string | null
 ): FormData => {
   // Create a FormData object to handle file upload
   const formDataToSend = new FormData();
@@ -231,7 +232,7 @@ export const buildSubmissionFormData = (
   // Map frontend fields to backend expected fields
   const userData: UserData = {
     // Unique ID and form type
-    unique_id: uniqueSubmissionId,
+    unique_id: editUserId || uniqueSubmissionId,
     form_type: 'disabled',
     category: 'disabled',
 
@@ -255,8 +256,7 @@ export const buildSubmissionFormData = (
     disability_type: personDetails.disability_type || 'physical',
     disability_details: personDetails.disability_description || '',
     disability_description: personDetails.disability_description || '',
-    medical_condition: personDetails.medical_condition || '',
-    medical_history: personDetails.medical_condition || '', // Include both for compatibility
+    medical_history: personDetails.medical_history || '', // Include both for compatibility
     special_needs: personDetails.special_needs || '',
     emergency_contact: personDetails.emergency_contact || '',
     emergency_phone: personDetails.emergency_phone || '',
@@ -323,6 +323,13 @@ export const buildSubmissionFormData = (
   // Add form metadata
   formDataToSend.append('form_type', 'disabled');
   formDataToSend.append('category', 'disabled');
+
+  // If this is an update operation, add the necessary fields
+  if (editUserId) {
+    formDataToSend.append('user_id', editUserId);
+    formDataToSend.append('is_update', 'true');
+    formDataToSend.append('operation_type', 'update');
+  }
 
   // Append the complete user data in JSON format
   formDataToSend.append('user_data', JSON.stringify(userData));

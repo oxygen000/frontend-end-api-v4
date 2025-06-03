@@ -386,6 +386,8 @@ export const submitForm = async (
 
     // Make sure image is handled correctly
     try {
+      let imageAdded = false;
+
       if (formData.image) {
         // Ensure the image is a valid File object
         if (formData.image instanceof File) {
@@ -395,6 +397,7 @@ export const submitForm = async (
             formData.image.size
           );
           formDataToSend.append('file', formData.image);
+          imageAdded = true;
         } else {
           console.error('Invalid image object:', formData.image);
           throw new Error(
@@ -411,6 +414,7 @@ export const submitForm = async (
           });
           console.log('Created file from webcam image:', file.size);
           formDataToSend.append('file', file);
+          imageAdded = true;
         } catch (imgError) {
           console.error('Error converting webcam image:', imgError);
           throw new Error(
@@ -420,11 +424,22 @@ export const submitForm = async (
             )
           );
         }
+      } else if (editUserId) {
+        // Special case: if editing but no new image provided, we still need to send user data
+        console.log('Edit mode: No new image provided, updating data only');
+        imageAdded = false; // This will allow data-only updates
       } else {
-        console.error('No image provided');
+        console.error('No image provided for new registration');
         throw new Error(
           t('validation.photoRequired', 'Please provide an image')
         );
+      }
+
+      // Log whether image was added
+      if (imageAdded) {
+        console.log('✅ Image successfully added to form data');
+      } else {
+        console.log('ℹ️ No image added to form data (data-only update)');
       }
     } catch (imageError) {
       console.error('Image processing error:', imageError);
@@ -486,9 +501,10 @@ export const submitForm = async (
       let responseData;
       if (editUserId) {
         console.log('Updating existing user with ID:', editUserId);
-        // Note: You may need to implement updateUser method in registrationApi
-        // For now, using the same endpoint but with user_id parameter
-        responseData = await registrationApi.registerUser(formDataToSend);
+        responseData = await registrationApi.updateUser(
+          editUserId,
+          formDataToSend
+        );
       } else {
         console.log('Creating new user registration');
         responseData = await registrationApi.registerUser(formDataToSend);
