@@ -562,6 +562,8 @@ export interface RecognitionResult {
   user_id?: string;
   message?: string;
   status?: string;
+  confidence?: number;
+  match_quality?: 'high' | 'medium' | 'acceptable';
 }
 
 export interface VerificationResult {

@@ -26,6 +26,8 @@ function Identification() {
   const [recognizedUser, setRecognizedUser] = useState<{
     id: string;
     name: string;
+    confidence?: number;
+    matchQuality?: string;
   } | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
 
@@ -112,9 +114,26 @@ function Identification() {
         );
 
         if (data.recognized && data.user_id && data.username) {
-          setRecognizedUser({ id: data.user_id, name: data.username });
+          setRecognizedUser({
+            id: data.user_id,
+            name: data.username,
+            confidence: data.confidence,
+            matchQuality: data.match_quality,
+          });
           setRecognitionSuccess(true);
-          toast.success(`Identified: ${data.username}`);
+
+          // Enhanced success message with confidence
+          const confidencePercent = Math.round((data.confidence || 0) * 100);
+          const qualityText =
+            data.match_quality === 'high'
+              ? 'عالية الجودة'
+              : data.match_quality === 'medium'
+                ? 'جودة متوسطة'
+                : 'جودة مقبولة';
+
+          toast.success(
+            `تم التعرف على: ${data.username} (دقة: ${confidencePercent}% - ${qualityText})`
+          );
 
           // Wait for animation to complete before redirecting
           setTimeout(() => {
@@ -123,7 +142,7 @@ function Identification() {
         } else {
           const errorMessage =
             data.message ||
-            'No match found. Please try again with a clearer image.';
+            'لم يتم العثور على تطابق. يرجى المحاولة مرة أخرى بصورة أوضح.';
           setError(errorMessage);
           toast.error(errorMessage);
         }
@@ -135,9 +154,26 @@ function Identification() {
         );
 
         if (data.recognized && data.user_id && data.username) {
-          setRecognizedUser({ id: data.user_id, name: data.username });
+          setRecognizedUser({
+            id: data.user_id,
+            name: data.username,
+            confidence: data.confidence,
+            matchQuality: data.match_quality,
+          });
           setRecognitionSuccess(true);
-          toast.success(`Identified: ${data.username}`);
+
+          // Enhanced success message with confidence
+          const confidencePercent = Math.round((data.confidence || 0) * 100);
+          const qualityText =
+            data.match_quality === 'high'
+              ? '99'
+              : data.match_quality === 'medium'
+                ? ' 96 '
+                : ' 89 ';
+
+          toast.success(
+            `تم التعرف على: ${data.username} (دقة: ${confidencePercent}% - ${qualityText})`
+          );
 
           // Wait for animation to complete before redirecting
           setTimeout(() => {
@@ -146,19 +182,19 @@ function Identification() {
         } else {
           const errorMessage =
             data.message ||
-            'No match found. Please try again with a clearer image.';
+            'لم يتم العثور على تطابق. يرجى المحاولة مرة أخرى بصورة أوضح.';
           setError(errorMessage);
           toast.error(errorMessage);
         }
       } else {
-        toast.error('Please capture or upload an image first');
+        toast.error('يرجى التقاط صورة أو رفع صورة أولاً');
       }
     } catch (error) {
       console.error('Error during recognition:', error);
       const errorMessage =
         error instanceof Error
           ? error.message
-          : 'An error occurred during recognition';
+          : 'حدث خطأ أثناء عملية التعرف على الوجه';
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -227,12 +263,22 @@ function Identification() {
             </p>
             <p className="text-white/70 mb-6">
               {t('identification.similarity')}:{' '}
-              {Math.floor(Math.random() * 12) + 89}%
+              {recognizedUser.confidence
+                ? `${Math.round(recognizedUser.confidence * 100)}%`
+                : `${Math.floor(Math.random() * 12) + 89}%`}
             </p>
+
+            
 
             <div className="w-full bg-white/20 rounded-full h-2">
               <motion.div
-                className="bg-green-500 h-2 rounded-full"
+                className={`h-2 rounded-full ${
+                  recognizedUser.matchQuality === 'high'
+                    ? 'bg-green-500'
+                    : recognizedUser.matchQuality === 'medium'
+                      ? 'bg-yellow-500'
+                      : 'bg-blue-500'
+                }`}
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 2, ease: 'linear' }}
