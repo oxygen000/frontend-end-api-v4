@@ -220,6 +220,15 @@ function ActionsSection({
         // Form type
         form_type: 'disabled',
       };
+
+      // Store original image path if exists for edit mode
+      if (user.image_path) {
+        console.log('🖼️ User has existing image:', user.image_path);
+        // Add originalImagePath to the prepared data
+        (
+          preparedUserData as User & { originalImagePath?: string }
+        ).originalImagePath = user.image_path;
+      }
     } else if (user.form_type === 'woman') {
       // Woman-specific data preparation
       preparedUserData = {

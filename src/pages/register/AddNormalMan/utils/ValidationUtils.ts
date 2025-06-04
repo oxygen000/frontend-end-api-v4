@@ -60,7 +60,6 @@ export const validateForm = (
   } else if (currentSection === 3) {
     // Criminal record validation
     if (formData.has_criminal_record) {
-    
       if (!formData.case_number) {
         errors.push('Case Number is required when criminal record exists');
       }
@@ -68,7 +67,6 @@ export const validateForm = (
   } else if (currentSection === 4) {
     // Vehicle info validation
     if (formData.has_vehicle) {
-     
       if (!formData.vehicle_model) {
         errors.push('Vehicle Model is required for vehicle');
       }
@@ -83,11 +81,10 @@ export const validateForm = (
       }
     }
   } else if (currentSection === 6) {
-    // Image validation
-    if (!formData.image && !capturedImage) {
-      errors.push('Photo is required');
-    } else {
-      const imageToCheck = formData.image || capturedImage;
+    // Image validation - Image is now optional
+    const imageToCheck = formData.image || capturedImage;
+    if (imageToCheck) {
+      // Only validate if an image is provided
       if (imageToCheck instanceof File) {
         if (imageToCheck.size > 6 * 1024 * 1024) {
           errors.push('Image size should be less than 5MB');
@@ -99,6 +96,7 @@ export const validateForm = (
         }
       }
     }
+    // Note: Image is now optional - no error if not provided
   }
 
   return errors;

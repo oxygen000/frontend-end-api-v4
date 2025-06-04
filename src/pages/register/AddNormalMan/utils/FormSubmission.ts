@@ -429,23 +429,31 @@ export const submitForm = async (
         console.log('Edit mode: No new image provided, updating data only');
         imageAdded = false; // This will allow data-only updates
       } else {
-        console.error('No image provided for new registration');
-        throw new Error(
-          t('validation.photoRequired', 'Please provide an image')
+        // New registration without image - allow this for normal registration
+        console.log(
+          'New registration: No image provided, will use default avatar'
         );
+        imageAdded = false; // This will allow registration without image
       }
 
       // Log whether image was added
       if (imageAdded) {
         console.log('✅ Image successfully added to form data');
       } else {
-        console.log('ℹ️ No image added to form data (data-only update)');
+        console.log('ℹ️ No image added to form data (will use default avatar)');
       }
     } catch (imageError) {
       console.error('Image processing error:', imageError);
-      throw new Error(
-        t('validation.photoRequired', 'Please provide a valid image')
-      );
+      // Only throw error if image was expected but failed to process
+      if (formData.image || capturedImage) {
+        throw new Error(
+          t('validation.photoRequired', 'Please provide a valid image')
+        );
+      } else {
+        console.log(
+          'No image provided - continuing with registration without image'
+        );
+      }
     }
 
     console.log(
