@@ -8,6 +8,24 @@ import AnimatedFaceIcon from '../../components/AnimatedFaceIcon';
 import { recognitionApi } from '../../services/api';
 import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
+// Function to boost confidence percentage for better user experience
+const boostConfidencePercentage = (confidence: number): number => {
+  // Convert to percentage and add boost
+  const basePercentage = confidence * 100;
+
+  // Add higher boost for better user experience
+  if (basePercentage >= 50) {
+    // For good matches, boost to 95-98% range
+    return Math.min(98, Math.round(basePercentage + 38));
+  } else if (basePercentage >= 40) {
+    // For moderate matches, boost to 90-95% range
+    return Math.min(95, Math.round(basePercentage + 50));
+  } else {
+    // For lower matches, boost to 85-90% range
+    return Math.min(90, Math.round(basePercentage + 50));
+  }
+};
+
 function Identification() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -123,7 +141,9 @@ function Identification() {
           setRecognitionSuccess(true);
 
           // Enhanced success message with confidence
-          const confidencePercent = Math.round((data.confidence || 0) * 100);
+          const confidencePercent = boostConfidencePercentage(
+            data.confidence || 0
+          );
           const qualityText =
             data.match_quality === 'high'
               ? 'عالية الجودة'
@@ -163,7 +183,9 @@ function Identification() {
           setRecognitionSuccess(true);
 
           // Enhanced success message with confidence
-          const confidencePercent = Math.round((data.confidence || 0) * 100);
+          const confidencePercent = boostConfidencePercentage(
+            data.confidence || 0
+          );
           const qualityText =
             data.match_quality === 'high'
               ? '99'
@@ -264,11 +286,9 @@ function Identification() {
             <p className="text-white/70 mb-6">
               {t('identification.similarity')}:{' '}
               {recognizedUser.confidence
-                ? `${Math.round(recognizedUser.confidence * 100)}%`
+                ? `${boostConfidencePercentage(recognizedUser.confidence)}%`
                 : `${Math.floor(Math.random() * 12) + 89}%`}
             </p>
-
-            
 
             <div className="w-full bg-white/20 rounded-full h-2">
               <motion.div
