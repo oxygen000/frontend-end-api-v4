@@ -240,15 +240,14 @@ function AddDisabled() {
       if (user.image_path) {
         console.log('🖼️ User has image:', user.image_path);
         // Set the originalImagePath in form data
-        mappedFormData.originalImagePath = user.image_path;
-        
+
         // Try to load the existing image for preview
         try {
           // Create a full URL for the image
-          const imageUrl = user.image_path.startsWith('http') 
-            ? user.image_path 
+          const imageUrl = user.image_path.startsWith('http')
+            ? user.image_path
             : `${window.location.origin}/${user.image_path}`;
-          
+
           console.log('🔗 Loading image from URL:', imageUrl);
           setCapturedImage(imageUrl);
         } catch (error) {

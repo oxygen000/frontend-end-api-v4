@@ -104,8 +104,7 @@ export const validateForm = (
   else if (currentSection === 7) {
     if (
       !personDetails.image &&
-      !capturedImage &&
-      !personDetails.originalImagePath
+      !capturedImage 
     ) {
       errors.push(
         'A personal photo is required. You cannot proceed without uploading or capturing a photo.'
@@ -349,14 +348,6 @@ export const buildSubmissionFormData = (
       formDataToSend.append('image', imageFile);
       formDataToSend.append('file', imageFile); // Add both field names for compatibility
     }
-  } else if (personDetails.originalImagePath && editUserId) {
-    // In edit mode, if no new image is provided but there's an original image path,
-    // include the original image path so the backend knows to keep the existing image
-    formDataToSend.append('keep_existing_image', 'true');
-    formDataToSend.append(
-      'existing_image_path',
-      personDetails.originalImagePath
-    );
   }
 
   // Add bypass parameters for face recognition
