@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiX, FiPhone } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
 import type { User } from '../types/types';
 
 interface UserImageModalProps {
@@ -17,20 +18,34 @@ const UserImageModal = ({
   imageModalOpen,
   setImageModalOpen,
 }: UserImageModalProps) => {
+  const [imageKey, setImageKey] = useState(Date.now());
+
+  // Update image key when user image changes to force refresh
+  useEffect(() => {
+    setImageKey(Date.now());
+  }, [user.image_path]);
+
   const getImageUrl = (
     imagePath: string | null | undefined,
     userName: string
   ) => {
     if (!imagePath) {
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=random`;
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=random&v=${imageKey}`;
     }
     if (imagePath.startsWith('http')) {
-      return imagePath;
+      // Add cache-busting parameter
+      const separator = imagePath.includes('?') ? '&' : '?';
+      return `${imagePath}${separator}v=${imageKey}`;
     }
     const formattedPath = imagePath.includes('uploads/')
       ? imagePath
       : `uploads/${imagePath}`;
-    return `https://backend-fast-api-ai.fly.dev/${formattedPath.replace(/^\/?/, '')}`;
+    return `https://backend-fast-api-ai.fly.dev/${formattedPath.replace(/^\/?/, '')}?v=${imageKey}`;
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random&v=${Date.now()}`;
   };
 
   return (
@@ -60,9 +75,11 @@ const UserImageModal = ({
               <FiX size={24} />
             </button>
             <img
+              key={`${user.id}-modal-${imageKey}`}
               src={getImageUrl(user.image_path, user.name)}
               alt={user.name}
               className="max-h-[85vh] max-w-full object-contain"
+              onError={handleImageError}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3">
               <div className="text-center">
@@ -77,7 +94,8 @@ const UserImageModal = ({
                 <div className="text-center mt-1 flex items-center justify-center">
                   <FiPhone className="mr-2" />
                   <span>
-                    {t('users.missing_person_phone', "Missing Person's Phone")}: {user.missing_person_phone}
+                    {t('users.missing_person_phone', "Missing Person's Phone")}:{' '}
+                    {user.missing_person_phone}
                   </span>
                 </div>
               )}
