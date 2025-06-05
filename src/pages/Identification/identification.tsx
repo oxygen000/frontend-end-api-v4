@@ -45,7 +45,6 @@ function Identification() {
     id: string;
     name: string;
     confidence?: number;
-    matchQuality?: string;
   } | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
 
@@ -136,7 +135,6 @@ function Identification() {
             id: data.user_id,
             name: data.username,
             confidence: data.confidence,
-            matchQuality: data.match_quality,
           });
           setRecognitionSuccess(true);
 
@@ -144,15 +142,9 @@ function Identification() {
           const confidencePercent = boostConfidencePercentage(
             data.confidence || 0
           );
-          const qualityText =
-            data.match_quality === 'high'
-              ? 'عالية الجودة'
-              : data.match_quality === 'medium'
-                ? 'جودة متوسطة'
-                : 'جودة مقبولة';
 
           toast.success(
-            `تم التعرف على: ${data.username} (دقة: ${confidencePercent}% - ${qualityText})`
+            `تم التعرف على: ${data.username} (دقة: ${confidencePercent}%)`
           );
 
           // Wait for animation to complete before redirecting
@@ -178,7 +170,6 @@ function Identification() {
             id: data.user_id,
             name: data.username,
             confidence: data.confidence,
-            matchQuality: data.match_quality,
           });
           setRecognitionSuccess(true);
 
@@ -186,15 +177,9 @@ function Identification() {
           const confidencePercent = boostConfidencePercentage(
             data.confidence || 0
           );
-          const qualityText =
-            data.match_quality === 'high'
-              ? '99'
-              : data.match_quality === 'medium'
-                ? ' 96 '
-                : ' 89 ';
 
           toast.success(
-            `تم التعرف على: ${data.username} (دقة: ${confidencePercent}% - ${qualityText})`
+            `تم التعرف على: ${data.username} (دقة: ${confidencePercent}%)`
           );
 
           // Wait for animation to complete before redirecting
@@ -293,9 +278,10 @@ function Identification() {
             <div className="w-full bg-white/20 rounded-full h-2">
               <motion.div
                 className={`h-2 rounded-full ${
-                  recognizedUser.matchQuality === 'high'
+                  recognizedUser.confidence && recognizedUser.confidence >= 50
                     ? 'bg-green-500'
-                    : recognizedUser.matchQuality === 'medium'
+                    : recognizedUser.confidence &&
+                        recognizedUser.confidence >= 40
                       ? 'bg-yellow-500'
                       : 'bg-blue-500'
                 }`}
