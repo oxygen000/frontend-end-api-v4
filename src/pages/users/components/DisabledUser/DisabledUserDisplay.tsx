@@ -17,6 +17,9 @@ interface DisabledUserDisplayProps {
   t: (key: string, defaultText?: string) => string;
   navigate: (to: string | number | { path: string; state?: any }) => void;
   onDelete: () => void;
+  searchedPersonImage?: string;
+  isSearching?: boolean;
+  searchedPersonName?: string;
 }
 
 const DisabledUserDisplay = ({
@@ -25,8 +28,14 @@ const DisabledUserDisplay = ({
   t,
   navigate,
   onDelete,
+  searchedPersonImage,
+  isSearching,
+  searchedPersonName,
 }: DisabledUserDisplayProps) => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [modalDefaultView, setModalDefaultView] = useState<'user' | 'searched'>(
+    'user'
+  );
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isIdentityRevealed] = useState(true);
 
@@ -71,6 +80,10 @@ const DisabledUserDisplay = ({
         t={t}
         setImageModalOpen={setImageModalOpen}
         imageModalOpen={imageModalOpen}
+        searchedPersonImage={searchedPersonImage}
+        isSearching={isSearching}
+        searchedPersonName={searchedPersonName}
+        setModalDefaultView={setModalDefaultView}
       />
       <UserImageModal
         user={user}
@@ -78,6 +91,11 @@ const DisabledUserDisplay = ({
         t={t}
         imageModalOpen={imageModalOpen}
         setImageModalOpen={setImageModalOpen}
+        searchedPersonImage={searchedPersonImage}
+        isSearching={isSearching}
+        searchedPersonName={searchedPersonName}
+        defaultView={modalDefaultView}
+        isRTL={isRTL}
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2 space-y-4 sm:space-y-6">

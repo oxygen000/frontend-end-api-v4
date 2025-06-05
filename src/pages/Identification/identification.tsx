@@ -149,7 +149,15 @@ function Identification() {
 
           // Wait for animation to complete before redirecting
           setTimeout(() => {
-            navigate(`/users/${data.user_id}`, { replace: true });
+            navigate(`/users/${data.user_id}`, {
+              replace: true,
+              state: {
+                searchedImage: uploadedImagePreview, // الصورة المبحوث بها
+                searchedPersonName: data.username,
+                isFromSearch: true,
+                searchConfidence: data.confidence,
+              },
+            });
           }, 2000);
         } else {
           const errorMessage =
@@ -184,7 +192,15 @@ function Identification() {
 
           // Wait for animation to complete before redirecting
           setTimeout(() => {
-            navigate(`/users/${data.user_id}`, { replace: true });
+            navigate(`/users/${data.user_id}`, {
+              replace: true,
+              state: {
+                searchedImage: capturedImage, // الصورة المبحوث بها
+                searchedPersonName: data.username,
+                isFromSearch: true,
+                searchConfidence: data.confidence,
+              },
+            });
           }, 2000);
         } else {
           const errorMessage =

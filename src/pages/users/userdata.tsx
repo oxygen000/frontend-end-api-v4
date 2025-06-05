@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
@@ -26,6 +26,7 @@ import { formatDate, maskSensitiveInfo } from './utils/utils';
 function Userdata() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +34,18 @@ function Userdata() {
   const [showEmptyFields] = useState<boolean>(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const [imageModalOpen, setImageModalOpen] = useState<boolean>(false);
+  const [modalDefaultView, setModalDefaultView] = useState<'user' | 'searched'>(
+    'user'
+  );
   const { t, isRTL } = useTranslationWithFallback();
+
+  // استخراج معلومات البحث من navigation state
+  const searchData = location.state as {
+    searchedImage?: string;
+    searchedPersonName?: string;
+    isFromSearch?: boolean;
+    searchConfidence?: number;
+  } | null;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -146,6 +158,9 @@ function Userdata() {
           }
         }}
         onDelete={handleDelete}
+        searchedPersonImage={searchData?.searchedImage}
+        isSearching={searchData?.isFromSearch}
+        searchedPersonName={searchData?.searchedPersonName}
       />
     );
   }
@@ -174,6 +189,9 @@ function Userdata() {
           }
         }}
         onDelete={handleDelete}
+        searchedPersonImage={searchData?.searchedImage}
+        isSearching={searchData?.isFromSearch}
+        searchedPersonName={searchData?.searchedPersonName}
       />
     );
   }
@@ -275,6 +293,10 @@ function Userdata() {
         t={t}
         setImageModalOpen={setImageModalOpen}
         imageModalOpen={imageModalOpen}
+        searchedPersonImage={searchData?.searchedImage}
+        isSearching={searchData?.isFromSearch}
+        searchedPersonName={searchData?.searchedPersonName}
+        setModalDefaultView={setModalDefaultView}
       />
 
       {/* Image Modal */}
@@ -284,6 +306,11 @@ function Userdata() {
         t={t}
         imageModalOpen={imageModalOpen}
         setImageModalOpen={setImageModalOpen}
+        searchedPersonImage={searchData?.searchedImage}
+        isSearching={searchData?.isFromSearch}
+        searchedPersonName={searchData?.searchedPersonName}
+        defaultView={modalDefaultView}
+        isRTL={isRTL}
       />
 
       {/* User details grid */}

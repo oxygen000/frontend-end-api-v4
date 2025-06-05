@@ -355,6 +355,8 @@
     "lastVerification": "Last Verification",
     "documentVerification": "Document Verification",
     "idCard": "ID Card",
+    "searchedImage": "Searched Image",
+    "registeredImage": "Registered Image",
     "commonInfo": "Common Information",
     "category": "Category",
     "phoneNumbers": " phone numbers (NTRA)",
