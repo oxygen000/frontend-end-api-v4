@@ -23,13 +23,7 @@ export const validateForm = (
     if (!formData.address) {
       errors.push('Address is required');
     }
-    if (
-      formData.national_id &&
-      formData.national_id.length > 0 &&
-      formData.national_id.length < 14
-    ) {
-      errors.push('National ID should be 14 digits');
-    }
+    
   } else if (currentSection === 3) {
     // Section 3: Reporter Information - mandatory for case follow-up
     if (!formData.reporter_name) {
