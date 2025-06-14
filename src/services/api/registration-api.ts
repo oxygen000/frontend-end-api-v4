@@ -54,21 +54,21 @@ const registerUser = async (
   formData: FormData
 ): Promise<RegistrationResult> => {
   try {
-    // Generate a unique cache key based on user data
-    const name = formData.get('name') as string;
-    const dob = formData.get('dob') as string;
+    // Generate a unique cache key based on timestamp to prevent any caching issues during debugging
+    const name =
+      (formData.get('full_name') as string) ||
+      (formData.get('name') as string) ||
+      '';
     const formType = formData.get('form_type') as string;
-    const cacheKey = `${name}-${dob}-${formType}-${Date.now()}`;
+    const cacheKey = `${formType}-${Date.now()}-${Math.random()}`;
 
     // Debug logging to help with troubleshooting
-    console.log(`Registration attempt for ${name}, type: ${formType}`);
-    console.log('Form data fields:', Array.from(formData.keys()));
+    console.log(`🚀 Registration attempt for ${name}, type: ${formType}`);
+    console.log('📋 Form data fields:', Array.from(formData.keys()));
+    console.log('🔑 Cache key:', cacheKey);
 
-    // Check if this registration is already in progress
-    if (registrationInProgress.has(cacheKey)) {
-      console.log('Registration already in progress, using existing promise');
-      return registrationInProgress.get(cacheKey)!;
-    }
+    // Temporarily disable caching to debug the core issue
+    // TODO: Re-enable proper caching after fixing the main problem
 
     // Ensure bypass_angle_check and train_multiple are set to true
     if (!formData.has('bypass_angle_check')) {
@@ -141,14 +141,35 @@ const registerUser = async (
           }
         });
 
-        // Make sure 'name' field is explicitly set from full_name for database compatibility
+        // CRITICAL: Make sure 'name' field is explicitly set for database compatibility
         if (!userData.name && userData.full_name) {
           userData.name = userData.full_name;
-          console.log('Setting name field from full_name to prevent DB errors');
+          console.log(
+            'CRITICAL: Setting name field from full_name to prevent DB errors:',
+            userData.full_name
+          );
         } else if (!userData.full_name && userData.name) {
           userData.full_name = userData.name;
-          console.log('Setting full_name field from name to prevent DB errors');
+          console.log(
+            'CRITICAL: Setting full_name field from name to prevent DB errors:',
+            userData.name
+          );
+        } else if (!userData.name && !userData.full_name) {
+          console.error(
+            'CRITICAL ERROR: Both name and full_name are missing in user_data JSON!'
+          );
+          throw new Error('Name field is required in user_data but missing');
         }
+
+        // Final validation for name field in JSON
+        if (!userData.name || userData.name.trim() === '') {
+          console.error(
+            'CRITICAL ERROR: Name field is empty in user_data JSON after processing'
+          );
+          throw new Error('Name field in user_data cannot be empty');
+        }
+
+        console.log('FINAL CHECK - user_data name field:', userData.name);
 
         // Ensure both date_of_birth and dob are set properly for all form types
         if (userData.date_of_birth && !userData.dob) {
@@ -293,14 +314,70 @@ const registerUser = async (
       }
     }
 
-    // Make sure both name and full_name fields are set
-    if (!formData.get('name') && formData.get('full_name')) {
-      formData.append('name', formData.get('full_name') as string);
-      console.log('Setting name field from full_name in main registration');
-    } else if (!formData.get('full_name') && formData.get('name')) {
-      formData.append('full_name', formData.get('name') as string);
-      console.log('Setting full_name field from name in main registration');
+    // CRITICAL: Make sure both name and full_name fields are set correctly in BOTH FormData objects
+    const fullNameValue = formData.get('full_name') as string;
+    const nameValue = formData.get('name') as string;
+
+    if (!nameValue && fullNameValue) {
+      formData.set('name', fullNameValue);
+      filteredFormData.set('name', fullNameValue); // CRITICAL: Also set in filteredFormData
+      console.log(
+        'CRITICAL: Setting name field from full_name:',
+        fullNameValue
+      );
+    } else if (!fullNameValue && nameValue) {
+      formData.set('full_name', nameValue);
+      filteredFormData.set('full_name', nameValue); // CRITICAL: Also set in filteredFormData
+      console.log('CRITICAL: Setting full_name field from name:', nameValue);
+    } else if (!nameValue && !fullNameValue) {
+      // Both are missing, this is a critical error
+      console.error('CRITICAL ERROR: Both name and full_name are missing!');
+      throw new Error('Name field is required but missing');
     }
+
+    // Ensure both name and full_name are in filteredFormData (the one being sent to API)
+    if (!filteredFormData.get('name') && filteredFormData.get('full_name')) {
+      filteredFormData.set('name', filteredFormData.get('full_name') as string);
+      console.log('CRITICAL: Ensuring name field is in filteredFormData');
+    } else if (
+      !filteredFormData.get('full_name') &&
+      filteredFormData.get('name')
+    ) {
+      filteredFormData.set('full_name', filteredFormData.get('name') as string);
+      console.log('CRITICAL: Ensuring full_name field is in filteredFormData');
+    } else if (
+      !filteredFormData.get('name') &&
+      !filteredFormData.get('full_name')
+    ) {
+      // If both are missing from filteredFormData, use the values we just set
+      const currentName = formData.get('name') as string;
+      const currentFullName = formData.get('full_name') as string;
+      if (currentName) {
+        filteredFormData.set('name', currentName);
+        console.log('CRITICAL: Adding name to filteredFormData:', currentName);
+      }
+      if (currentFullName) {
+        filteredFormData.set('full_name', currentFullName);
+        console.log(
+          'CRITICAL: Adding full_name to filteredFormData:',
+          currentFullName
+        );
+      }
+    }
+
+    // Double check that name field is not null or empty in filteredFormData
+    const finalNameValue = filteredFormData.get('name') as string;
+    if (!finalNameValue || finalNameValue.trim() === '') {
+      console.error(
+        'CRITICAL ERROR: Name field is empty in filteredFormData after processing'
+      );
+      throw new Error('Name field cannot be empty in filtered form data');
+    }
+
+    console.log(
+      'FINAL CHECK - filteredFormData name field value:',
+      finalNameValue
+    );
 
     // Make sure both relationship and reporter_relationship are set
     if (
@@ -333,13 +410,13 @@ const registerUser = async (
         // Choose the appropriate endpoint based on form type
         const formType = filteredFormData.get('form_type')?.toString() || '';
 
-        console.log(
-          `Processing registration for form type: ${formType} using main endpoint`
-        );
+        console.log(`Processing registration for form type: ${formType}`);
 
         try {
-          // Always use the main endpoint for all form types to avoid ID conflicts
-          console.log('Using main registration endpoint for all form types');
+          // Always use the main endpoint for all form types for reliability
+          console.log(
+            `Using main registration endpoint for form type: ${formType}`
+          );
           registerWithMainEndpoint(filteredFormData)
             .then(async (result) => {
               await clearCaches();
@@ -388,18 +465,40 @@ const registerWithMainEndpoint = async (
     console.log('form_type:', formData.get('form_type'));
     console.log('category:', formData.get('category'));
 
-    // CRITICAL: Check for full_name field - this is required by the backend
+    // CRITICAL: Check for both name and full_name fields - these are required by the backend
+    console.log('CRITICAL CHECK - name field:', formData.get('name'));
     console.log('CRITICAL CHECK - full_name field:', formData.get('full_name'));
-    if (!formData.get('full_name')) {
-      console.error('CRITICAL ERROR: full_name is missing from form data');
-      // Force add full_name from name if available
-      if (formData.get('name')) {
-        formData.append('full_name', formData.get('name') as string);
-        console.log(
-          'Added missing full_name field from name:',
-          formData.get('name')
-        );
-      }
+
+    const nameValue = formData.get('name') as string;
+    const fullNameValue = formData.get('full_name') as string;
+
+    // Ensure both name and full_name are set
+    if (!nameValue && !fullNameValue) {
+      console.error(
+        'CRITICAL ERROR: Both name and full_name are missing from form data'
+      );
+      throw new Error(
+        'Name field is required but both name and full_name are missing from form data'
+      );
+    }
+
+    // Set name from full_name if missing
+    if (!nameValue && fullNameValue) {
+      formData.set('name', fullNameValue);
+      console.log('Added missing name field from full_name:', fullNameValue);
+    }
+
+    // Set full_name from name if missing
+    if (!fullNameValue && nameValue) {
+      formData.set('full_name', nameValue);
+      console.log('Added missing full_name field from name:', nameValue);
+    }
+
+    // Final validation - ensure name field is not empty
+    const finalNameValue = formData.get('name') as string;
+    if (!finalNameValue || finalNameValue.trim() === '') {
+      console.error('CRITICAL ERROR: name field is empty after processing');
+      throw new Error('Name field cannot be empty');
     }
 
     // Debug reporter fields
@@ -431,6 +530,58 @@ const registerWithMainEndpoint = async (
           console.log('Setting full_name field from name in user_data JSON');
         }
 
+        // CRITICAL FIX: Add missing reporter fields from user_data to formData
+        const reporterFields = [
+          'reporter_name',
+          'reporter_phone',
+          'reporter_national_id',
+          'reporter_relationship',
+          'reporter_address',
+          'reporter_occupation',
+          'reporter_education',
+        ];
+
+        reporterFields.forEach((field) => {
+          if (userData[field] && !formData.get(field)) {
+            formData.set(field, userData[field]);
+            console.log(
+              `🔧 FIXED: Added missing ${field} from user_data:`,
+              userData[field]
+            );
+          }
+        });
+
+        // Also ensure relationship field is set
+        if (userData.reporter_relationship && !formData.get('relationship')) {
+          formData.set('relationship', userData.reporter_relationship);
+          console.log(
+            '🔧 FIXED: Added relationship from reporter_relationship:',
+            userData.reporter_relationship
+          );
+        }
+
+        // CRITICAL FIX: Ensure all essential user fields are in formData
+        const essentialFields = [
+          'national_id',
+          'address',
+          'phone_number',
+          'emergency_contact',
+          'emergency_phone',
+          'disability_type',
+          'disability_description',
+          'medical_history',
+        ];
+
+        essentialFields.forEach((field) => {
+          if (userData[field] && !formData.get(field)) {
+            formData.set(field, userData[field]);
+            console.log(
+              `🔧 FIXED: Added missing essential ${field} from user_data:`,
+              userData[field]
+            );
+          }
+        });
+
         // Update user_data in the FormData
         formData.set('user_data', JSON.stringify(userData));
       }
@@ -458,7 +609,37 @@ const registerWithMainEndpoint = async (
       hasData: !!response.data,
       userId: response.data?.user_id || response.data?.user?.id,
       userObj: !!response.data?.user,
+      formType: formData.get('form_type'),
+      userName: formData.get('full_name') || formData.get('name'),
     });
+
+    // Handle successful response with data
+    if (response.status === 200 && response.data) {
+      // If we have proper user data, return it
+      if (response.data.user_id || response.data.user) {
+        const result: RegistrationResult = {
+          status: 'success',
+          message: response.data.message || 'تم التسجيل بنجاح!',
+          user_id: response.data.user_id || response.data.user?.id,
+          user: response.data.user || {
+            id: response.data.user_id,
+            face_id: response.data.user_id,
+            name:
+              (formData.get('full_name') as string) ||
+              (formData.get('name') as string) ||
+              'User',
+            full_name:
+              (formData.get('full_name') as string) ||
+              (formData.get('name') as string) ||
+              'User',
+            image_path: '/static/default-avatar.png',
+            created_at: new Date().toISOString(),
+          },
+        };
+        console.log('✅ Registration successful with data:', result);
+        return result;
+      }
+    }
 
     // Even if we get a 200 response but no user data, create a synthetic response
     // This ensures the UI gets something workable back
@@ -472,18 +653,33 @@ const registerWithMainEndpoint = async (
       const tempId = `temp-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
 
       // Try to get a name from the form data
-      const userName = (formData.get('name') as string) || 'User';
+      const userName =
+        (formData.get('full_name') as string) ||
+        (formData.get('name') as string) ||
+        'User';
+      const formType = (formData.get('form_type') as string) || 'unknown';
+
+      // Create a success message based on form type
+      let successMessage = 'تم التسجيل بنجاح!';
+      if (formType === 'disabled') {
+        successMessage = `تم تسجيل ${userName} بنجاح كمعاق!`;
+      } else if (formType === 'child') {
+        successMessage = `تم تسجيل الطفل ${userName} بنجاح!`;
+      } else {
+        successMessage = `تم تسجيل ${userName} بنجاح!`;
+      }
 
       // Create a minimal response object
       const syntheticResponse: RegistrationResult = {
         status: 'success',
-        message: 'Registration was successful, but no user ID was returned',
+        message: successMessage,
         user_id: tempId,
         user: {
           id: tempId,
           name: userName,
-          form_type: (formData.get('form_type') as string) || 'unknown',
-          category: (formData.get('category') as string) || 'unknown',
+          full_name: userName,
+          form_type: formType,
+          category: (formData.get('category') as string) || formType,
           created_at: new Date().toISOString(),
           // Required fields for the User type
           face_id: tempId,
@@ -491,6 +687,7 @@ const registerWithMainEndpoint = async (
         },
       };
 
+      console.log('✅ Synthetic response created:', syntheticResponse);
       return syntheticResponse;
     }
 
@@ -581,6 +778,19 @@ const registerDisabled = async (
       userData = userDataCopy;
     }
 
+    // Create a cache key based on national_id and name to prevent duplicates
+    const cacheKey = userData.national_id
+      ? `disabled-${userData.national_id}`
+      : `disabled-${userData.name}-${userData.dob}`;
+
+    // Check if this registration is already in progress (prevent duplicates)
+    if (registrationInProgress.has(cacheKey)) {
+      console.log(
+        'Disabled registration already in progress for this person, using existing promise'
+      );
+      return registrationInProgress.get(cacheKey)!;
+    }
+
     // Force remove ID to prevent unique constraint failures - triple-check
     if ('id' in userData) {
       delete (userData as unknown as Record<string, unknown>).id;
@@ -633,6 +843,7 @@ const registerDisabled = async (
     // Log the request to help debug
     console.log('Registering disabled user with data:', {
       name: userData.name,
+      national_id: userData.national_id,
       uniqueId: userData.unique_id,
       idPresent: 'id' in userData,
     });
@@ -648,33 +859,93 @@ const registerDisabled = async (
       apiFormData.append('file', image);
     }
 
-    // Use the /api/disabled endpoint which works with the existing schema
-    try {
-      console.log('Making API request to /disabled endpoint...');
-      const response = await apiClient.post('/disabled', apiFormData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    // Create a promise for the disabled registration process
+    const disabledRegistrationPromise = new Promise<RegistrationResult>(
+      (resolve, reject) => {
+        (async () => {
+          try {
+            console.log('Making API request to /disabled endpoint...');
+            const response = await apiClient.post('/disabled', apiFormData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              timeout: 30000, // 30 second timeout
+            });
 
-      console.log('Disabled registration response:', response.data);
+            console.log('Disabled registration response:', response.data);
 
-      // Convert the response to our expected RegistrationResult format
-      if (response.data && response.data.user) {
-        const result: RegistrationResult = {
-          status: 'success',
-          message: 'User registered successfully',
-          user_id: response.data.user.id,
-          user: response.data.user,
-        };
-        return result;
-      } else {
-        throw new Error('Invalid response from disabled registration endpoint');
+            // Clear caches after successful registration
+            await clearCaches();
+
+            // Convert the response to our expected RegistrationResult format
+            if (response.data && response.data.user) {
+              const result: RegistrationResult = {
+                status: 'success',
+                message: `تم تسجيل ${userData.name || userData.full_name} بنجاح كمعاق`,
+                user_id: response.data.user.id,
+                user: response.data.user,
+              };
+              console.log('✅ Disabled registration successful:', result);
+              resolve(result);
+            } else if (response.status === 200) {
+              // Handle cases where registration was successful but response format is different
+              const tempId = userData.unique_id || `disabled-${Date.now()}`;
+              const result: RegistrationResult = {
+                status: 'success',
+                message: `تم تسجيل ${userData.name || userData.full_name} بنجاح كمعاق`,
+                user_id: tempId,
+                user: {
+                  id: tempId,
+                  face_id: tempId,
+                  name: userData.name || userData.full_name || 'Unknown',
+                  full_name: userData.full_name || userData.name || 'Unknown',
+                  image_path: '/static/default-avatar.png',
+                  created_at: new Date().toISOString(),
+                },
+              };
+              console.log(
+                '✅ Disabled registration successful (synthetic response):',
+                result
+              );
+              resolve(result);
+            } else {
+              reject(
+                new Error(
+                  'Invalid response from disabled registration endpoint'
+                )
+              );
+            }
+          } catch (apiError) {
+            console.error('API error details:', apiError);
+
+            // Handle specific server errors
+            if (
+              axios.isAxiosError(apiError) &&
+              apiError.response?.status === 500
+            ) {
+              const errorMessage = apiError.response?.data?.message || '';
+              if (errorMessage.includes('database is locked')) {
+                throw new Error(
+                  'database is locked - الخادم مشغول حالياً، يرجى المحاولة بعد دقيقة'
+                );
+              } else {
+                throw new Error('خطأ في الخادم - يرجى المحاولة مرة أخرى');
+              }
+            }
+
+            reject(apiError);
+          }
+        })();
       }
-    } catch (apiError) {
-      console.error('API error details:', apiError);
-      throw apiError;
-    }
+    );
+
+    // Store the promise and remove it when done
+    registrationInProgress.set(cacheKey, disabledRegistrationPromise);
+    disabledRegistrationPromise.finally(() => {
+      registrationInProgress.delete(cacheKey);
+    });
+
+    return disabledRegistrationPromise;
   } catch (error) {
     console.error('Error in specialized disabled registration:', error);
     throw error;

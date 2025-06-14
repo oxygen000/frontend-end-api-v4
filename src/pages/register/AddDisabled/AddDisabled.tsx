@@ -321,10 +321,21 @@ function AddDisabled() {
       }));
     } else {
       // Handle top-level fields
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => {
+        const updatedData = {
+          ...prev,
+          [name]: value,
+        };
+
+        // CRITICAL: Ensure name and full_name are synchronized
+        if (name === 'full_name') {
+          updatedData.name = value;
+        } else if (name === 'name') {
+          updatedData.full_name = value;
+        }
+
+        return updatedData;
+      });
     }
   };
 
@@ -475,11 +486,24 @@ function AddDisabled() {
       }, 30000); // 30 second timeout
 
       // Prepare form data for submission
+      console.log('📋 Form data being sent:');
+      console.log('   - full_name:', formData.full_name);
+      console.log('   - name:', formData.name);
+      console.log('   - dob:', formData.dob);
+      console.log('   - gender:', formData.gender);
+      console.log('   - disability_type:', formData.disability_type);
+      console.log('   - Complete formData:', formData);
+
       const formDataToSend = buildSubmissionFormData(
         formData,
         capturedImage,
         editUserId
       );
+
+      console.log('📡 FormData entries being sent to API:');
+      for (const [key, value] of formDataToSend.entries()) {
+        console.log(`   - ${key}:`, value);
+      }
 
       try {
         // Send the registration request with timeout (including editUserId for updates)
@@ -571,75 +595,51 @@ function AddDisabled() {
         // Clear pending submission
         pendingSubmissions.delete(submissionKey);
 
+        console.error('Error submitting form:', error);
+
         // Handle specific error types
         if (error instanceof Error) {
+          let errorMessage = '';
+
           if (error.message === 'Request timeout') {
-            toast.error(
-              t(
-                'form.errors.timeout',
-                'Registration timed out. Please try again.'
-              ),
-              {
-                id: 'disabled-registration',
-              }
+            errorMessage = t(
+              'form.errors.timeout',
+              'Registration timed out. Please try again.'
             );
-            setFormErrors([
-              t(
-                'form.errors.timeout',
-                'Registration timed out. Please try again.'
-              ),
-            ]);
           } else if (error.message.includes('network')) {
-            toast.error(
-              t(
-                'form.errors.network',
-                'Network error. Please check your connection.'
-              ),
-              {
-                id: 'disabled-registration',
-              }
+            errorMessage = t(
+              'form.errors.network',
+              'Network error. Please check your connection.'
             );
-            setFormErrors([
-              t(
-                'form.errors.network',
-                'Network error. Please check your connection.'
-              ),
-            ]);
+          } else if (
+            error.message.includes('NOT NULL constraint failed: users.name')
+          ) {
+            errorMessage = 'يرجى التأكد من إدخال الاسم الكامل قبل التسجيل';
+          } else if (error.message.includes('Name is required')) {
+            errorMessage = 'الاسم الكامل مطلوب لإتمام التسجيل';
+          } else if (error.message.includes('name field')) {
+            errorMessage = 'هناك مشكلة في حقل الاسم، يرجى المحاولة مرة أخرى';
           } else {
-            console.error('Error submitting form:', error);
-            toast.error(
-              t(
-                'form.errors.submission',
-                'Error submitting form. Please try again.'
-              ),
-              {
-                id: 'disabled-registration',
-              }
+            errorMessage = t(
+              'form.errors.submission',
+              'Error submitting form. Please try again.'
             );
-            setFormErrors([
-              t(
-                'form.errors.submission',
-                'Error submitting form. Please try again.'
-              ),
-            ]);
           }
+
+          toast.error(errorMessage, {
+            id: 'disabled-registration',
+          });
+          setFormErrors([errorMessage]);
         } else {
           console.error('Unknown error submitting form:', error);
-          toast.error(
-            t(
-              'form.errors.unknown',
-              'An unexpected error occurred. Please try again.'
-            ),
-            {
-              id: 'disabled-registration',
-            }
+          const unknownErrorMessage = t(
+            'form.errors.unknown',
+            'An unexpected error occurred. Please try again.'
           );
-          setFormErrors([
-            t(
-              'form.errors.unknown',
-              'An unexpected error occurred. Please try again.'
-            ),
-          ]);
+          toast.error(unknownErrorMessage, {
+            id: 'disabled-registration',
+          });
+          setFormErrors([unknownErrorMessage]);
         }
       }
     } catch (error) {

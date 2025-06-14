@@ -179,7 +179,20 @@ const PhotoCaptureSection: React.FC<PhotoCaptureSectionProps> = ({
                 />
               </div>
 
-              
+              {(previewUrl || formData.image) && (
+                <div className="mt-3 sm:mt-4 flex justify-center">
+                  <img
+                    src={
+                      previewUrl ||
+                      (formData.image
+                        ? URL.createObjectURL(formData.image)
+                        : '')
+                    }
+                    alt="Preview"
+                    className="max-w-full max-h-48 sm:max-h-64 rounded shadow-md"
+                  />
+                </div>
+              )}
             </div>
           </div>
         ) : (
