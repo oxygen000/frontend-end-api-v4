@@ -318,21 +318,38 @@ const registerUser = async (
     const fullNameValue = formData.get('full_name') as string;
     const nameValue = formData.get('name') as string;
 
+    console.log('🔍 DEBUGGING name field handling:');
+    console.log('  - Original nameValue:', `"${nameValue}"`);
+    console.log('  - Original fullNameValue:', `"${fullNameValue}"`);
+
     if (!nameValue && fullNameValue) {
       formData.set('name', fullNameValue);
       filteredFormData.set('name', fullNameValue); // CRITICAL: Also set in filteredFormData
       console.log(
-        'CRITICAL: Setting name field from full_name:',
+        '✅ CRITICAL: Setting name field from full_name:',
         fullNameValue
       );
     } else if (!fullNameValue && nameValue) {
       formData.set('full_name', nameValue);
       filteredFormData.set('full_name', nameValue); // CRITICAL: Also set in filteredFormData
-      console.log('CRITICAL: Setting full_name field from name:', nameValue);
+      console.log('✅ CRITICAL: Setting full_name field from name:', nameValue);
     } else if (!nameValue && !fullNameValue) {
       // Both are missing, this is a critical error
-      console.error('CRITICAL ERROR: Both name and full_name are missing!');
+      console.error('❌ CRITICAL ERROR: Both name and full_name are missing!');
       throw new Error('Name field is required but missing');
+    }
+
+    // FINAL VALIDATION: Double-check both FormData objects have name field
+    const finalFilteredName = filteredFormData.get('name') as string;
+    const finalOriginalName = formData.get('name') as string;
+
+    console.log('🔍 FINAL name field check:');
+    console.log('  - filteredFormData name:', `"${finalFilteredName}"`);
+    console.log('  - original formData name:', `"${finalOriginalName}"`);
+
+    if (!finalFilteredName || !finalFilteredName.trim()) {
+      console.error('❌ FINAL CRITICAL ERROR: filteredFormData name is empty!');
+      throw new Error('Name field is empty in filtered form data');
     }
 
     // Ensure both name and full_name are in filteredFormData (the one being sent to API)
@@ -1429,6 +1446,57 @@ const checkApiHealth = async (): Promise<boolean> => {
   }
 };
 
+/**
+ * Debug function to test registration endpoint
+ */
+const debugRegistration = async (testData?: {
+  full_name?: string;
+  form_type?: string;
+}): Promise<RegistrationResult> => {
+  try {
+    console.log('🔍 DEBUG: Testing registration endpoint...');
+
+    const formData = new FormData();
+    formData.append('full_name', testData?.full_name || 'Test User');
+    formData.append('form_type', testData?.form_type || 'child');
+    formData.append('bypass_angle_check', 'true');
+    formData.append('train_multiple', 'true');
+
+    // Add some sample user_data JSON
+    const sampleUserData = {
+      name: testData?.full_name || 'Test User',
+      full_name: testData?.full_name || 'Test User',
+      form_type: testData?.form_type || 'child',
+      reporter_name: 'Test Reporter',
+      reporter_phone: '1234567890',
+    };
+    formData.append('user_data', JSON.stringify(sampleUserData));
+
+    console.log('🔍 DEBUG: Sending test data to /debug/registration...');
+
+    const response = await apiClient.post('/debug/registration', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 10000,
+    });
+
+    console.log('🔍 DEBUG: Response received:', response.data);
+
+    if (response.data?.status === 'success') {
+      return {
+        status: 'success',
+        message: response.data.message || 'Debug test successful',
+        user_id: response.data.user_id,
+        user: response.data.user,
+      };
+    } else {
+      throw new Error(response.data?.message || 'Debug test failed');
+    }
+  } catch (error) {
+    console.error('🔍 DEBUG: Registration test failed:', error);
+    throw error;
+  }
+};
+
 // Export registration API functions
 export const registrationApi = {
   registerUser,
@@ -1438,6 +1506,7 @@ export const registrationApi = {
   registerWithBase64,
   checkApiHealth,
   updateUser,
+  debugRegistration,
 };
 
 export default registrationApi;

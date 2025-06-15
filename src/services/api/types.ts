@@ -248,6 +248,10 @@ export interface ChildUser extends BaseUser {
   first_friend_phone?: string;
   second_friend_phone?: string;
   additional_notes?: string;
+  phone_number?: string;
+  phone_company?: string;
+  service_provider?: string;
+  secondary_phone?: string;
 
   // Internal tracking fields
   unique_id?: string;

@@ -42,8 +42,8 @@ const ContactInformationSection: React.FC<ContactInformationSectionProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label={t('registration.phoneNumber', 'Phone Number')}
-          name="emergency_phone"
-          value={formData.emergency_phone || ''}
+          name="phone_number"
+          value={formData.phone_number || ''}
           onChange={handleInputChange}
         />
 

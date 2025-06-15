@@ -54,6 +54,9 @@ export interface FormData {
   // Missing Person Information
   distinctive_mark?: string; // Mapped from physical_description
   missing_person_phone?: string;
+  phone_number?: string;
+  service_provider?: string;
+  secondary_phone?: string;
   missing_person_occupation?: string;
   missing_person_education?: string;
 
@@ -150,6 +153,9 @@ export const initialFormData: FormData = {
 
   // Missing person fields
   missing_person_phone: '',
+  phone_number: '',
+  service_provider: '',
+  secondary_phone: '',
   missing_person_occupation: '',
   missing_person_education: '',
 

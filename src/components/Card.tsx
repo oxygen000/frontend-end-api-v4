@@ -7,7 +7,7 @@ interface User {
   id: string;
   full_name: string;
   name: string;
-  nickname?: string; 
+  nickname?: string;
   department?: string;
   role?: string;
   image_path?: string;
@@ -18,8 +18,15 @@ interface User {
   phone_number?: string;
   national_id?: string;
   address?: string;
-
-
+  // Add support for child form fields
+  guardian_phone?: string;
+  // Add support for other possible phone fields
+  reporter_phone?: string;
+  missing_person_phone?: string;
+  // Add support for secondary phone fields
+  secondary_phone?: string;
+  second_phone_number?: string;
+  emergency_phone?: string;
 }
 
 interface CardProps {
@@ -30,10 +37,46 @@ const Card: React.FC<CardProps> = ({ user }) => {
   const { t, isRTL } = useTranslationWithFallback();
   const [imageKey, setImageKey] = useState(Date.now());
 
+  // Debug: Log user data to see what's available
+  console.log('Card user data:', {
+    id: user.id,
+    form_type: user.form_type,
+    phone_number: user.phone_number,
+    guardian_phone: user.guardian_phone,
+    missing_person_phone: user.missing_person_phone,
+    reporter_phone: user.reporter_phone,
+    national_id: user.national_id,
+  });
+
   // Update image key when user image changes to force refresh
   useEffect(() => {
     setImageKey(Date.now());
   }, [user.image_path, user.image_url]);
+
+  // Helper function to get the available phone number
+  const getPhoneNumber = () => {
+    // Check all possible phone number fields in order of priority
+    const phoneFields = [
+      user.missing_person_phone, // الأولوية للشخص المفقود
+      user.phone_number, // الرقم الأساسي للمعاق
+      user.guardian_phone, // رقم الولي للطفل
+      user.reporter_phone, // رقم المبلغ
+      user.emergency_phone, // رقم الطوارئ
+      user.second_phone_number, // الرقم الثاني
+      user.secondary_phone, // الرقم الثانوي
+    ];
+
+    // Return the first available phone number
+    for (const phone of phoneFields) {
+      if (phone && phone.trim() !== '') {
+        console.log('Found phone number:', phone);
+        return phone;
+      }
+    }
+
+    console.log('No phone number found, returning N/A');
+    return t('card.notAvailable', 'N/A');
+  };
 
   const getImageUrl = () => {
     if (user.image_path) {
@@ -92,9 +135,7 @@ const Card: React.FC<CardProps> = ({ user }) => {
       <div className="w-full space-y-2">
         <div className="flex justify-between items-center">
           <p className="text-white/70">{t('card.Number', 'Number:')}</p>
-          <p className="font-bold text-white">
-              {user.phone_number || t('card.notAvailable', 'N/A')}
-          </p>
+          <p className="font-bold text-white">{getPhoneNumber()}</p>
         </div>
 
         <div className="flex justify-between items-center">

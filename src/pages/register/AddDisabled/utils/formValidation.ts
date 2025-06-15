@@ -352,17 +352,10 @@ export const buildSubmissionFormData = (
   formDataToSend.append('train_multiple', 'true');
 
   // Add direct field mappings for critical fields that must be present as form fields
-  const nameValue = personDetails.full_name || personDetails.name || '';
-  const dobValue = personDetails.dob || '';
-
-  if (!nameValue) {
-    throw new Error('Name is required but missing from form data');
-  }
-
-  formDataToSend.append('name', nameValue);
-  formDataToSend.append('full_name', nameValue);
-  formDataToSend.append('dob', dobValue);
-  formDataToSend.append('date_of_birth', dobValue);
+  formDataToSend.append('name', personDetails.full_name);
+  formDataToSend.append('full_name', personDetails.full_name);
+  formDataToSend.append('dob', personDetails.dob);
+  formDataToSend.append('date_of_birth', personDetails.dob);
   formDataToSend.append('gender', personDetails.gender || '');
   formDataToSend.append(
     'disability_type',

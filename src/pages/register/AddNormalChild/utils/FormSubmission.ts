@@ -38,11 +38,19 @@ export const submitForm = async (
 
   try {
     console.log('=== CHILD FORM SUBMISSION ANALYSIS ===');
-    console.log(`📊 Form Name: ${formData.name}`);
+    console.log(`📊 Form Name: "${formData.name}"`);
+    console.log(`📊 Form Full Name: "${formData.full_name}"`);
     console.log(`🆔 Edit User ID: ${editUserId}`);
     console.log(`🔄 Is Edit Mode: ${isEditMode}`);
     console.log(`📝 Submission Key: ${submissionKey}`);
     console.log('==========================================');
+
+    // CRITICAL: Check if name fields are empty BEFORE processing
+    if (!formData.name && !formData.full_name) {
+      throw new Error(
+        '❌ CRITICAL: Both name and full_name are empty in formData'
+      );
+    }
 
     if (isEditMode) {
       console.log(`🔄 UPDATING existing child with ID: ${editUserId}`);
@@ -144,15 +152,27 @@ export const submitForm = async (
       console.log('   - operation_type:', formDataToSend.get('operation_type'));
     }
 
-    // Add essential fields to FormData
-    formDataToSend.append(
-      'full_name',
-      formData.full_name || formData.name || ''
-    );
+    // Add essential fields to FormData - CRITICAL: Both name and full_name are required
+    const userName = formData.full_name || formData.name || '';
+
+    // CRITICAL: Ensure both name and full_name are set
+    if (!userName || !userName.trim()) {
+      throw new Error(
+        'اسم الطفل مطلوب ولا يمكن أن يكون فارغًا - Child name is required and cannot be empty'
+      );
+    }
+
+    formDataToSend.append('name', userName);
+    formDataToSend.append('full_name', userName);
     formDataToSend.append('form_type', 'child');
     formDataToSend.append('category', 'child');
     formDataToSend.append('bypass_angle_check', 'true');
     formDataToSend.append('train_multiple', 'true');
+
+    // Debug log to verify name fields
+    console.log('✅ CRITICAL: Added name fields to FormData:');
+    console.log('   - name:', formDataToSend.get('name'));
+    console.log('   - full_name:', formDataToSend.get('full_name'));
 
     // Generate temp face ID for new registrations only
     if (!isEditMode) {
@@ -199,8 +219,7 @@ export const submitForm = async (
       guardian_phone: formData.guardian_phone || '',
       guardian_id: formData.guardian_id || '',
       relationship: formData.relationship || '',
-      phone_number: formData.guardian_phone || '',
-      phone_company: formData.phone_company || '',
+
 
       // Physical description
       physical_description: formData.physical_description || '',
@@ -224,7 +243,10 @@ export const submitForm = async (
       reporter_education: formData.reporter_education || '',
 
       // Missing person details - matching database schema
-      service_provider: formData.phone_company || '',
+      phone_number: formData.phone_number || '',
+      phone_company: formData.phone_company || '',
+      service_provider: formData.service_provider || '',
+      secondary_phone: formData.secondary_phone || '',
       date_of_birth: formData.dob || '',
       last_sighting:
         formData.last_sighting || formData.last_seen_location || '',
@@ -247,6 +269,7 @@ export const submitForm = async (
       gone_missing_before: formData.gone_missing_before || '',
       reason_for_location: formData.reason_for_location || '',
       was_accompanied: formData.was_accompanied || '',
+      
       missing_person_phone: formData.missing_person_phone || '',
       missing_person_occupation: formData.missing_person_occupation || '',
       missing_person_education: formData.missing_person_education || '',
@@ -268,6 +291,27 @@ export const submitForm = async (
 
     // Add user_data as JSON
     formDataToSend.append('user_data', JSON.stringify(childData));
+
+    // CRITICAL: Final verification of name fields before sending
+    const finalName = formDataToSend.get('name') as string;
+    const finalFullName = formDataToSend.get('full_name') as string;
+    console.log('🔍 FINAL PRE-SEND VERIFICATION:');
+    console.log(`   - name in FormData: "${finalName}"`);
+    console.log(`   - full_name in FormData: "${finalFullName}"`);
+    console.log(`   - childData.name: "${childData.name}"`);
+    console.log(`   - childData.full_name: "${childData.full_name}"`);
+
+    if (!finalName || !finalName.trim()) {
+      throw new Error(
+        '❌ CRITICAL: name field is empty in FormData before sending'
+      );
+    }
+
+    if (!finalFullName || !finalFullName.trim()) {
+      throw new Error(
+        '❌ CRITICAL: full_name field is empty in FormData before sending'
+      );
+    }
 
     // FINAL VERIFICATION: Double-check update parameters before sending
     if (isEditMode && editUserId) {
