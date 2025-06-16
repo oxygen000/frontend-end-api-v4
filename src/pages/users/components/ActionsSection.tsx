@@ -59,7 +59,6 @@ function ActionsSection({
 
         // Contact and basic info
         address: user.address || user.reporter_address || '',
-        phone_number: user.phone_number || user.missing_person_phone || '',
 
         // Guardian/Reporter mapping with comprehensive fallbacks
         guardian_name: user.guardian_name || user.reporter_name || '',
@@ -111,7 +110,7 @@ function ActionsSection({
         second_friend_phone: user.second_friend_phone || '',
 
         // Missing person details
-        missing_person_phone: user.missing_person_phone || '',
+        phone_number: user.phone_number || user.missing_person_phone || '',
         missing_person_occupation: user.missing_person_occupation || '',
         missing_person_education: user.missing_person_education || '',
 
@@ -330,11 +329,93 @@ function ActionsSection({
         // CRITICAL: Ensure the user ID is always present for edit mode
         id: user.id,
 
+        // Basic personal information
         full_name: user.full_name || user.name || '',
         name: user.name || user.full_name || '',
+        nickname: user.nickname || '',
         date_of_birth: user.date_of_birth || user.dob || '',
         dob: user.dob || user.date_of_birth || '',
-      };
+        mothers_name: user.mothers_name || '',
+        marital_status: user.marital_status || '',
+        educational_qualification: user.educational_qualification || '',
+        occupation: user.occupation || '',
+        national_id: user.national_id || '',
+        issuing_authority: user.issuing_authority || '',
+        issue_date: user.issue_date || '',
+        governorate: user.governorate || '',
+
+        // Contact information
+        address: user.address || '',
+        phone_number: user.phone_number || '',
+        phone_company: user.phone_company || '',
+        service_provider: user.service_provider || '',
+        second_phone_number: user.second_phone_number || '',
+        landline_number: user.landline_number || '',
+
+        // Criminal record information
+        has_criminal_record: Boolean(user.has_criminal_record),
+        case_details: user.case_details || '',
+        police_station: user.police_station || '',
+        case_number: user.case_number || '',
+        judgment: user.judgment || '',
+        record_number: user.record_number || '',
+        dossier_number: user.dossier_number || '',
+        charge: user.charge || '',
+        sentence: user.sentence || '',
+        accusation: user.accusation || '',
+        court_governorate: user.court_governorate || '',
+
+        // Travel information
+        has_travel: Boolean(
+          user.travel_date || user.departure_date || user.passport_number
+        ),
+        passport_number: user.passport_number || '',
+        passport_issue_date: user.passport_issue_date || '',
+        passport_expiry_date: user.passport_expiry_date || '',
+        travel_date: user.travel_date || user.departure_date || '',
+        travel_destination: user.travel_destination || user.destination || '',
+        departure_country: user.departure_country || '',
+        departure_destination: user.departure_destination || '',
+        departure_date: user.departure_date || user.travel_date || '',
+        departure_time: user.departure_time || '',
+        departure_airline: user.departure_airline || '',
+        departure_flight_number: user.departure_flight_number || '',
+        departure_airport: user.departure_airport || '',
+        arrival_origin: user.arrival_origin || '',
+        arrival_destination: user.arrival_destination || '',
+        arrival_airline: user.arrival_airline || '',
+        arrival_flight_number: user.arrival_flight_number || '',
+        arrival_date: user.arrival_date || '',
+        arrival_time: user.arrival_time || '',
+        arrival_airport: user.arrival_airport || '',
+        return_date: user.return_date || '',
+        return_flight_number: user.return_flight_number || '',
+        return_airport: user.return_airport || '',
+
+        // Vehicle information
+        has_vehicle: Boolean(
+          user.has_vehicle || user.vehicle_number || user.license_plate
+        ),
+        vehicle_number: user.vehicle_number || '',
+        license_plate: user.license_plate || '',
+        license_type: user.license_type || '',
+        traffic_unit: user.traffic_unit || '',
+        license_expiration: user.license_expiration || '',
+        chassis_number: user.chassis_number || '',
+        license_governorate: user.license_governorate || '',
+        brand: user.brand || '',
+        vehicle_color: user.vehicle_color || user.color || '',
+        vehicle_model: user.vehicle_model || '',
+        manufacture_year: user.manufacture_year || '',
+        expiration_year: user.expiration_year || '',
+        traffic_department: user.traffic_department || '',
+        vehicle_type: user.vehicle_type || '',
+
+        // Additional information
+        additional_notes: user.additional_notes || '',
+
+        form_type: 'man',
+      } as unknown as User;
     }
 
     // Pass user data through navigation state

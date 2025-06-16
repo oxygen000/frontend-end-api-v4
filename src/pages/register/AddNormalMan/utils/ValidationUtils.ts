@@ -72,13 +72,7 @@ export const validateForm = (
       }
       if (!formData.license_expiration) {
         errors.push('License Expiration Date is required for vehicle');
-      } else {
-        const expDate = new Date(formData.license_expiration);
-        const today = new Date();
-        if (expDate < today) {
-          errors.push('License has expired');
-        }
-      }
+      } 
     }
   } else if (currentSection === 6) {
     // Image validation - Image is now optional

@@ -157,6 +157,7 @@ const AddNormalChild = () => {
 
         // Missing person information
         missing_person_phone: user.missing_person_phone || '',
+        phone_number: user.phone_number || '',
         missing_person_occupation: user.missing_person_occupation || '',
         missing_person_education: user.missing_person_education || '',
 

@@ -213,23 +213,24 @@ export const submitForm = async (
       formDataToSend.append('vehicle_number', formData.vehicle_number || '');
     }
 
-    // Add travel fields if has_travel is true
-    if (formData.has_travel) {
-      // Passport information
-      formDataToSend.append('passport_number', formData.passport_number || '');
-      formDataToSend.append(
-        'passport_issue_date',
-        formData.passport_issue_date || ''
-      );
-      formDataToSend.append(
-        'passport_expiry_date',
-        formData.passport_expiry_date || ''
-      );
-      formDataToSend.append(
-        'passport_issuing_country',
-        formData.passport_issuing_country || ''
-      );
+    // Add travel fields (always send passport fields, regardless of has_travel status)
+    // Passport information - always include these fields
+    formDataToSend.append('passport_number', formData.passport_number || '');
+    formDataToSend.append(
+      'passport_issue_date',
+      formData.passport_issue_date || ''
+    );
+    formDataToSend.append(
+      'passport_expiry_date',
+      formData.passport_expiry_date || ''
+    );
+    formDataToSend.append(
+      'passport_issuing_country',
+      formData.passport_issuing_country || ''
+    );
 
+    // Add additional travel fields if has_travel is true
+    if (formData.has_travel) {
       // Departure information
       formDataToSend.append(
         'departure_airport',

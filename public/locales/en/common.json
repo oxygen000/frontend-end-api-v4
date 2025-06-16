@@ -120,6 +120,7 @@
     "referenceId": "Reference ID",
     "caseReferenceId": "Registration ID:",
     "newRegistration": "New Registration",
+    "courtGovernorate": "Court Governorate",
     "generalError": "An error occurred during registration",
     "photoRequired": "Please provide an image",
     "contactInfo": "Contact Information",

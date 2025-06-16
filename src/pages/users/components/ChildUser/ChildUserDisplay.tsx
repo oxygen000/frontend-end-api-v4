@@ -259,7 +259,7 @@ const ChildUserDisplay = ({
                     'users.missing_person_phone',
                     'Missing Person Phone'
                   )}
-                  value={maskInfo(user.missing_person_phone)}
+                  value={maskInfo(user.phone_number)}
                   icon={<></>}
                 />
 
