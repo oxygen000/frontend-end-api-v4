@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'; // استبدال useRouter بـ
 import { users } from '../../../types/users'; // تأكد أن المسار صحيح وفق بنية مشروعك
 
 function Login() {
-  const [username, setUsername] = useState('user1');
-  const [password, setPassword] = useState('user123');
+  const [username, setUsername] = useState('Dr. Mohamed.Magdy');
+  const [password, setPassword] = useState('123456');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
